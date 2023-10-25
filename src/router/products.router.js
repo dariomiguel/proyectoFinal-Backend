@@ -5,6 +5,16 @@ const router = Router();
 const pets = [];
 
 router.get("/", (req, res) => {
+    //Listamos con limites
+    const limit = req.query.limit;
+
+    if (limit) {
+        const limitNumber = parseInt(limit, 10);
+        if (!isNaN(limitNumber) && limitNumber >= 0) {
+            productos = productos.slice(0, limitNumber);
+        }
+    }
+
     res.json(pets);
 })
 

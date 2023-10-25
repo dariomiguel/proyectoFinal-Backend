@@ -1,5 +1,5 @@
 import express from "express";
-import routerPets from "./router/pets.router.js"
+import routerProducts from "./router/products.router.js"
 
 const app = express();
 app.use(express.json())
@@ -9,6 +9,6 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static("../src/public"))
 app.get("/", async (req, res) => res.json("OK!"))
 
-app.use("/api/pets", routerPets)
+app.use("/api/products", routerProducts)
 
 app.listen(8080, () => console.log("En linea..."))
