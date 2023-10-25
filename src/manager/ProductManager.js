@@ -60,10 +60,11 @@ class ProductManager {
             id: this.createID(),
             title: title,
             description: description,
-            price: price,
-            thumbnail: thumbnail,
             code: code,
-            stock: stock
+            price: price,
+            status: true,
+            stock: stock,
+            thumbnail: thumbnail,
         };
         this.products.push(product);
     }
