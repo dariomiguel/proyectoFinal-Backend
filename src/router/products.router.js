@@ -6,27 +6,39 @@ const router = Router();
 const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
-    //Listamos con limites
-    const limit = req.query.limit;
-    const products = await productManager.getProducts();
+    try {
+        // Listamos con límites
+        const limit = req.query.limit;
+        let products = await productManager.getProducts();
 
-    // if (limit) {
-    //     const limitNumber = parseInt(limit, 10);
-    //     if (!isNaN(limitNumber) && limitNumber >= 0) {
-    //         products = products.slice(0, limitNumber);
-    //     }
-    // }
+        if (limit) {
+            const limitNumber = parseInt(limit, 10);
+            if (!isNaN(limitNumber) && limitNumber >= 0) {
+                products = products.slice(0, limitNumber);
+            }
+        }
 
-    res.json(products);
-    // res.send(products)
-})
+        res.json(products);
+    } catch (error) {
+        console.error("Error al obtener la lista de productos:", error);
+        res.status(500).json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
+});
 
-router.get("/:id", (req, res) => {
-    const id = req.params.id
-    const product = products.find(p => p.id == id)
+router.get("/:pid", async (req, res) => {
+    try {
+        const productPorId = await productManager.getProductById(req.params.pid);
 
-    res.json(pet)
-})
+        if (typeof productPorId === "string") {
+            res.json({ Error: productPorId });
+        } else {
+            res.json({ productPorId });
+        }
+    } catch (error) {
+        res.status(500).json({ Error: "Hubo un error al buscar el producto por ID" });
+    }
+});
+
 
 router.post("/", (req, res) => {
     const data = req.body
