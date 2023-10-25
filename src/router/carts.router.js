@@ -11,3 +11,5 @@ router.get("/", (req, res) => {
     //     const limit
     // }
 })
+
+export default router

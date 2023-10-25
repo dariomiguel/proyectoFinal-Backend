@@ -5,9 +5,9 @@ import fs from 'fs';
 class ProductManager {
 
     //Se construye el elemento inicial (un array vacío).
-    constructor(path) {
+    constructor() {
+        this.path = "../api/products.json";
         this.products = this.getProducts() || [];
-        this.path = path;
 
         this.counter = 0;
 
@@ -17,7 +17,7 @@ class ProductManager {
     getProducts = async () => {
         //Verificamos que exista el archivo antes de leerlo
         try {
-            if (!fs.existsSync(this.path)) return [];
+            if (!fs.existsSync(this.path)) return ["WHat happening???"];
 
             const lectura = await fs.promises.readFile(this.path, "utf-8");
             if (!lectura) return this.products;
