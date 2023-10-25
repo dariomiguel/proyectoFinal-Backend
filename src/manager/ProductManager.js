@@ -17,7 +17,7 @@ class ProductManager {
     getProducts = async () => {
         //Verificamos que exista el archivo antes de leerlo
         try {
-            if (!fs.existsSync(this.path)) return ["WHat happening???"];
+            if (!fs.existsSync(this.path)) return [];
 
             const lectura = await fs.promises.readFile(this.path, "utf-8");
             if (!lectura) return this.products;

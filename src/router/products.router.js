@@ -40,13 +40,21 @@ router.get("/:pid", async (req, res) => {
 });
 
 
-router.post("/", (req, res) => {
-    const data = req.body
+router.post("/", async (req, res) => {
+    try {
+        const { title, description, price, thumbnail, code, stock } = req.body;
+        if (await productManager.isNotValidCode(title, description, price, thumbnail, code, stock)) {
+            return res.status(400).json({ message: "Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!" });
+        }
+        await productManager.addProduct(title, description, price, thumbnail, code, stock);
 
-    data.id = products.length + 1
-    products.push(data)
+        res.status(201).json({ message: "Producto agregado correctamente" });
 
-    res.json(data)
-})
+    } catch (error) {
+        console.error("Hubo un error en el proceso", error);
+        res.status(500).json({ error: "Hubo un error en el proceso" });
+    }
+});
+
 
 export default router
