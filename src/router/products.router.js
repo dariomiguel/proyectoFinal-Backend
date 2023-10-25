@@ -2,7 +2,7 @@ import { Router } from "express"
 
 const router = Router();
 
-const pets = [];
+const products = [];
 
 router.get("/", (req, res) => {
     //Listamos con limites
@@ -15,12 +15,12 @@ router.get("/", (req, res) => {
         }
     }
 
-    res.json(pets);
+    res.json(products);
 })
 
 router.get("/:id", (req, res) => {
     const id = req.params.id
-    const pet = pets.find(p => p.id == id)
+    const product = products.find(p => p.id == id)
 
     res.json(pet)
 })
@@ -28,8 +28,8 @@ router.get("/:id", (req, res) => {
 router.post("/", (req, res) => {
     const data = req.body
 
-    data.id = pets.length + 1
-    pets.push(data)
+    data.id = products.length + 1
+    products.push(data)
 
     res.json(data)
 })
