@@ -10,7 +10,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/static", express.static("../src/public"))
 app.get("/", async (req, res) => res.json("OK!"))
 
-app.use("/api/products", routerProducts)
-app.use("/api/carts", routerCarts)
+app.use("/api/products", routerProducts);
+app.use("/api/carts", routerCarts);
 
-app.listen(8080, () => console.log("En linea..."))
+app.listen(8080, () => console.log("En linea..."));
