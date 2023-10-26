@@ -42,11 +42,11 @@ router.get("/:pid", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { title, description, price, thumbnail, code, stock } = req.body;
-        if (await productManager.isNotValidCode(title, description, price, thumbnail, code, stock)) {
+        const { title, description, code, price, stock, category, thumbnail } = req.body;
+        if (await productManager.isNotValidCode(title, description, code, price, stock, category, thumbnail)) {
             return res.status(400).json({ message: "Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!" });
         }
-        await productManager.addProduct(title, description, price, thumbnail, code, stock);
+        await productManager.addProduct(title, description, code, price, stock, category, thumbnail);
 
         res.status(201).json({ message: "Producto agregado correctamente" });
 

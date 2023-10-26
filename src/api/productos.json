@@ -1,1 +1,24 @@
-[]
+[
+	{
+		"id": 0,
+		"title": "Producto de prueba",
+		"description": "Descripción de prueba",
+		"code": "12345",
+		"price": 29.99,
+		"status": true,
+		"stock": 100,
+		"category": "Electrónicos",
+		"thumbnail": "imagen.jpg"
+	},
+	{
+		"id": 1,
+		"title": "Remera de Ratatuile",
+		"description": "Remera de algodón",
+		"code": "RMA211",
+		"price": 500,
+		"status": true,
+		"stock": 12,
+		"category": "Ropa",
+		"thumbnail": "rremera.jpg"
+	}
+]
