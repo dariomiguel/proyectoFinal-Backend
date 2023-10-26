@@ -128,7 +128,6 @@ class ProductManager {
     deleteProduct = async (id) => {
         try {
             const product = await this.getProductById(id);
-            if (typeof product === "string") return console.log(product);
 
             this.products = await this.getProducts();
             //Buscamos en que indice el id coincide

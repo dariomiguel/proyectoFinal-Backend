@@ -1,22 +1,22 @@
 [
 	{
 		"id": 0,
-		"title": "A",
-		"description": "A",
-		"code": "A",
-		"price": 19.99,
-		"status": true,
-		"stock": 10,
-		"thumbnail": "A.jpg"
+		"title": "",
+		"description": "",
+		"code": "",
+		"price": "",
+		"status": "",
+		"stock": "",
+		"thumbnail": ""
 	},
 	{
 		"id": 1,
-		"title": "Remera de Ratatuile",
-		"description": "Remera de algodón",
-		"code": "RMA211",
-		"price": 15.99,
-		"status": true,
-		"stock": 12,
-		"thumbnail": "rremera.jpg"
+		"title": "",
+		"description": "",
+		"code": "",
+		"price": "",
+		"status": "",
+		"stock": "",
+		"thumbnail": ""
 	}
 ]

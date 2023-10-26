@@ -70,4 +70,16 @@ router.put("/:pid", async (req, res) => {
     }
 })
 
+router.delete("/:pid", async (req, res) => {
+    try {
+        const productId = parseInt(req.params.pid);
+
+        await productManager.deleteProduct(productId)
+        res.status(201).json({ message: "Producto eliminado correctamente" });
+
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+        res.status(500).json({ error: "Hubo un error al eliminar el producto" });
+    }
+})
 export default router
