@@ -5,7 +5,12 @@
 	},
 	{
 		"id": 1,
-		"products": []
+		"products": [
+			{
+				"pid": 1,
+				"quantity": 1
+			}
+		]
 	},
 	{
 		"id": 2,

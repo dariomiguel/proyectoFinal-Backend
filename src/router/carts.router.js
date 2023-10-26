@@ -38,34 +38,19 @@ router.get("/:cid", async (req, res) => {
     }
 });
 
-// router.get('/:cid', async (req, res) => {
-//     const id = parseInt(req.params.cid)
-//     const cart = await cartManager.getCartById(id)
-//     res.send(cart)
 
-// })
+router.post('/:cid/product/:pid', async (req, res) => {
+    try {
+        const cid = parseInt(req.params.cid)
+        const pid = parseInt(req.params.pid)
 
-// router.post('/', async (req, res) => {
-//     try {
-//         const cart = await cartManager.createCart()
-//         res.send(cart)
-//     } catch (err) {
-//         res.status(500).send("Error al crear el carrito" + err)
-//     }
-// })
+        const product = await cartManager.addProductInCart(cid, pid)
 
-// router.post('/:cid/product/:pid', async (req, res) => {
-//     try {
-//         const cid = parseInt(req.params.cid)
-//         const pid = parseInt(req.params.pid)
+        res.send(product)
 
-//         const product = await cartManager.addProductInCart(cid, pid)
-
-//         res.send(product)
-
-//     } catch (err) {
-//         res.status(500).send("Error al agregar producto al carrito" + err)
-//     }
-// })
+    } catch (err) {
+        res.status(500).send("Error al agregar producto al carrito" + err)
+    }
+})
 
 export default router
