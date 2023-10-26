@@ -20,5 +20,104 @@
 		"stock": 12,
 		"category": "Ropa",
 		"thumbnail": "rremera.jpg"
+	},
+	{
+		"id": 2,
+		"title": "Zapatillas deportivas",
+		"description": "Zapatillas ideales para hacer ejercicio",
+		"code": "SKU456",
+		"price": 29.99,
+		"status": true,
+		"stock": 30,
+		"category": "Ropa",
+		"thumbnail": "zapatillas.jpg"
+	},
+	{
+		"id": 3,
+		"title": "Bolso de cuero",
+		"description": "Bolso elegante de cuero genuino",
+		"code": "SKU789",
+		"price": 39.99,
+		"status": true,
+		"stock": 20,
+		"category": "Ropa",
+		"thumbnail": "bolso.jpg"
+	},
+	{
+		"id": 4,
+		"title": "Tablet Android",
+		"description": "Tablet con sistema operativo Android",
+		"code": "SKU012",
+		"price": 199.99,
+		"status": true,
+		"stock": 10,
+		"category": "Electrónica",
+		"thumbnail": "tablet.jpg"
+	},
+	{
+		"id": 5,
+		"title": "Cámara digital",
+		"description": "Cámara de alta resolución para fotografía",
+		"code": "SKU345",
+		"price": 299.99,
+		"status": true,
+		"stock": 79,
+		"category": "Electrónica",
+		"thumbnail": "camara.jpg"
+	},
+	{
+		"id": 6,
+		"title": "Cámara de alta resolución",
+		"description": "Ideal para fotografía profesional",
+		"code": "SKU123",
+		"price": 399.99,
+		"status": true,
+		"stock": 10,
+		"category": "Electrónica",
+		"thumbnail": "camara01.jpg"
+	},
+	{
+		"id": 7,
+		"title": "Cámara de acción",
+		"description": "Resistente al agua y a golpes",
+		"code": "SKU78s9",
+		"price": 299.99,
+		"status": true,
+		"stock": 15,
+		"category": "Electrónica",
+		"thumbnail": "camara03.jpg"
+	},
+	{
+		"id": 8,
+		"title": "Cámara réflex",
+		"description": "Para fotógrafos avanzados",
+		"code": "SKU101",
+		"price": 599.99,
+		"status": true,
+		"stock": 12,
+		"category": "Electrónica",
+		"thumbnail": "camara04.jpg"
+	},
+	{
+		"id": 9,
+		"title": "Cámara de vlogging",
+		"description": "Grabación de video en alta definición",
+		"code": "SKU222",
+		"price": 249.99,
+		"status": true,
+		"stock": 7,
+		"category": "Electrónica",
+		"thumbnail": "camara05.jpg"
+	},
+	{
+		"id": 10,
+		"title": "Producto de ejemplo",
+		"description": "Descripción del producto",
+		"code": "P12345",
+		"price": 19.99,
+		"status": true,
+		"stock": 10,
+		"category": "Ropa",
+		"thumbnail": "imagen.jpg"
 	}
 ]
