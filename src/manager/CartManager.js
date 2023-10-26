@@ -54,25 +54,29 @@ class CartManager {
     }
 
     getCarts = async () => {
+        //Verificamos que exista el archivo antes de leerlo
         try {
-            if (!fs.existsSync(this.path)) return this.carts
+            if (!fs.existsSync(this.path)) return [];
 
-            const data = await fs.promises.readFile(this.path, 'utf-8')
-            this.carts = JSON.parse(data)
+            const lectura = await fs.promises.readFile(this.path, "utf-8");
+            if (!lectura) return this.carts;
 
-            return this.carts
+            return this.carts = JSON.parse(lectura) || [];
+
         } catch (error) {
-            return error
+            console.log("Hubo un error en el READ", error);
+            throw error;
         }
     }
 
-    getCartById = async (cid) => {
+    getCartById = async (id) => {
         try {
             const data = await fs.promises.readFile(this.path, 'utf-8')
             this.carts = JSON.parse(data)
-            const carrito = this.carts.find(cart => cart.id == cid)
+            const carrito = this.carts.find(cart => cart.id == id)
 
-            return carrito ? carrito : 'Not found'
+            if (!carrito) return `No hay un producto con el número de ID ${id}.`
+            return carrito
         } catch (error) {
             return error
         }

@@ -81,11 +81,15 @@ class ProductManager {
 
     //Verificación si existe un producto con el ID
     getProductById = async (id) => {
-        this.products = await this.getProducts();
-        const product = this.products.find((product) => product.id == id);
+        try {
+            this.products = await this.getProducts();
+            const product = this.products.find((product) => product.id == id);
 
-        if (!product) return `No hay un producto con el número de ID ${id}.`
-        return product
+            if (!product) return `No hay un producto con el número de ID ${id}.`
+            return product
+        } catch (error) {
+            return error
+        }
     }
 
     //Método para buscar un ID especificado, con la clave y el valor a actualizar 

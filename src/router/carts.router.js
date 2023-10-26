@@ -14,15 +14,29 @@ router.post("/", async (req, res) => {
     }
 })
 
-// router.get('/', async (req, res) => {
-//     try {
-//         const carts = await cartManager.getCarts()
-//         res.send(carts)
+router.get('/', async (req, res) => {
+    try {
+        const carts = await cartManager.getCarts()
+        res.send(carts)
 
-//     } catch (err) {
-//         res.status(500).send("Error al obtener los carritos" + err)
-//     }
-// })
+    } catch (err) {
+        res.status(500).send("Error al obtener los carritos" + err)
+    }
+})
+
+router.get("/:cid", async (req, res) => {
+    try {
+        const cartPorId = await cartManager.getCartById(req.params.cid);
+
+        if (typeof cartPorId === "string") {
+            res.json({ Error: cartPorId });
+        } else {
+            res.json({ cartPorId });
+        }
+    } catch (error) {
+        res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
+    }
+});
 
 // router.get('/:cid', async (req, res) => {
 //     const id = parseInt(req.params.cid)
