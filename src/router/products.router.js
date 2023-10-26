@@ -56,5 +56,18 @@ router.post("/", async (req, res) => {
     }
 });
 
+router.put("/:pid", async (req, res) => {
+    try {
+        const productId = req.params.pid;
+        const { key, value } = req.body;
+
+        await productManager.updateProduct(productId, key, value)
+        res.status(201).json({ message: "Producto actualizado correctamente" });
+
+    } catch (error) {
+        console.error("Error al actualizar el producto:", error);
+        res.status(500).json({ error: "Hubo un error al actualizar el producto" });
+    }
+})
 
 export default router
