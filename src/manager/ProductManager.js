@@ -6,7 +6,7 @@ class ProductManager {
 
     //Se construye el elemento inicial (un array vacío).
     constructor() {
-        this.path = "../src/api/products.json";
+        this.path = "../src/api/productos.json";
         this.products = this.getProducts() || [];
 
         this.counter = 0;
