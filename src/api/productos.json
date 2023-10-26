@@ -18,5 +18,9 @@
 		"status": "",
 		"stock": "",
 		"thumbnail": ""
+	},
+	{
+		"id": 2,
+		"products": []
 	}
 ]

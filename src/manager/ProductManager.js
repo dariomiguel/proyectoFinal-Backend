@@ -10,7 +10,6 @@ class ProductManager {
         this.products = this.getProducts() || [];
 
         this.counter = 0;
-
     }
 
     //Se crea el retorno de los productos ingresados en el archivo database.json .
