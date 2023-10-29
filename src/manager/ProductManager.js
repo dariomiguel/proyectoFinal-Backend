@@ -1,12 +1,13 @@
 //Importamos el módulo para interactuar con archivos
 import fs from 'fs';
+import __dirname from "../utils.js"
 
 //Creamos la clase ProductManager que contendra los productos y metodos que necesitemos para la actividad.
 class ProductManager {
 
     //Se construye el elemento inicial (un array vacío).
     constructor() {
-        this.path = "../src/api/productos.json";
+        this.path = __dirname + "/api/productos.json";
         this.products = this.getProducts() || [];
 
         this.counter = 0;
