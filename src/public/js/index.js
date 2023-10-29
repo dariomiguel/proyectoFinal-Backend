@@ -5,3 +5,7 @@ document.querySelector("#sendMensaje").onclick = () => {
 
     socket.emit("message", value);
 }
+
+socket.on("mensaje_al_resto", (data) => {
+    console.log(data);
+})

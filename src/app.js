@@ -28,6 +28,8 @@ socketServer.on("connection", socket => {
 
     socket.on("message", data => {
         console.log(data);
+
+        socket.broadcast.emit("mensaje_al_resto")
     });
 });
 
