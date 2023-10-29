@@ -1,6 +1,7 @@
 import express from "express";
-import routerProducts from "./router/products.router.js"
-import routerCarts from "./router/carts.router.js"
+import productsRouter from "./router/products.router.js"
+import cartsRouter from "./router/carts.router.js"
+import viewsRouter from "./router/views.router.js"
 import __dirname from "./utils.js"
 
 const app = express();
@@ -16,7 +17,11 @@ app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"))
 app.get("/", async (req, res) => res.json("OK!"))
 
-app.use("/api/products", routerProducts);
-app.use("/api/carts", routerCarts);
+//Ruta de vistas
+app.use("/", viewsRouter)
+//Ruta de producto
+app.use("/api/products", productsRouter);
+//Ruta de carrito
+app.use("/api/carts", cartsRouter);
 
 app.listen(8080, () => console.log("En linea..."));
