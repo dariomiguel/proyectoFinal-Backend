@@ -102,8 +102,10 @@ class ProductManager {
 
             this.products = await this.getProducts();
             //Buscamos en que indice el id coincide
-            const indice = this.products.findIndex((objeto) => objeto.id === id);
+            const indice = this.products.findIndex((objeto) => objeto.id === parseInt(id, 10));
+            if (indice == -1) return console.log("No se encontro id");
 
+            // Registra lo que se va a actualizar
             product[key] = newValue;
             this.products[indice] = product;
 

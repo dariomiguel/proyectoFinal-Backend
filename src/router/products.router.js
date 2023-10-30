@@ -1,6 +1,6 @@
 import { Router } from "express"
 import ProductManager from "../manager/ProductManager.js";
-
+import __dirname from "../utils.js";
 
 const router = Router();
 const productManager = new ProductManager();
@@ -67,7 +67,13 @@ router.put("/:pid", async (req, res) => {
         const { key, value } = req.body;
 
         await productManager.updateProduct(productId, key, value)
-        res.status(201).json({ message: "Producto actualizado correctamente" });
+
+        const productPorId = await productManager.getProductById(req.params.pid);
+        if (typeof productPorId === "string") {
+            res.status(404).json({ Error: "No se encontro el producto solicitado" });
+        } else {
+            res.status(201).json({ message: "Producto actualizado correctamente" });
+        }
 
     } catch (error) {
         console.error("Error al actualizar el producto:", error);
