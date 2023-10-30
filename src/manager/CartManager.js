@@ -1,11 +1,12 @@
 import fs from 'fs'
 import ProductManager from './ProductManager.js'
+import __dirname from '../utils.js';
 
 const productManager = new ProductManager()
 
 class CartManager {
     constructor() {
-        this.path = '../src/api/carrito.json';
+        this.path = __dirname + "/api/carrito.json";
         this.carts = [];
 
         this.counter = 0;
