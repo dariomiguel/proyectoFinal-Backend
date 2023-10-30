@@ -23,16 +23,6 @@ app.use(express.static(__dirname + "/public"))
 const httpServer = app.listen(8080, () => console.log("En linea..."));
 //Creamos una variable que contenga el servidor socket basado en http
 const socketServer = new Server(httpServer);
-//Creamos un evento para el socket
-socketServer.on("connection", socket => {
-    console.log("Nuevo cliente conectado");
-
-    socket.on("message", data => {
-        console.log(data);
-
-        socket.broadcast.emit("mensaje_al_resto")
-    });
-});
 
 
 //Ruta de vistas
@@ -43,3 +33,14 @@ app.use("/realtimeproducts", realtimeproductsRouter);
 app.use("/api/products", productsRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
+
+//Creamos un evento para el socket
+socketServer.on("connection", socket => {
+    console.log("Nuevo cliente conectado");
+
+    socket.on("message", data => {
+        console.log(data);
+
+        socket.broadcast.emit("mensaje_al_resto")
+    });
+});
