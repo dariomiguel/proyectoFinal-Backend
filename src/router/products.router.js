@@ -68,7 +68,7 @@ router.put("/:pid", async (req, res) => {
 
         await productManager.updateProduct(productId, key, value)
 
-        const productPorId = await productManager.getProductById(req.params.pid);
+        const productPorId = await productManager.getProductById(productId);
         if (typeof productPorId === "string") {
             res.status(404).json({ Error: "No se encontro el producto solicitado" });
         } else {
@@ -84,9 +84,14 @@ router.put("/:pid", async (req, res) => {
 router.delete("/:pid", async (req, res) => {
     try {
         const productId = parseInt(req.params.pid);
+        const productPorId = await productManager.getProductById(productId);
 
-        await productManager.deleteProduct(productId)
-        res.status(201).json({ message: "Producto eliminado correctamente" });
+        if (typeof productPorId === "string") {
+            res.status(404).json({ Error: "No se encontro el producto solicitado" });
+        } else {
+            await productManager.deleteProduct(productId)
+            res.status(201).json({ message: "Producto eliminado correctamente" });
+        }
 
     } catch (error) {
         console.error("Error al eliminar el producto:", error);
