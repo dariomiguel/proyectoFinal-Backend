@@ -11,6 +11,11 @@ router.get("/", async (req, res) => {
         const limit = req.query.limit;
         let products = await productManager.getProducts();
 
+        if (products.length === 0) {
+            res.status(404).json({ Error: "No se encontraron productos" });
+            return;
+        }
+
         if (limit) {
             const limitNumber = parseInt(limit, 10);
             if (!isNaN(limitNumber) && limitNumber >= 0) {
@@ -30,7 +35,7 @@ router.get("/:pid", async (req, res) => {
         const productPorId = await productManager.getProductById(req.params.pid);
 
         if (typeof productPorId === "string") {
-            res.json({ Error: productPorId });
+            res.status(404).json({ Error: "No se encontro el producto solicitado" });
         } else {
             res.json({ productPorId });
         }
