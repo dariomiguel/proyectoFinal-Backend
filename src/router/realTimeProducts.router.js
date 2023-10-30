@@ -16,7 +16,7 @@ router.get("/", async (req, res) => {
                 products = products.slice(0, limitNumber);
             }
         }
-        res.render("home", {
+        res.render("realTimeProducts", {
             products
         });
     } catch (error) {

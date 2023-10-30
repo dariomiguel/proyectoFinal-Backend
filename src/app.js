@@ -5,6 +5,7 @@ import { Server } from "socket.io";
 import productsRouter from "./router/products.router.js";
 import cartsRouter from "./router/carts.router.js";
 import viewsRouter from "./router/views.router.js";
+import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 
 const app = express();
 app.use(express.json());
@@ -36,6 +37,8 @@ socketServer.on("connection", socket => {
 
 //Ruta de vistas
 app.use("/", viewsRouter)
+//Ruta de realtimeProducts
+app.use("/realtimeproducts", realtimeproductsRouter);
 //Ruta de producto
 app.use("/api/products", productsRouter);
 //Ruta de carrito
