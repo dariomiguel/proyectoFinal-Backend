@@ -1,8 +1,10 @@
 import { Router } from "express";
 import CartManager from "../manager/CartManager.js";
+import ProductManager from "../manager/ProductManager.js";
 
-const router = Router()
-const cartManager = new CartManager()
+const router = Router();
+const cartManager = new CartManager();
+const productManager = new ProductManager();
 
 router.post("/", async (req, res) => {
     try {
@@ -44,12 +46,16 @@ router.post('/:cid/product/:pid', async (req, res) => {
         const cid = parseInt(req.params.cid)
         const pid = parseInt(req.params.pid)
 
-        const product = await cartManager.addProductInCart(cid, pid)
+        const productPorId = await productManager.getProductById(pid);
+        const result = await cartManager.addProductInCart(cid, pid);
 
-        res.send(product)
+        if (result === 'Carrito not found') return res.status(404).json({ Error: "No se encontró el carrito" });
+        if (typeof productPorId === "string") return res.status(404).json({ Error: "No se encontro el producto solicitado" });
+
+        res.send(result);
 
     } catch (err) {
-        res.status(500).send("Error al agregar producto al carrito" + err)
+        res.status(500).send("Error al agregar producto al carrito " + err)
     }
 })
 
