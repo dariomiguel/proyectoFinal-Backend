@@ -10,6 +10,11 @@ router.get("/", async (req, res) => {
         const limit = req.query.limit;
         let products = await productManager.getProducts();
 
+        if (products.length === 0) {
+            res.status(404).json({ Error: "No se encontraron productos" });
+            return;
+        }
+
         if (limit) {
             const limitNumber = parseInt(limit, 10);
             if (!isNaN(limitNumber) && limitNumber >= 0) {
