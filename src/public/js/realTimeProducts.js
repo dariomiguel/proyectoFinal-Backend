@@ -3,7 +3,7 @@ let socket;
 
 // Función para enviar un nuevo producto al servidor
 function sendMessage(title, price, description, code, stock, category, img) {
-    socket.emit('addProduct', {
+    socket.emit("addProduct", {
         title: title,
         price: price,
         description: description,
@@ -12,6 +12,10 @@ function sendMessage(title, price, description, code, stock, category, img) {
         category: category,
         img: img
     });
+}
+
+function sendDelete(id) {
+    socket.emit("inputDeleteProduct", id)
 }
 
 // Función para inicializar la conexión de Socket.IO
@@ -34,11 +38,13 @@ document.querySelector('#btnAdd').addEventListener('click', (event) => {
         const imgInput = document.getElementById('imgAdd').value;
 
         sendMessage(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, imgInput);
-        productManager.addProduct(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, imgInput);
-
-        // Aquí puedes agregar código para manejar el éxito de la operación.
     } catch (error) {
         console.error("Error al agregar el producto:", error);
-        // Aquí puedes agregar código para manejar el error.
     }
+});
+
+
+document.querySelector('#btnDelete').addEventListener('click', (event) => {
+    const titleInput = document.getElementById('titleDelete').value;
+    sendDelete(titleInput);
 });

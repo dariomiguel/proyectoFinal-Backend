@@ -132,13 +132,13 @@ class ProductManager {
     }
 
     //Método para borrar uno de los productos
-    deleteProduct = async (id) => {
+    deleteProduct = async (pid) => {
         try {
-            const product = await this.getProductById(id);
+            const product = await this.getProductById(pid);
 
             this.products = await this.getProducts();
             //Buscamos en que indice el id coincide
-            const indice = this.products.findIndex((objeto) => objeto.id === id);
+            const indice = this.products.findIndex((objeto) => objeto.id == pid);
 
             for (const key in product) {
                 if (key !== 'id') product[key] = '';

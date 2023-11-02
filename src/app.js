@@ -47,4 +47,11 @@ socketServer.on("connection", socket => {
     socket.on("addProduct", async data => {
         await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.img);
     });
+
+    socket.on("inputDeleteProduct", async dataDelete => {
+        console.log("Id a eliminar: " + dataDelete);
+        console.log(await productManager.getProductById(dataDelete))
+        await productManager.deleteProduct(dataDelete)
+        console.log(await productManager.getProductById(dataDelete))
+    })
 });
