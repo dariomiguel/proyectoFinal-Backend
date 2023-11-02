@@ -49,9 +49,6 @@ socketServer.on("connection", socket => {
     });
 
     socket.on("inputDeleteProduct", async dataDelete => {
-        console.log("Id a eliminar: " + dataDelete);
-        console.log(await productManager.getProductById(dataDelete))
         await productManager.deleteProduct(dataDelete)
-        console.log(await productManager.getProductById(dataDelete))
     })
 });

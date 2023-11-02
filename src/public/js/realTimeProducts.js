@@ -23,7 +23,6 @@ function initIO() {
     socket = io();
 }
 
-// Esta función se ejecuta después de que la página se ha cargado y Socket.IO está inicializado.
 initIO();
 
 
