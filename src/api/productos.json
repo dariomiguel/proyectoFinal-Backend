@@ -152,5 +152,16 @@
 		"stock": "",
 		"category": "",
 		"thumbnail": ""
+	},
+	{
+		"id": 14,
+		"title": "Estatua de Barro",
+		"description": "Estatuta esculpida por los mejores alfareros de Grecia y Argentina",
+		"code": "AGR123",
+		"price": "15000",
+		"status": true,
+		"stock": "1",
+		"category": "Arte",
+		"thumbnail": "estatua.jpg"
 	}
 ]
