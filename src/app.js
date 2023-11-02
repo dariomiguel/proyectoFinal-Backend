@@ -6,6 +6,9 @@ import productsRouter from "./router/products.router.js";
 import cartsRouter from "./router/carts.router.js";
 import viewsRouter from "./router/views.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
+import ProductManager from "./manager/ProductManager.js";
+
+const productManager = new ProductManager();
 
 const app = express();
 app.use(express.json());
@@ -20,9 +23,9 @@ app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"))
 
 //Creamos una variable para el servidor  
-const httpServer = app.listen(8080, () => console.log("En linea..."));
+const io = app.listen(8080, () => console.log("En linea..."));
 //Creamos una variable que contenga el servidor socket basado en http
-const socketServer = new Server(httpServer);
+const socketServer = new Server(io);
 
 
 //Ruta de vistas
@@ -34,13 +37,14 @@ app.use("/api/products", productsRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
 
+
+const messages = []
+
 //Creamos un evento para el socket
 socketServer.on("connection", socket => {
-    console.log("Nuevo cliente conectado");
+    console.log("Página actualizada");
 
-    socket.on("message", data => {
-        console.log(data);
-
-        socket.broadcast.emit("mensaje_al_resto")
+    socket.on("addProduct", async data => {
+        await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.img);
     });
 });

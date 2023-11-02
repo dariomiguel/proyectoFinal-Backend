@@ -3,13 +3,14 @@
 <!-- Agregar un nuevo producto con WebSockets -->
 <h2>Agregar Nuevo Producto</h2>
 <form id="productForm">
-    <input type="text" id="title" placeholder="Título del producto">
-    <input type="number" id="price" placeholder="Precio del producto">
-    <input type="text" id="description" placeholder="Descripción del producto">
-    <input type="text" id="title" placeholder="Código de producto">
-    <input type="text" id="title" placeholder="Categoría del producto">
-    <input type="text" id="title" placeholder="URL de imagén">
-    <button type="submit">Agregar Producto</button>
+    <input type="text" id="titleAdd" placeholder="Título del producto">
+    <input type="number" id="priceAdd" placeholder="Precio del producto">
+    <input type="text" id="descriptionAdd" placeholder="Descripción del producto">
+    <input type="text" id="codeAdd" placeholder="Código de producto">
+    <input type="number" id="stockAdd" placeholder="Cantidad en stock">
+    <input type="text" id="categoryAdd" placeholder="Categoría del producto">
+    <input type="text" id="imgAdd" placeholder="URL de imagén">
+    <button type="submit" id="btnAdd">Agregar Producto</button>
 </form>
 <hr>
 <!-- Elinar un producto usando WebSockets -->
@@ -19,6 +20,8 @@
     <button type="submit">Agregar Producto</button>
 </form>
 <hr>
+
+<div id="nuevoProductoAgregado"></div>
 
 <h2>Productos</h2>
 {{#each products}}
@@ -35,5 +38,7 @@
     <hr>
 {{/each}}
 
+
+
 <script src="/socket.io/socket.io.js"></script>
-<script src="/js/home.js"></script>
+<script  src="/js/realTimeProducts.js"></script>
