@@ -22,6 +22,7 @@ router.get("/", async (req, res) => {
             }
         }
         res.render("realtimeproducts", {
+            style: "realTimeProducts.css",
             products
         });
     } catch (error) {
