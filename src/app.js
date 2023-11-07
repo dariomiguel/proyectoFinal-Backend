@@ -42,10 +42,14 @@ const messages = []
 
 //Creamos un evento para el socket
 socketServer.on("connection", socket => {
-    console.log("Página actualizada");
+    console.log("Página actualizada", socket.id);
+    socket.emit("serverShowProducts", data => {
+        console.log(data);
+    })
 
-    socket.on("addProduct", async data => {
-        await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.img);
+    socket.on("clientAddProduct", data => {
+        console.log("Producto por agregar", data);
+        socket.emit("ServerAddProducts", data)
     });
 
     socket.on("inputDeleteProduct", async dataDelete => {
