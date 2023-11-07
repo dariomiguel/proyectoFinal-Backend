@@ -27,6 +27,7 @@ initIO();
 
 
 document.querySelector('#btnAdd').addEventListener('click', (event) => {
+    event.preventDefault();
     try {
         const titleInput = document.getElementById('titleAdd').value;
         const priceInput = document.getElementById('priceAdd').value;
@@ -44,6 +45,7 @@ document.querySelector('#btnAdd').addEventListener('click', (event) => {
 
 
 document.querySelector('#btnDelete').addEventListener('click', (event) => {
+    event.preventDefault();
     const titleInput = document.getElementById('titleDelete').value;
     sendDelete(titleInput);
 });
