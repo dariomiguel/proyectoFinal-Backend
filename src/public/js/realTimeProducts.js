@@ -3,8 +3,6 @@ const productsAddForm = document.getElementById("productForm");
 const nuevoProducto = document.getElementById("nuevoProductoAgregado")
 
 
-
-
 let socket;
 // Función para inicializar la conexión de Socket.IO
 function initIO() {
@@ -13,17 +11,22 @@ function initIO() {
 initIO();
 
 // Función para enviar un nuevo producto al servidor
-function sendAddProducts(title, price, description, code, stock, category, img) {
+function sendAddProducts(title, price, description, code, stock, category, thumbnails) {
     socket.emit("clientAddProduct", {
-        title: title,
-        price: price,
-        description: description,
-        code: code,
-        stock: stock,
-        category: category,
-        img: img
+        title,
+        price,
+        description,
+        code,
+        stock,
+        category,
+        thumbnails
     });
 }
+
+socket.on("ServerAddProducts", datos => {
+    console.log("Productos Desde el servidor", datos)
+
+})
 // function sendDelete(id) {
 //     socket.emit("inputDeleteProduct", id)
 // }
@@ -40,9 +43,9 @@ productsAddForm.addEventListener("submit", (event) => {
         const codeInput = document.getElementById('codeAdd').value;
         const stockAdd = document.getElementById('stockAdd').value;
         const categoryInput = document.getElementById('categoryAdd').value;
-        const imgInput = document.getElementById('imgAdd').value;
+        const thumbnailsInput = document.getElementById('thumbnailsAdd').value;
 
-        sendAddProducts(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, imgInput);
+        sendAddProducts(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, thumbnailsInput);
 
     } catch (error) {
         console.error("Error al agregar el producto:", error);
