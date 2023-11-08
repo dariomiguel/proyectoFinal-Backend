@@ -1,5 +1,15 @@
-// Inicializamos la conexión de Socket.IO
+//Utilizamos una variable para manejar el formulario de adisión
+const productsAddForm = document.getElementById("productForm");
+const nuevoProducto = document.getElementById("nuevoProductoAgregado")
+
+
+
+
 let socket;
+// Función para inicializar la conexión de Socket.IO
+function initIO() {
+    socket = io();
+}
 initIO();
 
 // Función para enviar un nuevo producto al servidor
@@ -14,24 +24,14 @@ function sendAddProducts(title, price, description, code, stock, category, img) 
         img: img
     });
 }
+// function sendDelete(id) {
+//     socket.emit("inputDeleteProduct", id)
+// }
 
-socket.on("ServerAddProducts", data => {
-    console.log("Esto esta en el front ahora", data);
-})
-
-function sendDelete(id) {
-    socket.emit("inputDeleteProduct", id)
-}
-
-// Función para inicializar la conexión de Socket.IO
-function initIO() {
-    socket = io();
-}
+// socket.on("serverShowProducts", data)
 
 
-
-
-document.querySelector('#btnAdd').addEventListener('click', (event) => {
+productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
     try {
         const titleInput = document.getElementById('titleAdd').value;
@@ -44,11 +44,10 @@ document.querySelector('#btnAdd').addEventListener('click', (event) => {
 
         sendAddProducts(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, imgInput);
 
-
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }
-});
+})
 
 
 document.querySelector('#btnDelete').addEventListener('click', (event) => {
