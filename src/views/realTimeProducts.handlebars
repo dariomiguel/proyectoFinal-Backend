@@ -3,42 +3,49 @@
 <!-- Agregar un nuevo producto con WebSockets -->
 <h2>Agregar Nuevo Producto</h2>
 <form id="productForm">
-    <input type="text" id="titleAdd" placeholder="Título del producto">
-    <input type="number" id="priceAdd" placeholder="Precio del producto">
-    <input type="text" id="descriptionAdd" placeholder="Descripción del producto">
-    <input type="text" id="codeAdd" placeholder="Código de producto">
-    <input type="number" id="stockAdd" placeholder="Cantidad en stock">
-    <input type="text" id="categoryAdd" placeholder="Categoría del producto">
-    <input type="text" id="imgAdd" placeholder="URL de imagén">
+    <input type="text" id="titleAdd" placeholder="Título del producto" />
+    <input type="number" id="priceAdd" placeholder="Precio del producto" />
+    <input
+        type="text"
+        id="descriptionAdd"
+        placeholder="Descripción del producto"
+    />
+    <input type="text" id="codeAdd" placeholder="Código de producto" />
+    <input type="number" id="stockAdd" placeholder="Cantidad en stock" />
+    <input type="text" id="categoryAdd" placeholder="Categoría del producto" />
+    <input type="text" id="thumbnailsAdd" placeholder="URL de imagén" />
     <button type="submit" id="btnAdd">Agregar Producto</button>
 </form>
-<hr>
+<hr />
 <!-- Elinar un producto usando WebSockets -->
 <h2>Eliminar Producto por ID</h2>
 <form id="deleteProductForm">
-    <input type="text" id="titleDelete" placeholder="Id de producto a Eliminar">
+    <input
+        type="text"
+        id="titleDelete"
+        placeholder="Id de producto a Eliminar"
+    />
     <button type="submit" id="btnDelete">Eliminar Producto</button>
 </form>
-<hr>
-
-<div id="nuevoProductoAgregado"></div>
+<hr />
 
 <h2>Productos</h2>
-{{#each products}}
-    <h3>{{this.title}}</h3>
-    <ul>
-        <li>$ {{this.price}}</li>
-        <li>N° Id: {{this.id}}</li>
-        <li>{{this.description}}</li>
-        <li>Código de producto: {{this.code}}</li>
-        <li>Cant. Stock:{{this.stock}}</li>
-        <li>Categoría: {{this.category}}</li>
-        <li>{{this.thumbnail}}</li>
-    </ul>
-    <hr>
+<div id="nuevoProductoAgregado"></div>
+{{#each reversedproducts}}
+    <div id={{this.id}}>
+        <h3>{{this.title}}</h3>
+        <ul>
+            <li>$ {{this.price}}</li>
+            <li>N° Id: {{this.id}}</li>
+            <li>{{this.description}}</li>
+            <li>Código de producto: {{this.code}}</li>
+            <li>Stock:{{this.stock}}</li>
+            <li>Categoría: {{this.category}}</li>
+            <li>{{this.thumbnails}}</li>
+        </ul>
+        <hr />
+    </div>
 {{/each}}
 
-
-
 <script src="/socket.io/socket.io.js"></script>
-<script  src="/js/realTimeProducts.js"></script>
+<script src="/js/realTimeProducts.js"></script>

@@ -8,7 +8,7 @@
 		"status": true,
 		"stock": 100,
 		"category": "Electrónicos",
-		"thumbnail": "imagen.jpg"
+		"thumbnails": "imagen.jpg"
 	},
 	{
 		"id": 1,
@@ -19,7 +19,7 @@
 		"status": true,
 		"stock": 12,
 		"category": "Ropa",
-		"thumbnail": "rremera.jpg"
+		"thumbnails": "rremera.jpg"
 	},
 	{
 		"id": 2,
@@ -30,7 +30,7 @@
 		"status": true,
 		"stock": 30,
 		"category": "Ropa",
-		"thumbnail": "zapatillas.jpg"
+		"thumbnails": "zapatillas.jpg"
 	},
 	{
 		"id": 3,
@@ -41,7 +41,7 @@
 		"status": true,
 		"stock": 20,
 		"category": "Ropa",
-		"thumbnail": "bolso.jpg"
+		"thumbnails": "bolso.jpg"
 	},
 	{
 		"id": 4,
@@ -52,7 +52,7 @@
 		"status": true,
 		"stock": 10,
 		"category": "Electrónica",
-		"thumbnail": "tablet.jpg"
+		"thumbnails": "tablet.jpg"
 	},
 	{
 		"id": 5,
@@ -63,7 +63,7 @@
 		"status": true,
 		"stock": 79,
 		"category": "Electrónica",
-		"thumbnail": "camara.jpg"
+		"thumbnails": "camara.jpg"
 	},
 	{
 		"id": 6,
@@ -74,7 +74,7 @@
 		"status": true,
 		"stock": 10,
 		"category": "Electrónica",
-		"thumbnail": "camara01.jpg"
+		"thumbnails": "camara01.jpg"
 	},
 	{
 		"id": 7,
@@ -85,18 +85,18 @@
 		"status": true,
 		"stock": 15,
 		"category": "Electrónica",
-		"thumbnail": "camara03.jpg"
+		"thumbnails": "camara03.jpg"
 	},
 	{
 		"id": 8,
-		"title": "Cámara réflex",
-		"description": "Para fotógrafos avanzados",
-		"code": "SKU101",
-		"price": 599.99,
-		"status": true,
-		"stock": 12,
-		"category": "Electrónica",
-		"thumbnail": "camara04.jpg"
+		"title": "",
+		"description": "",
+		"code": "",
+		"price": "",
+		"status": "",
+		"stock": "",
+		"category": "",
+		"thumbnails": ""
 	},
 	{
 		"id": 9,
@@ -107,7 +107,7 @@
 		"status": true,
 		"stock": 7,
 		"category": "Electrónica",
-		"thumbnail": "camara05.jpg"
+		"thumbnails": "camara05.jpg"
 	},
 	{
 		"id": 10,
@@ -118,10 +118,21 @@
 		"status": true,
 		"stock": 10,
 		"category": "Ropa",
-		"thumbnail": "imagen.jpg"
+		"thumbnails": "imagen.jpg"
 	},
 	{
 		"id": 11,
+		"title": "5",
+		"description": "5",
+		"code": "5",
+		"price": "5",
+		"status": true,
+		"stock": "5",
+		"category": "5",
+		"thumbnails": "5"
+	},
+	{
+		"id": 12,
 		"title": "",
 		"description": "",
 		"code": "",
@@ -129,18 +140,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnail": ""
-	},
-	{
-		"id": 12,
-		"title": "2122222",
-		"description": "22222",
-		"code": "22222",
-		"price": "22222",
-		"status": true,
-		"stock": "222222",
-		"category": "22222",
-		"thumbnail": "22222"
+		"thumbnails": ""
 	},
 	{
 		"id": 13,
@@ -151,17 +151,50 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnail": ""
+		"thumbnails": ""
 	},
 	{
 		"id": 14,
-		"title": "Estatua de Barro",
-		"description": "Estatuta esculpida por los mejores alfareros de Grecia y Argentina",
-		"code": "AGR123",
-		"price": "15000",
+		"title": "",
+		"description": "",
+		"code": "",
+		"price": "",
+		"status": "",
+		"stock": "",
+		"category": "",
+		"thumbnails": ""
+	},
+	{
+		"id": 15,
+		"title": "",
+		"description": "",
+		"code": "",
+		"price": "",
+		"status": "",
+		"stock": "",
+		"category": "",
+		"thumbnails": ""
+	},
+	{
+		"id": 16,
+		"title": "1",
+		"description": "1",
+		"code": "1",
+		"price": "1",
 		"status": true,
 		"stock": "1",
-		"category": "Arte",
-		"thumbnail": "estatua.jpg"
+		"category": "1",
+		"thumbnails": "1"
+	},
+	{
+		"id": 17,
+		"title": "2",
+		"description": "2",
+		"code": "2",
+		"price": "2",
+		"status": true,
+		"stock": "2",
+		"category": "2",
+		"thumbnails": "2"
 	}
 ]

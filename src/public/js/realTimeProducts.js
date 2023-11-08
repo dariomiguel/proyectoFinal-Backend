@@ -1,49 +1,101 @@
-// Inicializamos la conexión de Socket.IO
+//Utilizamos una variable para manejar el formulario de adisión
+const productsAddForm = document.getElementById("productForm");
+const nuevoProducto = document.getElementById("nuevoProductoAgregado");
+
 let socket;
-
-// Función para enviar un nuevo producto al servidor
-function sendMessage(title, price, description, code, stock, category, img) {
-    socket.emit("addProduct", {
-        title: title,
-        price: price,
-        description: description,
-        code: code,
-        stock: stock,
-        category: category,
-        img: img
-    });
-}
-
-function sendDelete(id) {
-    socket.emit("inputDeleteProduct", id)
-}
-
 // Función para inicializar la conexión de Socket.IO
 function initIO() {
     socket = io();
 }
-
 initIO();
 
+// Función para enviar un nuevo producto al servidor
+function sendAddProducts(title, price, description, code, stock, category, thumbnails) {
+    socket.emit("clientAddProduct", {
+        title,
+        price,
+        description,
+        code,
+        stock,
+        category,
+        thumbnails
+    });
+}
 
-document.querySelector('#btnAdd').addEventListener('click', (event) => {
+socket.on("ServerAddProducts", (datos) => {
+    const div = document.createElement("div");
+    div.id = datos.id;
+    div.innerHTML = `
+        <h3>${datos.title}</h3>
+        <ul>
+            <li>$ ${datos.price}</li>
+            <li>N° Id: ${datos.id}</li>
+            <li>${datos.description}</li>
+            <li>Código de producto: ${datos.code}</li>
+            <li>Stock: ${datos.stock}</li>
+            <li>Categoría: ${datos.category}</li>
+            <li>${datos.thumbnails}</li>
+        </ul>
+        <hr />
+    `;
+
+    //Agregamos en la parte superior
+    nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
+});
+
+const sendDelete = async (id) => {
+    await fetch(`/api/products/${id}`, {
+        method: "DELETE",
+    })
+        .then((data) => data.json())
+        .then((json) => {
+            document.getElementById(id).innerHTML = "";
+        });
+};
+
+productsAddForm.addEventListener("submit", (event) => {
+    event.preventDefault();
     try {
-        const titleInput = document.getElementById('titleAdd').value;
-        const priceInput = document.getElementById('priceAdd').value;
-        const descriptionInput = document.getElementById('descriptionAdd').value;
-        const codeInput = document.getElementById('codeAdd').value;
-        const stockAdd = document.getElementById('stockAdd').value;
-        const categoryInput = document.getElementById('categoryAdd').value;
-        const imgInput = document.getElementById('imgAdd').value;
+        const titleInput = document.getElementById("titleAdd");
+        const priceInput = document.getElementById("priceAdd");
+        const descriptionInput = document.getElementById("descriptionAdd");
+        const codeInput = document.getElementById("codeAdd");
+        const stockAdd = document.getElementById("stockAdd");
+        const categoryInput = document.getElementById("categoryAdd");
+        const thumbnailsInput = document.getElementById("thumbnailsAdd");
 
-        sendMessage(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, imgInput);
+        const title = titleInput.value;
+        const price = priceInput.value;
+        const description = descriptionInput.value;
+        const code = codeInput.value;
+        const stock = stockAdd.value;
+        const category = categoryInput.value;
+        const thumbnails = thumbnailsInput.value;
+
+        sendAddProducts(
+            title,
+            price,
+            description,
+            code,
+            stock,
+            category,
+            thumbnails
+        );
+
+        titleInput.value = "";
+        priceInput.value = "";
+        descriptionInput.value = "";
+        codeInput.value = "";
+        stockAdd.value = "";
+        categoryInput.value = "";
+        thumbnailsInput.value = "";
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }
 });
 
-
-document.querySelector('#btnDelete').addEventListener('click', (event) => {
-    const titleInput = document.getElementById('titleDelete').value;
+document.querySelector("#btnDelete").addEventListener("click", (event) => {
+    event.preventDefault();
+    const titleInput = document.getElementById("titleDelete").value;
     sendDelete(titleInput);
 });
