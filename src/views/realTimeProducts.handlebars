@@ -1,4 +1,4 @@
-<h1>Lista de productos en tiempo real</h1>
+{{!-- <h1>Lista de productos en tiempo real</h1>
 
 <!-- Agregar un nuevo producto con WebSockets -->
 <h2>Agregar Nuevo Producto</h2>
@@ -37,8 +37,35 @@
     </ul>
     <hr>
 {{/each}}
+--}}
 
+<div class="container">
+    <div class="row">
+        <div>
+            <form id="productForm">
+                <h1> add a note</h1>
+                <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Write a title"
+                    autofocus
+                />
+                <textarea
+                    name="description"
+                    id="description"
+                    class="form-control"
+                    placeholder="write a description"
+                ></textarea>
 
+                <button>Enviar</button>
+            </form>
+        </div>
+        <div id="notes">
+            notes
+        </div>
+    </div>
+</div>
 
 <script src="/socket.io/socket.io.js"></script>
-<script  src="/js/realTimeProducts.js"></script>
+<script src="/js/realTimeProducts.js"></script>

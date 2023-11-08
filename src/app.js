@@ -41,14 +41,23 @@ app.use("/api/carts", cartsRouter);
 const messages = []
 
 //Creamos un evento para el socket
-socketServer.on("connection", socket => {
-    console.log("Página actualizada");
+// socketServer.on("connection", socket => {
+//     console.log("Página actualizada");
 
-    socket.on("addProduct", async data => {
-        await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.img);
-    });
+//     socket.on("addProduct", async data => {
+//         await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.img);
+//     });
 
-    socket.on("inputDeleteProduct", async dataDelete => {
-        await productManager.deleteProduct(dataDelete)
+//     socket.on("inputDeleteProduct", async dataDelete => {
+//         await productManager.deleteProduct(dataDelete)
+//     })
+// });
+socketServer.on("connection", (socket) => {
+    console.log("Nueva conexión: ", socket.id);
+
+    socket.emit("ping")
+
+    socket.on("clientNewProduct", data => {
+        console.log(data);
     })
-});
+})
