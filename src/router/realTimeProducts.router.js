@@ -25,7 +25,7 @@ router.setSocketServer = (server) => {
                 console.log("Producto agregado exitosamente");
                 let productsFromClient = await productManager.getProducts()
 
-                socket.emit("ServerAddProducts", productsFromClient);
+                socket.emit("ServerAddProducts", data);
             } else {
                 console.error("el producto no es valido");
             }
@@ -50,8 +50,11 @@ router.get("/", async (req, res) => {
                 products = products.slice(0, limitNumber);
             }
         }
+
+        const reversedproducts = [...products].reverse();
+
         res.render("realtimeproducts", {
-            products
+            reversedproducts
         });
     } catch (error) {
         console.error("Error al obtener la lista de productos:", error);
