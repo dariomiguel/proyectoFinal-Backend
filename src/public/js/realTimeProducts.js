@@ -24,8 +24,16 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
 }
 
 socket.on("ServerAddProducts", datos => {
-    console.log("Productos Desde el servidor", datos)
+    // if (Object.keys(datos).length === 0) {
+    //     console.error("Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!");
+    // } else {
+    console.log(datos);
+    const div = document.createElement("div");
+    nuevoProducto.append(
+        div.innerHTML = `  <div> ${datos}   </div>
+        `)
 
+    // }
 })
 // function sendDelete(id) {
 //     socket.emit("inputDeleteProduct", id)

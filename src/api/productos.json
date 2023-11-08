@@ -12,13 +12,46 @@
 	},
 	{
 		"id": 1,
-		"title": "title",
-		"description": "descri",
-		"code": "codig11",
-		"price": "0010101",
+		"title": "0",
+		"description": "0",
+		"code": "0",
+		"price": "0",
 		"status": true,
-		"stock": "11",
-		"category": "cateq",
-		"thumbnails": "UAAL"
+		"stock": "0",
+		"category": "0",
+		"thumbnails": "0"
+	},
+	{
+		"id": 2,
+		"title": "01",
+		"description": "01",
+		"code": "01",
+		"price": "01",
+		"status": true,
+		"stock": "01",
+		"category": "01",
+		"thumbnails": "01"
+	},
+	{
+		"id": 3,
+		"title": "013",
+		"description": "013",
+		"code": "013",
+		"price": "013",
+		"status": true,
+		"stock": "013",
+		"category": "013",
+		"thumbnails": "013"
+	},
+	{
+		"id": 4,
+		"title": "0134",
+		"description": "0134",
+		"code": "0134",
+		"price": "0134",
+		"status": true,
+		"stock": "0134",
+		"category": "0134",
+		"thumbnails": "0134"
 	}
 ]
