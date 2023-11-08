@@ -6,21 +6,33 @@ const router = express.Router();
 
 let socketServer; // Variable para almacenar la instancia de socketServer
 
-
-
 // Método para configurar la instancia de socketServer
 router.setSocketServer = (server) => {
     socketServer = server;
-    socketServer.on("connection", socket => {
+    socketServer.on("connection", (socket) => {
         console.log("Página actualizada", socket.id);
 
-        socket.on("clientAddProduct", async data => {
-
-            let validador = await productManager.isNotValidCode(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails)
+        socket.on("clientAddProduct", async (data) => {
+            let validador = await productManager.isNotValidCode(
+                data.title,
+                data.description,
+                data.code,
+                data.price,
+                data.stock,
+                data.category,
+                data.thumbnails
+            );
 
             if (!validador) {
-
-                await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails);
+                await productManager.addProduct(
+                    data.title,
+                    data.description,
+                    data.code,
+                    data.price,
+                    data.stock,
+                    data.category,
+                    data.thumbnails
+                );
 
                 console.log("Producto agregado exitosamente");
                 console.log("El id es : ", productManager.showId());
@@ -31,7 +43,6 @@ router.setSocketServer = (server) => {
                 console.error("el producto no es valido");
             }
         });
-
     });
 };
 
@@ -52,14 +63,16 @@ router.get("/", async (req, res) => {
             }
         }
 
-        const reversedproducts = [...products].reverse();
+        const reversedproducts = [...products].reverse().filter((p) => p.title);
 
         res.render("realtimeproducts", {
-            reversedproducts
+            reversedproducts,
         });
     } catch (error) {
         console.error("Error al obtener la lista de productos:", error);
-        res.status(500).json({ Error: "Hubo un error al obtener la lista de productos" });
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
     }
 });
 

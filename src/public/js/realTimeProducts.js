@@ -1,7 +1,6 @@
 //Utilizamos una variable para manejar el formulario de adisión
 const productsAddForm = document.getElementById("productForm");
-const nuevoProducto = document.getElementById("nuevoProductoAgregado")
-
+const nuevoProducto = document.getElementById("nuevoProductoAgregado");
 
 let socket;
 // Función para inicializar la conexión de Socket.IO
@@ -23,9 +22,7 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
     });
 }
 
-socket.on("ServerAddProducts", datos => {
-    console.log(datos);
-
+socket.on("ServerAddProducts", (datos) => {
     const div = document.createElement("div");
     div.id = datos.id;
     div.innerHTML = `
@@ -43,42 +40,29 @@ socket.on("ServerAddProducts", datos => {
     `;
 
     //Agregamos en la parte superior
-    nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
+    nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
 });
 
 const sendDelete = async (id) => {
     await fetch(`/api/products/${id}`, {
-        method: "DELETE"
+        method: "DELETE",
     })
-        .then(data => data.json())
-        .then(json => {
-            socket.emit("deleteProduct", id)
-        })
-    await fetch(`/`, {
-        method: "GET"
-    })
-        .then(data => data.json())
-        .then(json => {
-            // socket.emit("ServerAddProducts", json)
-        })
-    // socket.emit("inputDeleteProduct", id)
-}
-
-socket.on("deleteProduct", id => {
-    document.getElementById(id).innerHTML = "";
-})
+        .then((data) => data.json())
+        .then((json) => {
+            document.getElementById(id).innerHTML = "";
+        });
+};
 
 productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
     try {
-        const titleInput = document.getElementById('titleAdd');
-        const priceInput = document.getElementById('priceAdd');
-        const descriptionInput = document.getElementById('descriptionAdd');
-        const codeInput = document.getElementById('codeAdd');
-        const stockAdd = document.getElementById('stockAdd');
-        const categoryInput = document.getElementById('categoryAdd');
-        const thumbnailsInput = document.getElementById('thumbnailsAdd');
-
+        const titleInput = document.getElementById("titleAdd");
+        const priceInput = document.getElementById("priceAdd");
+        const descriptionInput = document.getElementById("descriptionAdd");
+        const codeInput = document.getElementById("codeAdd");
+        const stockAdd = document.getElementById("stockAdd");
+        const categoryInput = document.getElementById("categoryAdd");
+        const thumbnailsInput = document.getElementById("thumbnailsAdd");
 
         const title = titleInput.value;
         const price = priceInput.value;
@@ -88,7 +72,15 @@ productsAddForm.addEventListener("submit", (event) => {
         const category = categoryInput.value;
         const thumbnails = thumbnailsInput.value;
 
-        sendAddProducts(title, price, description, code, stock, category, thumbnails);
+        sendAddProducts(
+            title,
+            price,
+            description,
+            code,
+            stock,
+            category,
+            thumbnails
+        );
 
         titleInput.value = "";
         priceInput.value = "";
@@ -97,15 +89,13 @@ productsAddForm.addEventListener("submit", (event) => {
         stockAdd.value = "";
         categoryInput.value = "";
         thumbnailsInput.value = "";
-
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }
-})
+});
 
-
-document.querySelector('#btnDelete').addEventListener('click', (event) => {
+document.querySelector("#btnDelete").addEventListener("click", (event) => {
     event.preventDefault();
-    const titleInput = document.getElementById('titleDelete').value;
+    const titleInput = document.getElementById("titleDelete").value;
     sendDelete(titleInput);
 });
