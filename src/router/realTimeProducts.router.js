@@ -6,16 +6,16 @@ const router = express.Router();
 
 let socketServer; // Variable para almacenar la instancia de socketServer
 
-
-
 // Método para configurar la instancia de socketServer
 router.setSocketServer = (server) => {
     socketServer = server;
     socketServer.on("connection", async socket => {
         console.log("Página actualizada", socket.id);
         let productos = await productManager.getProducts();
+        //Socket para iniciar la lista
         socket.emit("productos", productos);
 
+        //Socket para agregar producto
         socket.on("clientAddProduct", async data => {
             let validador = await productManager.isNotValidCode(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails)
             if (!validador) {
@@ -27,6 +27,13 @@ router.setSocketServer = (server) => {
             } else {
                 console.error("el producto no es valido");
             }
+        });
+
+        //socket para eliminar un producto
+        socket.on("clientDeleteProduct", async (id) => {
+            let productos = await productManager.getProducts();
+            await productManager.deleteProduct(id);
+            socket.emit("serverDeleteProduct", productos);
         });
 
     });

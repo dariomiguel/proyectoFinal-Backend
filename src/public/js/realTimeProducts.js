@@ -50,9 +50,31 @@ socket.on("productos", (productos) => {
 });
 
 
+socket.on("ServerAddProducts", datos => {
+    console.log(datos);
+    const div = document.createElement("div");
+
+    div.innerHTML = `
+        <h3>${datos.title}</h3>
+        <ul>
+            <li>$ ${datos.price}</li>
+            <li>N° Id: ${datos.id}</li>
+            <li>${datos.description}</li>
+            <li>Código de producto: ${datos.code}</li>
+            <li>Stock: ${datos.stock}</li>
+            <li>Categoría: ${datos.category}</li>
+            <li>${datos.thumbnails}</li>
+        </ul>
+        <hr />
+    `;
+
+    //Agregamos en la parte superior
+    nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
+});
+
+
 function sendDelete(id) {
     socket.emit("clientDeleteProduct", id)
-    console.log();
 }
 
 productsAddForm.addEventListener("submit", (event) => {
@@ -93,6 +115,10 @@ productsAddForm.addEventListener("submit", (event) => {
 
 document.querySelector('#btnDelete').addEventListener('click', (event) => {
     event.preventDefault();
-    const titleInput = document.getElementById('titleDelete').value;
-    sendDelete(titleInput);
+    const titleInput = document.getElementById('titleDelete');
+
+    const title = titleInput.value;
+
+    sendDelete(title);
+    title.input = "";
 });
