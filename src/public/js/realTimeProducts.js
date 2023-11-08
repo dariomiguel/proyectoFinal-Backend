@@ -26,6 +26,10 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
 const productList = document.getElementById("productList");
 
 socket.on("productos", (productos) => {
+    while (productList.firstChild) {
+        productList.removeChild(productList.firstChild);
+    }
+
     productos.forEach((producto) => {
         const productDiv = document.createElement("div");
         productDiv.innerHTML = `
@@ -45,25 +49,6 @@ socket.on("productos", (productos) => {
     });
 });
 
-socket.on("ServerAddProducts", datos => {
-    const div = document.createElement("div");
-    div.innerHTML = `
-        <h3>${datos.title}</h3>
-        <ul>
-            <li>$ ${datos.price}</li>
-            <li>N° Id: ${datos.id}</li>
-            <li>${datos.description}</li>
-            <li>Código de producto: ${datos.code}</li>
-            <li>Stock: ${datos.stock}</li>
-            <li>Categoría: ${datos.category}</li>
-            <li>${datos.thumbnails}</li>
-        </ul>
-        <hr />
-    `;
-
-    //Agregamos en la parte superior
-    nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
-});
 
 function sendDelete(id) {
     socket.emit("clientDeleteProduct", id)

@@ -11,21 +11,18 @@ let socketServer; // Variable para almacenar la instancia de socketServer
 // Método para configurar la instancia de socketServer
 router.setSocketServer = (server) => {
     socketServer = server;
-    socketServer.on("connection", socket => {
+    socketServer.on("connection", async socket => {
         console.log("Página actualizada", socket.id);
+        let productos = await productManager.getProducts();
+        socket.emit("productos", productos);
 
         socket.on("clientAddProduct", async data => {
-
             let validador = await productManager.isNotValidCode(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails)
-
             if (!validador) {
-
                 await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails);
-
                 console.log("Producto agregado exitosamente");
-                console.log("El id es : ", productManager.showId());
-
                 const dataProducts = { ...data, id: productManager.showId() };
+
                 socket.emit("ServerAddProducts", dataProducts);
             } else {
                 console.error("el producto no es valido");

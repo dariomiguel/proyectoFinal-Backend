@@ -30,20 +30,7 @@
 <hr />
 
 <h2>Productos</h2>
-<div id="nuevoProductoAgregado"></div>
-{{#each reversedproducts}}
-    <h3>{{this.title}}</h3>
-    <ul>
-        <li>$ {{this.price}}</li>
-        <li>N° Id: {{this.id}}</li>
-        <li>{{this.description}}</li>
-        <li>Código de producto: {{this.code}}</li>
-        <li>Stock:{{this.stock}}</li>
-        <li>Categoría: {{this.category}}</li>
-        <li>{{this.thumbnails}}</li>
-    </ul>
-    <hr />
-{{/each}}
+<div id="productList"></div>
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>
