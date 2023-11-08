@@ -12,46 +12,57 @@
 	},
 	{
 		"id": 1,
+		"title": {},
+		"description": {},
+		"code": {},
+		"price": {},
+		"status": true,
+		"stock": {},
+		"category": {},
+		"thumbnails": {}
+	},
+	{
+		"id": 2,
+		"title": {},
+		"description": {},
+		"code": {},
+		"price": {},
+		"status": true,
+		"stock": {},
+		"category": {},
+		"thumbnails": {}
+	},
+	{
+		"id": 3,
 		"title": "0",
 		"description": "0",
 		"code": "0",
 		"price": "0",
 		"status": true,
-		"stock": "0",
+		"stock": {},
 		"category": "0",
 		"thumbnails": "0"
 	},
 	{
-		"id": 2,
-		"title": "02",
-		"description": "2",
-		"code": "2",
-		"price": "2",
-		"status": true,
-		"stock": "2",
-		"category": "2",
-		"thumbnails": "2"
-	},
-	{
-		"id": 3,
-		"title": "023",
-		"description": "23",
-		"code": "23",
-		"price": "23",
-		"status": true,
-		"stock": "23",
-		"category": "23",
-		"thumbnails": "23"
-	},
-	{
 		"id": 4,
-		"title": "0234",
-		"description": "234",
-		"code": "234",
-		"price": "234",
+		"title": "100",
+		"description": "100",
+		"code": "100",
+		"price": "1000",
 		"status": true,
-		"stock": "234",
-		"category": "234",
-		"thumbnails": "235"
+		"stock": {},
+		"category": "100",
+		"thumbnails": "100"
+	},
+	{
+		"id": 5,
+		"title": "2002002",
+		"description": "20020",
+		"code": "200",
+		"price": "200",
+		"status": true,
+		"stock": "200",
+		"category": "200",
+		"thumbnails": "02002"
 	}
 ]

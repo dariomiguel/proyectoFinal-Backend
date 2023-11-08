@@ -56,15 +56,32 @@ socket.on("ServerAddProducts", datos => {
 productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
     try {
-        const titleInput = document.getElementById('titleAdd').value;
-        const priceInput = document.getElementById('priceAdd').value;
-        const descriptionInput = document.getElementById('descriptionAdd').value;
-        const codeInput = document.getElementById('codeAdd').value;
-        const stockAdd = document.getElementById('stockAdd').value;
-        const categoryInput = document.getElementById('categoryAdd').value;
-        const thumbnailsInput = document.getElementById('thumbnailsAdd').value;
+        const titleInput = document.getElementById('titleAdd');
+        const priceInput = document.getElementById('priceAdd');
+        const descriptionInput = document.getElementById('descriptionAdd');
+        const codeInput = document.getElementById('codeAdd');
+        const stockAdd = document.getElementById('stockAdd');
+        const categoryInput = document.getElementById('categoryAdd');
+        const thumbnailsInput = document.getElementById('thumbnailsAdd');
 
-        sendAddProducts(titleInput, priceInput, descriptionInput, codeInput, stockAdd, categoryInput, thumbnailsInput);
+
+        const title = titleInput.value;
+        const price = priceInput.value;
+        const description = descriptionInput.value;
+        const code = codeInput.value;
+        const stock = stockAdd.value;
+        const category = categoryInput.value;
+        const thumbnails = thumbnailsInput.value;
+
+        sendAddProducts(title, price, description, code, stock, category, thumbnails);
+
+        titleInput.value = "";
+        priceInput.value = "";
+        descriptionInput.value = "";
+        codeInput.value = "";
+        stockAdd.value = "";
+        categoryInput.value = "";
+        thumbnailsInput.value = "";
 
     } catch (error) {
         console.error("Error al agregar el producto:", error);
