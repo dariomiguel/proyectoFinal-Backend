@@ -27,7 +27,7 @@ socket.on("ServerAddProducts", datos => {
     console.log(datos);
 
     const div = document.createElement("div");
-
+    div.id = datos.id;
     div.innerHTML = `
         <h3>${datos.title}</h3>
         <ul>
@@ -52,18 +52,21 @@ const sendDelete = async (id) => {
     })
         .then(data => data.json())
         .then(json => {
-            console.log(json);
+            socket.emit("deleteProduct", id)
         })
     await fetch(`/`, {
         method: "GET"
     })
         .then(data => data.json())
         .then(json => {
-            console.log(json);
+            // socket.emit("ServerAddProducts", json)
         })
     // socket.emit("inputDeleteProduct", id)
 }
 
+socket.on("deleteProduct", id => {
+    document.getElementById(id).innerHTML = "";
+})
 
 productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
