@@ -8,61 +8,39 @@
 		"status": true,
 		"stock": 100,
 		"category": "Electrónicos",
-		"thumbnail": "imagen.jpg"
+		"thumbnails": "imagen.jpg"
 	},
 	{
 		"id": 1,
-		"title": {},
-		"description": {},
-		"code": {},
-		"price": {},
-		"status": true,
-		"stock": {},
-		"category": {},
-		"thumbnails": {}
-	},
-	{
-		"id": 2,
-		"title": {},
-		"description": {},
-		"code": {},
-		"price": {},
-		"status": true,
-		"stock": {},
-		"category": {},
-		"thumbnails": {}
-	},
-	{
-		"id": 3,
 		"title": "0",
 		"description": "0",
 		"code": "0",
 		"price": "0",
 		"status": true,
-		"stock": {},
+		"stock": "0",
 		"category": "0",
 		"thumbnails": "0"
 	},
 	{
-		"id": 4,
-		"title": "100",
-		"description": "100",
-		"code": "100",
+		"id": 2,
+		"title": "tituk",
+		"description": "desfs",
+		"code": "codigoasdfasdf",
 		"price": "1000",
 		"status": true,
-		"stock": {},
-		"category": "100",
-		"thumbnails": "100"
+		"stock": "3",
+		"category": "Estatus",
+		"thumbnails": "img.jpg"
 	},
 	{
-		"id": 5,
-		"title": "2002002",
-		"description": "20020",
-		"code": "200",
-		"price": "200",
+		"id": 3,
+		"title": "5",
+		"description": "5",
+		"code": "5",
+		"price": "5",
 		"status": true,
-		"stock": "200",
-		"category": "200",
-		"thumbnails": "02002"
+		"stock": "5",
+		"category": "5",
+		"thumbnails": "5"
 	}
 ]

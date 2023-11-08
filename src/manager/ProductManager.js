@@ -11,6 +11,7 @@ class ProductManager {
         this.products = this.getProducts() || [];
 
         this.counter = 0;
+        this.memoria = 0;
     }
 
     //Se crea el retorno de los productos ingresados en el archivo database.json .
@@ -68,6 +69,7 @@ class ProductManager {
             thumbnails: thumbnails,
         };
         this.products.push(product);
+        this.memoria = product.id;
     }
 
     //Validación para verificar que el código no se repita o que no se hayan cargado todos los datos.
@@ -151,6 +153,10 @@ class ProductManager {
         } catch (error) {
             console.log("Hubo un error al intentar eliminar el producto ", error);
         }
+    }
+
+    showId() {
+        return this.memoria;
     }
 }
 

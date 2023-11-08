@@ -23,9 +23,10 @@ router.setSocketServer = (server) => {
                 await productManager.addProduct(data.title, data.description, data.code, data.price, data.stock, data.category, data.thumbnails);
 
                 console.log("Producto agregado exitosamente");
-                let productsFromClient = await productManager.getProducts()
+                console.log("El id es : ", productManager.showId());
 
-                socket.emit("ServerAddProducts", data);
+                const dataProducts = { ...data, id: productManager.showId() };
+                socket.emit("ServerAddProducts", dataProducts);
             } else {
                 console.error("el producto no es valido");
             }
