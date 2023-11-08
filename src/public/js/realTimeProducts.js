@@ -46,11 +46,23 @@ socket.on("ServerAddProducts", datos => {
     nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
 });
 
-// function sendDelete(id) {
-//     socket.emit("inputDeleteProduct", id)
-// }
-
-// socket.on("serverShowProducts", data)
+const sendDelete = async (id) => {
+    await fetch(`/api/products/${id}`, {
+        method: "DELETE"
+    })
+        .then(data => data.json())
+        .then(json => {
+            console.log(json);
+        })
+    await fetch(`/`, {
+        method: "GET"
+    })
+        .then(data => data.json())
+        .then(json => {
+            console.log(json);
+        })
+    // socket.emit("inputDeleteProduct", id)
+}
 
 
 productsAddForm.addEventListener("submit", (event) => {
