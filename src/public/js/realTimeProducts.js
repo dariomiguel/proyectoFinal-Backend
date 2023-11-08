@@ -33,18 +33,25 @@ socket.on("productos", (productos) => {
     productos.forEach((producto) => {
         const productDiv = document.createElement("div");
         productDiv.innerHTML = `
-        <h3>${producto.title}</h3>
-        <ul>
-            <li>$ ${producto.price}</li>
-            <li>N° Id: ${producto.id}</li>
-            <li>${producto.description}</li>
-            <li>Código de producto: ${producto.code}</li>
-            <li>Stock: ${producto.stock}</li>
-            <li>Categoría: ${producto.category}</li>
-            <li>${producto.thumbnails}</li>
-        </ul>
-        <hr />
+        <div class="product" data-id="${producto.id}">
+            
+            <h3>${producto.title}</h3>
+            <ul>
+                <li>$ ${producto.price}</li>
+                <li>N° Id: ${producto.id}</li>
+                <li>${producto.description}</li>
+                <li>Código de producto: ${producto.code}</li>
+                <li>Stock: ${producto.stock}</li>
+                <li>Categoría: ${producto.category}</li>
+                <li>${producto.thumbnails}</li>
+            </ul>
+            <button class="delete-button">Eliminar</button
+            <hr />
+        </div>
     `;
+        const btnDelete = productDiv.querySelector(".delete-button");
+        btnDelete.addEventListener("click", () => sendDelete(btnDelete.dataset.id));
+
         productList.appendChild(productDiv);
     });
 });
@@ -55,27 +62,46 @@ socket.on("ServerAddProducts", datos => {
     const div = document.createElement("div");
 
     div.innerHTML = `
-        <h3>${datos.title}</h3>
-        <ul>
-            <li>$ ${datos.price}</li>
-            <li>N° Id: ${datos.id}</li>
-            <li>${datos.description}</li>
-            <li>Código de producto: ${datos.code}</li>
-            <li>Stock: ${datos.stock}</li>
-            <li>Categoría: ${datos.category}</li>
-            <li>${datos.thumbnails}</li>
-        </ul>
-        <hr />
+        <div class="product" >
+            <h3>${datos.title}</h3>
+            <ul>
+                <li>$ ${datos.price}</li>
+                <li>N° Id: ${datos.id}</li>
+                <li>${datos.description}</li>
+                <li>Código de producto: ${datos.code}</li>
+                <li>Stock: ${datos.stock}</li>
+                <li>Categoría: ${datos.category}</li>
+                <li>${datos.thumbnails}</li>
+            </ul>
+            <hr />
+            <button class="delete-button data-id="${datos.id}">Eliminar</button
+        </div>
     `;
+    const btnDelete = div.querySelector(".delete-button");
+    btnDelete.addEventListener("click", () => sendDelete(btnDelete.dataset.id));
 
     //Agregamos en la parte superior
     nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
 });
 
-
 function sendDelete(id) {
     socket.emit("clientDeleteProduct", id)
 }
+
+
+socket.on("serverDeleteProduct", async (id) => {
+    console.log("El id e s", id[0].id)
+    if (typeof id[0].id === 'number') {
+        await productManager.deleteProduct(id[0].id);
+    } else {
+        console.log("El id[0].id e s", id[0].id);
+        console.error("id[0].id de producto no válid[0].ido");
+    }
+    console.log("Producto eliminado exitosamente");
+});
+
+
+
 
 productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
@@ -113,12 +139,15 @@ productsAddForm.addEventListener("submit", (event) => {
 })
 
 
-document.querySelector('#btnDelete').addEventListener('click', (event) => {
-    event.preventDefault();
-    const titleInput = document.getElementById('titleDelete');
 
-    const title = titleInput.value;
 
-    sendDelete(title);
-    title.input = "";
-});
+
+
+// document.querySelector('#btnDelete').addEventListener('click', (event) => {
+//     event.preventDefault();
+//     const titleInput = document.getElementById('titleDelete');
+
+//     const title = titleInput.value;
+//     sendDelete(title);
+//     title.value = "";
+// });

@@ -29,13 +29,14 @@ router.setSocketServer = (server) => {
             }
         });
 
-        //socket para eliminar un producto
+        // socket para eliminar un producto
         socket.on("clientDeleteProduct", async (id) => {
-            let productos = await productManager.getProducts();
             await productManager.deleteProduct(id);
+            let productos = await productManager.getProducts();
+
+            console.log(productos);
             socket.emit("serverDeleteProduct", productos);
         });
-
     });
 };
 

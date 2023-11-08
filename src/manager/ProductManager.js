@@ -134,26 +134,53 @@ class ProductManager {
     }
 
     //Método para borrar uno de los productos
-    deleteProduct = async (pid) => {
+    // deleteProduct = async (pid) => {
+    //     try {
+    //         const product = await this.getProductById(pid);
+
+    //         this.products = await this.getProducts();
+    //         //Buscamos en que indice el id coincide
+    //         const indice = this.products.findIndex((objeto) => objeto.id == pid);
+
+    //         for (const key in product) {
+    //             if (key !== 'id') product[key] = '';
+    //         }
+
+    //         this.products[indice] = product;
+
+    //         const data = JSON.stringify(this.products, null, "\t");
+    //         await fs.promises.writeFile(this.path, data, "utf-8");
+    //     } catch (error) {
+    //         console.log("Hubo un error al intentar eliminar el producto ", error);
+    //     }
+    // }
+    deleteProduct = async (id) => {
         try {
-            const product = await this.getProductById(pid);
-
-            this.products = await this.getProducts();
-            //Buscamos en que indice el id coincide
-            const indice = this.products.findIndex((objeto) => objeto.id == pid);
-
-            for (const key in product) {
-                if (key !== 'id') product[key] = '';
+            if (!id || typeof id !== 'number') {
+                console.error("ID de producto no válido");
+                return;
             }
 
-            this.products[indice] = product;
+            this.products = await this.getProducts();
+
+            const productIndex = this.products.findIndex((product) => product.id === id);
+
+            if (productIndex === -1) {
+                console.error("No se encontró un producto con el ID especificado");
+                return;
+            }
+
+            this.products.splice(productIndex, 1);
 
             const data = JSON.stringify(this.products, null, "\t");
             await fs.promises.writeFile(this.path, data, "utf-8");
         } catch (error) {
-            console.log("Hubo un error al intentar eliminar el producto ", error);
+            console.error("Hubo un error al intentar eliminar el producto", error);
         }
     }
+
+
+
 
     showId() {
         return this.memoria;
