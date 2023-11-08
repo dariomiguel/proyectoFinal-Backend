@@ -9,5 +9,16 @@
 		"stock": 100,
 		"category": "Electrónicos",
 		"thumbnail": "imagen.jpg"
+	},
+	{
+		"id": 1,
+		"title": "title",
+		"description": "descri",
+		"code": "codig11",
+		"price": "0010101",
+		"status": true,
+		"stock": "11",
+		"category": "cateq",
+		"thumbnails": "UAAL"
 	}
 ]
