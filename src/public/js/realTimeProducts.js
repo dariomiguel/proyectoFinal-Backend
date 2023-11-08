@@ -23,11 +23,30 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
     });
 }
 
+const productList = document.getElementById("productList");
+
+socket.on("productos", (productos) => {
+    productos.forEach((producto) => {
+        const productDiv = document.createElement("div");
+        productDiv.innerHTML = `
+        <h3>${producto.title}</h3>
+        <ul>
+            <li>$ ${producto.price}</li>
+            <li>N° Id: ${producto.id}</li>
+            <li>${producto.description}</li>
+            <li>Código de producto: ${producto.code}</li>
+            <li>Stock: ${producto.stock}</li>
+            <li>Categoría: ${producto.category}</li>
+            <li>${producto.thumbnails}</li>
+        </ul>
+        <hr />
+    `;
+        productList.appendChild(productDiv);
+    });
+});
+
 socket.on("ServerAddProducts", datos => {
-    console.log(datos);
-
     const div = document.createElement("div");
-
     div.innerHTML = `
         <h3>${datos.title}</h3>
         <ul>
@@ -46,12 +65,10 @@ socket.on("ServerAddProducts", datos => {
     nuevoProducto.insertBefore(div, nuevoProducto.firstChild)
 });
 
-// function sendDelete(id) {
-//     socket.emit("inputDeleteProduct", id)
-// }
-
-// socket.on("serverShowProducts", data)
-
+function sendDelete(id) {
+    socket.emit("clientDeleteProduct", id)
+    console.log();
+}
 
 productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
