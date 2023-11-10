@@ -52,12 +52,20 @@ const messages = []
 //         await productManager.deleteProduct(dataDelete)
 //     })
 // });
+
+import { v4 as uuid } from "uuid";
+
+const notes = []
+
 socketServer.on("connection", (socket) => {
     console.log("Nueva conexión: ", socket.id);
 
-    socket.emit("ping")
-
-    socket.on("clientNewProduct", data => {
-        console.log(data);
+    socket.on("clientNewProduct", newProduct => {
+        // Creamos un nuevo OBJETO basado en las propiedades de 'newProduct'
+        // y le asignamos un identificador único.
+        // la sintaxis de propagación (...) se utiliza para tomar los valores del objeto y usarlo en el objeto nuevo.
+        const product = { ...newProduct, id: uuid() }
+        notes.push(product)
+        socket.emit("serverNewProduct", product)
     })
 })

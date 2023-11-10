@@ -52,7 +52,9 @@ const socket = io()
 
 const productForm = document.querySelector("#productForm");
 const title = document.querySelector("#title");
-const description = document.querySelector("#description")
+const description = document.querySelector("#description");
+const notes = document.querySelector("#notes");
+
 productForm.addEventListener("submit", e => {
     e.preventDefault();
 
@@ -61,4 +63,8 @@ productForm.addEventListener("submit", e => {
         description: description.value
     })
 
+    socket.on("serverNewProduct", data => {
+        console.log(data);
+        notes.innerHTML += "Nueva nota"
+    })
 })
