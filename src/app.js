@@ -55,10 +55,12 @@ const messages = []
 
 import { v4 as uuid } from "uuid";
 
-const notes = []
+const notes = [];
 
 socketServer.on("connection", (socket) => {
     console.log("Nueva conexión: ", socket.id);
+
+    socket.emit("serverLoadProducts", notes);
 
     socket.on("clientNewProduct", newProduct => {
         // Creamos un nuevo OBJETO basado en las propiedades de 'newProduct'

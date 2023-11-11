@@ -58,13 +58,7 @@ const notes = document.querySelector("#notes");
 productForm.addEventListener("submit", e => {
     e.preventDefault();
 
-    socket.emit("clientNewProduct", {
-        title: title.value,
-        description: description.value
-    })
+    createProduct(title.value, description.value);
 
-    socket.on("serverNewProduct", data => {
-        console.log(data);
-        notes.innerHTML += "Nueva nota"
-    })
+
 })
