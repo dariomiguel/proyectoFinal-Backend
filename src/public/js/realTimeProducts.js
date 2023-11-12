@@ -53,12 +53,10 @@ const socket = io()
 const productForm = document.querySelector("#productForm");
 const title = document.querySelector("#title");
 const description = document.querySelector("#description");
-const notes = document.querySelector("#notes");
 
 productForm.addEventListener("submit", e => {
     e.preventDefault();
 
     createProduct(title.value, description.value);
-
-
 })
+

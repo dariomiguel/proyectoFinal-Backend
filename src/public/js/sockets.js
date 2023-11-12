@@ -1,5 +1,3 @@
-
-
 const createProduct = (title, description) => {
     socket.emit("clientNewProduct", {
         title,
@@ -7,9 +5,11 @@ const createProduct = (title, description) => {
     })
 }
 
-socket.on("serverNewProduct", appendProduct);
+const deleteProduct = id => {
+    console.log("data", id);
+    socket.emit("clientDelete", id);
+}
 
-socket.on("serverLoadProducts,", notes => {
-    console.log("Hola");
-    console.log(notes);
-})
+socket.on("serverLoadProducts", renderProducts)
+
+socket.on("serverNewProduct", appendProduct);

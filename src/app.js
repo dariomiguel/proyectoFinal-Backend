@@ -55,19 +55,22 @@ const messages = []
 
 import { v4 as uuid } from "uuid";
 
-const notes = [];
+const listaProductos = [];
 
 socketServer.on("connection", (socket) => {
     console.log("Nueva conexión: ", socket.id);
 
-    socket.emit("serverLoadProducts", notes);
+    socket.emit("serverLoadProducts", listaProductos)
 
     socket.on("clientNewProduct", newProduct => {
-        // Creamos un nuevo OBJETO basado en las propiedades de 'newProduct'
-        // y le asignamos un identificador único.
+        // Creamos un nuevo OBJETO basado en las propiedades de 'newProduct'y le asignamos un identificador único.
         // la sintaxis de propagación (...) se utiliza para tomar los valores del objeto y usarlo en el objeto nuevo.
         const product = { ...newProduct, id: uuid() }
-        notes.push(product)
+        listaProductos.push(product)
         socket.emit("serverNewProduct", product)
+    })
+
+    socket.on("clientDelete", data => {
+        console.log(data);
     })
 })
