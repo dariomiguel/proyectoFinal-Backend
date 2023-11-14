@@ -44,7 +44,14 @@ class ProductManager {
             //Si es válido la agrega al array de lista de productos.
             const lectura = await fs.promises.readFile(this.path, "utf-8");
             this.products = JSON.parse(lectura);
-            this.add(title, description, code, price, stock, category, thumbnails);
+            this.add(
+                title,
+                description,
+                code,
+                price,
+                stock,
+                category,
+                thumbnails);
 
             const data = JSON.stringify(this.products, null, "\t");
             await fs.promises.writeFile(this.path, data, "utf-8");
