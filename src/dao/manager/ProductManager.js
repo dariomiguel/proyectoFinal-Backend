@@ -1,6 +1,6 @@
 //Importamos el módulo para interactuar con archivos
 import fs from 'fs';
-import __dirname from "../utils.js"
+import __dirname from "../../utils.js"
 
 //Creamos la clase ProductManager que contendra los productos y metodos que necesitemos para la actividad.
 class ProductManager {
