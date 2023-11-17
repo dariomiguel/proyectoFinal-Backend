@@ -9,9 +9,9 @@ class ProductManagerMongo {
     getProducts = async () => {
         try {
             const lectura = await ProductModel.find();
-            return lectura
+            return lectura || []
         } catch (error) {
-            console.log("Hubo un error en el READ", error);
+            console.log("Hubo un error en la lectura de la base de datos.", error);
             throw error;
         }
     }

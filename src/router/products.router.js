@@ -2,8 +2,6 @@ import { Router } from "express";
 import ProductManager from "../dao/managerFS/ProductManager.js";
 import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js"
 import __dirname from "../utils.js";
-import mongoose from "mongoose"
-import ProductModel from "../dao/models/products.model.js"
 
 const router = Router();
 const productManager = new ProductManager();
@@ -128,15 +126,12 @@ const productManagerMongo = new ProductManagerMongo();
 //* =-               M O N G O   D B               -=
 //* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-// const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/"
-
 router.get("/", async (req, res) => {
     try {
         // Listamos con límites
         const limit = req.query.limit;
         let products = await productManagerMongo.getProducts();
-        console.log("Los productos capturados son: ", products);
-
+        console.log("Productos :", products);
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
@@ -286,12 +281,5 @@ router.post("/", async (req, res) => {
 // });
 
 
-// mongoose.connect(urlMongo, { dbName: "ecommerce" })
-//     .then(() => {
-//         console.log("DB connected.");
-//     })
-//     .catch(() => {
-//         console.error("Error conecting to DB");
-//     })
 
 export default router;
