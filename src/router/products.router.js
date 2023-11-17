@@ -1,5 +1,6 @@
 import { Router } from "express";
-import ProductManager from "../dao/manager/ProductManager.js";
+import ProductManager from "../dao/managerFS/ProductManager.js";
+import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js"
 import __dirname from "../utils.js";
 import mongoose from "mongoose"
 import ProductModel from "../dao/models/products.model.js"
@@ -12,7 +13,7 @@ const productManager = new ProductManager();
 // =-            F I L E   S Y S T E M            -=
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=`
 
-// router.get("/", async (req, res) => {
+// ?router.get("/", async (req, res) => {
 //     try {
 //         // Listamos con límites
 //         const limit = req.query.limit;
@@ -39,7 +40,7 @@ const productManager = new ProductManager();
 //     }
 // });
 
-// router.get("/:pid", async (req, res) => {
+//? router.get("/:pid", async (req, res) => {
 //     try {
 //         const productPorId = await productManager.getProductById(req.params.pid);
 
@@ -55,21 +56,11 @@ const productManager = new ProductManager();
 //     }
 // });
 
-// router.post("/", async (req, res) => {
+//? router.post("/", async (req, res) => {
 //     try {
-//         const { title, description, code, price, stock, category, thumbnail } =
-//             req.body;
-//         if (
-//             await productManager.isNotValidCode(
-//                 title,
-//                 description,
-//                 code,
-//                 price,
-//                 stock,
-//                 category,
-//                 thumbnail
-//             )
-//         ) {
+//         const { title, description, code, price, stock, category, thumbnail } = req.body;
+
+//         if (await productManager.isNotValidCode( title, description, code, price, stock, category, thumbnail)) {
 //             return res
 //                 .status(400)
 //                 .json({
@@ -96,7 +87,7 @@ const productManager = new ProductManager();
 //     }
 // });
 
-// router.put("/:pid", async (req, res) => {
+//? router.put("/:pid", async (req, res) => {
 //     try {
 //         const productId = req.params.pid;
 //         const { key, value } = req.body;
@@ -157,8 +148,6 @@ router.get("/", async (req, res) => {
         }
 
         res.json({ status: "success", payload: products })
-        console.log("Los productos en la base de datos son: ", products);
-
     } catch (error) {
         console.error("Error al obtener la lista de productos:", error);
         res
@@ -169,14 +158,32 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
+
+        const { title, description, code, price, stock, category, thumbnail } = req.body;
+
+        if (await productManager.isNotValidCode(title, description, code, price, stock, category, thumbnail)) {
+            return res
+                .status(400)
+                .json({
+                    message:
+                        "Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!",
+                });
+        }
+
+
+
+
+
         const data = req.body;
-        const result = await ProductModel.create(data);
+        //! const result = await ProductModel.create(data);
 
         res.json({ status: "success", payload: result })
         console.log("Los productos ", result);
+
     } catch (error) {
         if (error.code === 11000) {
             console.log(`No se pudo agregar el producto.Ya existe un producto con el código: ${error.keyValue.code}`);
+
         } else {
             console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
         }
