@@ -7,6 +7,7 @@ import ProductModel from "../dao/models/products.model.js"
 
 const router = Router();
 const productManager = new ProductManager();
+const productManagerMongo = new ProductManagerMongo();
 
 // ** Métodos  con file system
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -127,13 +128,14 @@ const productManager = new ProductManager();
 //* =-               M O N G O   D B               -=
 //* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/"
+// const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/"
 
 router.get("/", async (req, res) => {
     try {
         // Listamos con límites
         const limit = req.query.limit;
-        let products = await ProductModel.find();
+        let products = await productManagerMongo.getProducts();
+        console.log("Los productos capturados son: ", products);
 
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
@@ -149,7 +151,7 @@ router.get("/", async (req, res) => {
 
         res.json({ status: "success", payload: products })
     } catch (error) {
-        console.error("Error al obtener la lista de productos:", error);
+        console.error("Products, Error al obtener la lista de productos:", error);
         res
             .status(500)
             .json({ Error: "Hubo un error al obtener la lista de productos" });
@@ -284,12 +286,12 @@ router.post("/", async (req, res) => {
 // });
 
 
-mongoose.connect(urlMongo, { dbName: "ecommerce" })
-    .then(() => {
-        console.log("DB connected.");
-    })
-    .catch(() => {
-        console.error("Error conecting to DB");
-    })
+// mongoose.connect(urlMongo, { dbName: "ecommerce" })
+//     .then(() => {
+//         console.log("DB connected.");
+//     })
+//     .catch(() => {
+//         console.error("Error conecting to DB");
+//     })
 
 export default router;

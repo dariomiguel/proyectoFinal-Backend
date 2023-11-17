@@ -25,7 +25,7 @@ router.get("/", async (req, res) => {
             products
         });
     } catch (error) {
-        console.error("Error al obtener la lista de productos:", error);
+        console.error("Views router Error, al obtener la lista de productos:", error);
         res.status(500).json({ Error: "Hubo un error al obtener la lista de productos" });
     }
 });
