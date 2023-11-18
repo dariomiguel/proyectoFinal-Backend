@@ -25,68 +25,45 @@ class ProductManagerMongo {
     addProduct = async (title, description, code, price, stock, category, thumbnails) => {
 
         try {
-            //Antes de agregar verifica si es válido o no
-            if (await this.isNotValidCode(title, description, code, price, stock, category, thumbnails)) {
-                return console.log("Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!");
+
+            const productToAdd = {
+                id: 88,
+                title: title,
+                description: description,
+                code: code,
+                price: price,
+                status: true,
+                stock: stock,
+                category: category,
+                thumbnails: thumbnails,
             }
 
-            const productToAdd = this.add(
-                title,
-                description,
-                code,
-                price,
-                stock,
-                category,
-                thumbnails);
+            console.log("El número del ID es: \n", productToAdd.id)
 
-            console.log("Producto para agregar", productToAdd);
-            await ProductModel.create(productToAdd);
-            console.log("El producto se agrego con exito !!!!");
+            const result = await ProductModel.create(productToAdd);
+
+            console.log('Producto creado:', result);
+            console.log("El producto se agregó con éxito !!!!");
+            console.log("¿Qué es result?", result);
+            this.memoria = productToAdd.id;
+            console.log("El número en memoria es: \n", this.memoria);
+
+            return result;
 
         } catch (error) {
-            if (error.code === 11000) {
-                console.log(`No se pudo agregar el producto.Ya existe un producto con el código: ${error.keyValue.code}`);
-
-            } else {
-                console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
-            }
+            throw error
         }
     }
 
-    isNotValidCode = async (title, description, code, price, stock, category, thumbnails) => {
-        this.products = await this.getProducts();
-        //Verificamos que existe un codigo con el mismo nombre.
-        const checker = this.products.some((product) => product.code === code);
-        //Verificamos que esten todos los productos en la carga de datos.
-        const someValid = !title || !description || !price || !thumbnails || !code || !stock || !category;
-
-        return checker || someValid;
-    }
-
-    add(title, description, code, price, stock, category, thumbnails) {
-        const product = {
-            id: this.createID(),
-            title: title,
-            description: description,
-            code: code,
-            price: price,
-            status: true,
-            stock: stock,
-            category: category,
-            thumbnails: thumbnails,
-        };
-        this.memoria = product.id;
-
-        return product
-    }
-
-    createID() {
+    createID = async () => {
         // Verificar si hay productos en el array
-        if (this.products.length === 0) {
+        const resolvedProducts = await this.products;
+
+        if (resolvedProducts.length === 0) {
             this.counter = 0;
         } else {
             // Obtener el ID más grande del array de productos
-            const maxID = Math.max(...this.products.map((product) => product.id));
+            const maxID = Math.max(...resolvedProducts.map((product) => product.id));
             // Incrementar el contador en 1 y devolverlo como el próximo ID
             this.counter = maxID + 1;
         }

@@ -158,31 +158,25 @@ router.post("/", async (req, res) => {
 
         const { title, description, code, price, stock, category, thumbnails } = req.body;
 
-        if (await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnails)) {
-            console.log(title, description, code, price, stock, category, thumbnails);
-            return res
-                .status(400)
-                .json({
-                    message:
-                        "Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!",
-                });
-        }
+        productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails)
+            .then(result => {
+                console.log("Producto agregado correctamente:", result);
+                res.status(201).json({ message: "Producto agregado correctamente" })
+            })
+            .catch(error => {
+                if (error.code === 11000) {
+                    console.log(`No se pudo agregar el producto. Ya existe un producto con el código: ${error.keyValue.code}`);
+                    res.status(400).json({ error: `Ya existe un producto con el código ${error.keyValue.code} ` });
+                } else {
+                    console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
+                    res.status(500).json({ error: "Hubo un error en la escritura de la base de datos" });
+                }
+            });
 
-        const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
 
-        res.status(201).json({ message: "Producto agregado correctamente" });
-        // res.json({ status: "success", payload: result })
-        // console.log("Los productos ", result);
 
     } catch (error) {
-        if (error.code === 11000) {
-            console.log(`No se pudo agregar el producto.Ya existe un producto con el código: ${error.keyValue.code}`);
-            res.status(400)
-
-        } else {
-            console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
-        }
-        res.status(500).json({ error: "Hubo un error en la escritura de la base de datos" });
+        res.status(500).json({ error: "Hubo un error general en la escritura de la base de datos" });
     }
 })
 
