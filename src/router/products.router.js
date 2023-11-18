@@ -57,9 +57,9 @@ const productManagerMongo = new ProductManagerMongo();
 
 //? router.post("/", async (req, res) => {
 //     try {
-//         const { title, description, code, price, stock, category, thumbnail } = req.body;
+//         const { title, description, code, price, stock, category, thumbnails } = req.body;
 
-//         if (await productManager.isNotValidCode( title, description, code, price, stock, category, thumbnail)) {
+//         if (await productManager.isNotValidCode( title, description, code, price, stock, category, thumbnails)) {
 //             return res
 //                 .status(400)
 //                 .json({
@@ -74,7 +74,7 @@ const productManagerMongo = new ProductManagerMongo();
 //             price,
 //             stock,
 //             category,
-//             thumbnail
+//             thumbnails
 //         );
 
 //         // socket.emit("ServerAddProducts", productoAgregado)
@@ -156,9 +156,10 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
 
-        const { title, description, code, price, stock, category, thumbnail } = req.body;
+        const { title, description, code, price, stock, category, thumbnails } = req.body;
 
-        if (await productManager.isNotValidCode(title, description, code, price, stock, category, thumbnail)) {
+        if (await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnails)) {
+            console.log(title, description, code, price, stock, category, thumbnails);
             return res
                 .status(400)
                 .json({
@@ -167,19 +168,16 @@ router.post("/", async (req, res) => {
                 });
         }
 
+        const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
 
-
-
-
-        const data = req.body;
-        //! const result = await ProductModel.create(data);
-
-        res.json({ status: "success", payload: result })
-        console.log("Los productos ", result);
+        res.status(201).json({ message: "Producto agregado correctamente" });
+        // res.json({ status: "success", payload: result })
+        // console.log("Los productos ", result);
 
     } catch (error) {
         if (error.code === 11000) {
             console.log(`No se pudo agregar el producto.Ya existe un producto con el código: ${error.keyValue.code}`);
+            res.status(400)
 
         } else {
             console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
@@ -207,7 +205,7 @@ router.post("/", async (req, res) => {
 
 // router.post("/", async (req, res) => {
 //     try {
-//         const { title, description, code, price, stock, category, thumbnail } = req.body;
+//         const { title, description, code, price, stock, category, thumbnails } = req.body;
 //         if (
 //             await productManager.isNotValidCode(
 //                 title,
@@ -216,7 +214,7 @@ router.post("/", async (req, res) => {
 //                 price,
 //                 stock,
 //                 category,
-//                 thumbnail
+//                 thumbnails
 //             )
 //         ) {
 //             return res
@@ -233,7 +231,7 @@ router.post("/", async (req, res) => {
 //             price,
 //             stock,
 //             category,
-//             thumbnail
+//             thumbnails
 //         );
 
 
