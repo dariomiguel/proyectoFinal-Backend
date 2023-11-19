@@ -166,10 +166,14 @@ router.post("/", async (req, res) => {
             .catch(error => {
                 if (error.code === 11000) {
                     console.log(`No se pudo agregar el producto. Ya existe un producto con el código: ${error.keyValue.code}`);
-                    res.status(400).json({ error: `Ya existe un producto con el código ${error.keyValue.code} ` });
+                    res
+                        .status(400)
+                        .json({ error: `Ya existe un producto con el código ${error.keyValue.code} ` });
                 } else {
                     console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
-                    res.status(500).json({ error: "Hubo un error en la escritura de la base de datos" });
+                    res
+                        .status(500)
+                        .json({ error: "Hubo un error en la escritura de la base de datos" });
                 }
             });
 
@@ -183,9 +187,11 @@ router.get("/:pid", async (req, res) => {
         const productPorId = await productManagerMongo.getProductById(req.params.pid);
 
         if (productPorId === null) {
-            res.status(404).json({ Error: "No se encontro el producto solicitado" });
+            res
+                .status(404)
+                .json({ Error: "No se encontro el producto solicitado" });
         } else {
-            res.json({ productPorId });
+            res.json({ status: "success", payload: productPorId })
         }
     } catch (error) {
         res
@@ -194,74 +200,39 @@ router.get("/:pid", async (req, res) => {
     }
 });
 
+router.put("/:pid", async (req, res) => {
+    try {
+        const productId = req.params.pid;
+        const { key, value } = req.body;
+        const resultOfValid = await productManagerMongo.validateProperty(productId, key);
+
+        if (resultOfValid === undefined) {
+            console.error(`No se encontró la propiedad '${[key]}.`);
+            return res
+                .status(404)
+                .json({ Error: `No se encontró la propiedad '${[key]}'.` });
+        }
+
+        const resultOfUpdate = await productManagerMongo.updateProductById(productId, key, value);
+        if (resultOfUpdate !== null) res.status(201).json({ message: `Se actualizó la propiedad '${key}' del producto con id:'${productId}' correctamente!` });
+
+    } catch (error) {
+        res.status(500).json({ error: "Hubo un error al actualizar el producto" });
+    }
+});
+
+//! En proceso
+
 //TODO ELEMENTOS PARA AGREGAR CON MONGO
-// router.post("/", async (req, res) => {
-//     try {
-//         const { title, description, code, price, stock, category, thumbnails } = req.body;
-//         if (
-//             await productManager.isNotValidCode(
-//                 title,
-//                 description,
-//                 code,
-//                 price,
-//                 stock,
-//                 category,
-//                 thumbnails
-//             )
-//         ) {
-//             return res
-//                 .status(400)
-//                 .json({
-//                     message:
-//                         "Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!",
-//                 });
-//         }
-//         const productoAgregado = await productManager.addProduct(
-//             title,
-//             description,
-//             code,
-//             price,
-//             stock,
-//             category,
-//             thumbnails
-//         );
-
-
-//         res.status(201).json({ message: "Producto agregado correctamente" });
-//     } catch (error) {
-//         console.error("Hubo un error en el proceso", error);
-//         res.status(500).json({ error: "Hubo un error en el proceso" });
-//     }
-// });
-
-// router.put("/:pid", async (req, res) => {
-//     try {
-//         const productId = req.params.pid;
-//         const { key, value } = req.body;
-
-//         await productManager.updateProduct(productId, key, value);
-
-//         const productPorId = await productManager.getProductById(productId);
-//         if (typeof productPorId === "string") {
-//             res.status(404).json({ Error: "No se encontro el producto solicitado" });
-//         } else {
-//             res.status(201).json({ message: "Producto actualizado correctamente" });
-//         }
-//     } catch (error) {
-//         console.error("Error al actualizar el producto:", error);
-//         res.status(500).json({ error: "Hubo un error al actualizar el producto" });
-//     }
-// });
-
 // router.delete("/:pid", async (req, res) => {
 //     try {
 //         const productId = parseInt(req.params.pid);
-//         const productPorId = await productManager.getProductById(productId);
+//         const productPorId = await productManagerMongo.getProductById(productId);
 
 //         if (typeof productPorId === "string") {
 //             res.status(404).json({ Error: "No se encontro el producto solicitado" });
 //         } else {
-//             await productManager.deleteProduct(productId);
+//             await productManagerMongo.deleteProduct(productId);
 //             res.status(201).json({ message: "Producto eliminado correctamente" });
 //         }
 //     } catch (error) {
@@ -269,7 +240,5 @@ router.get("/:pid", async (req, res) => {
 //         res.status(500).json({ error: "Hubo un error al eliminar el producto" });
 //     }
 // });
-
-
 
 export default router;

@@ -23,7 +23,6 @@ class ProductManagerMongo {
     }
 
     addProduct = async (title, description, code, price, stock, category, thumbnails) => {
-
         try {
             const newId = await this.createID()
             const productToAdd = {
@@ -95,8 +94,32 @@ class ProductManagerMongo {
             throw error;
         }
     }
-}
 
+    updateProductById = async (productId, keyUpdate, newValue) => {
+        const idProducto = productId;
+        const nuevosDatos = { [keyUpdate]: newValue }
+
+        try {
+            await ProductModel.updateOne({ id: idProducto }, { $set: nuevosDatos })
+            console.log(`Se actualizó la propiedad '${[keyUpdate]}' del producto con id:'${idProducto}' correctamente!`);
+
+        } catch (error) {
+            console.error('Error al actualizar el documento:\n', error);
+            throw error;
+        }
+    }
+
+    validateProperty = async (productId, keyUpdate) => {
+        try {
+            const idProducto = productId;
+            const validador = await ProductModel.findOne({ id: idProducto, [keyUpdate]: { $exists: true } });
+            if (validador !== null) return validador;
+        } catch (error) {
+            console.error('No se pudo validar el documento:\n', error);
+            throw error;
+        }
+    }
+}
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {
