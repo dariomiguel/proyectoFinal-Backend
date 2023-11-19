@@ -50,8 +50,12 @@ class ProductManagerMongo {
         try {
             //*Buscamos el resultado que sea mas grande en la base de datos.
             const valorMaximo = await ProductModel.findOne().sort('-id').exec();
-
             if (!valorMaximo) return 0;
+
+            //*Buscamos si hay alguna id que falta en la sucesión de números ID.
+            const valorIdFaltante = await this.encontrarIdFaltante();
+
+            if (valorMaximo.id + 1 !== valorIdFaltante) return valorIdFaltante;
             return valorMaximo.id + 1;
 
         } catch (error) {
@@ -59,6 +63,27 @@ class ProductManagerMongo {
             throw error;
         }
     }
+
+    encontrarIdFaltante = async () => {
+        try {
+            // Obtener todos los documentos de la colección "products" (.lean se usa para convertilo en un objeto javascript)
+            const todosLosProductos = await ProductModel.find({}, 'id').lean();
+            // Extraer todos los IDs existentes en un array
+            const idsExistente = todosLosProductos.map(producto => producto.id);
+
+            let idFaltante;
+            for (let i = 0; i < idsExistente.length; i++) {
+                if (!idsExistente.includes(i)) {
+                    idFaltante = i;
+                    break;
+                }
+            }
+
+            return idFaltante
+        } catch (error) {
+            console.error("Error al encontrar el ID que falta:", error);
+        }
+    };
 
     getProductById = async (pId) => {
         try {
