@@ -59,6 +59,17 @@ class ProductManagerMongo {
             throw error;
         }
     }
+
+    getProductById = async (pId) => {
+        try {
+            //* Buscamos elementos por Id en base de datos
+            const productoBuscado = await ProductModel.findOne({ id: pId });
+            return productoBuscado;
+        } catch (error) {
+            console.error("No se encontró el producto solicitado\n", error);
+            throw error;
+        }
+    }
 }
 
 

@@ -178,23 +178,23 @@ router.post("/", async (req, res) => {
     }
 })
 
+router.get("/:pid", async (req, res) => {
+    try {
+        const productPorId = await productManagerMongo.getProductById(req.params.pid);
+
+        if (productPorId === null) {
+            res.status(404).json({ Error: "No se encontro el producto solicitado" });
+        } else {
+            res.json({ productPorId });
+        }
+    } catch (error) {
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al buscar el producto por ID" });
+    }
+});
+
 //TODO ELEMENTOS PARA AGREGAR CON MONGO
-// router.get("/:pid", async (req, res) => {
-//     try {
-//         const productPorId = await productManager.getProductById(req.params.pid);
-
-//         if (typeof productPorId === "string") {
-//             res.status(404).json({ Error: "No se encontro el producto solicitado" });
-//         } else {
-//             res.json({ productPorId });
-//         }
-//     } catch (error) {
-//         res
-//             .status(500)
-//             .json({ Error: "Hubo un error al buscar el producto por ID" });
-//     }
-// });
-
 // router.post("/", async (req, res) => {
 //     try {
 //         const { title, description, code, price, stock, category, thumbnails } = req.body;
