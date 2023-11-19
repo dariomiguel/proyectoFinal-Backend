@@ -2,20 +2,21 @@ import mongoose from "mongoose"
 import ProductModel from "../models/products.model.js"
 import __dirname from "../../utils.js"
 
-const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/"
+const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 class ProductManagerMongo {
 
     constructor() {
         this.products = this.getProducts();
-        this.counter = 0;
-        this.memoria = 0;
+        this.counter;
+        this.memoria;
     }
 
     getProducts = async () => {
         try {
             const lectura = await ProductModel.find();
             return lectura || []
+
         } catch (error) {
             console.log("Hubo un error en la lectura de la base de datos.", error);
             throw error;
@@ -25,9 +26,9 @@ class ProductManagerMongo {
     addProduct = async (title, description, code, price, stock, category, thumbnails) => {
 
         try {
-
+            const newId = await this.createID()
             const productToAdd = {
-                id: 88,
+                id: newId,
                 title: title,
                 description: description,
                 code: code,
@@ -38,16 +39,11 @@ class ProductManagerMongo {
                 thumbnails: thumbnails,
             }
 
-            console.log("El número del ID es: \n", productToAdd.id)
-
             const result = await ProductModel.create(productToAdd);
 
-            console.log('Producto creado:', result);
             console.log("El producto se agregó con éxito !!!!");
-            console.log("¿Qué es result?", result);
-            this.memoria = productToAdd.id;
-            console.log("El número en memoria es: \n", this.memoria);
 
+            this.memoria = productToAdd.id;
             return result;
 
         } catch (error) {
@@ -56,21 +52,18 @@ class ProductManagerMongo {
     }
 
     createID = async () => {
-        // Verificar si hay productos en el array
-        const resolvedProducts = await this.products;
+        try {
+            //*Buscamos el resultado que sea mas grande en la base de datos.
+            const resultado = await ProductModel.findOne().sort('-id').exec();
 
-        if (resolvedProducts.length === 0) {
-            this.counter = 0;
-        } else {
-            // Obtener el ID más grande del array de productos
-            const maxID = Math.max(...resolvedProducts.map((product) => product.id));
-            // Incrementar el contador en 1 y devolverlo como el próximo ID
-            this.counter = maxID + 1;
+            if (!resultado) return 0;
+            return resultado.id + 1;
+
+        } catch (error) {
+            console.error("Hubo un error en la creación del ID❗❗❗\n", error);
+            throw error;
         }
-
-        return this.counter;
     }
-
 }
 
 

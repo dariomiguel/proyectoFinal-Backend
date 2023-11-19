@@ -173,8 +173,6 @@ router.post("/", async (req, res) => {
                 }
             });
 
-
-
     } catch (error) {
         res.status(500).json({ error: "Hubo un error general en la escritura de la base de datos" });
     }
