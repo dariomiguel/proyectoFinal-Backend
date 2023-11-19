@@ -9,7 +9,6 @@ class ProductManagerMongo {
     constructor() {
         this.products = this.getProducts();
         this.counter;
-        this.memoria;
     }
 
     getProducts = async () => {
@@ -40,10 +39,6 @@ class ProductManagerMongo {
             }
 
             const result = await ProductModel.create(productToAdd);
-
-            console.log("El producto se agregó con éxito !!!!");
-
-            this.memoria = productToAdd.id;
             return result;
 
         } catch (error) {
@@ -54,10 +49,10 @@ class ProductManagerMongo {
     createID = async () => {
         try {
             //*Buscamos el resultado que sea mas grande en la base de datos.
-            const resultado = await ProductModel.findOne().sort('-id').exec();
+            const valorMaximo = await ProductModel.findOne().sort('-id').exec();
 
-            if (!resultado) return 0;
-            return resultado.id + 1;
+            if (!valorMaximo) return 0;
+            return valorMaximo.id + 1;
 
         } catch (error) {
             console.error("Hubo un error en la creación del ID❗❗❗\n", error);
