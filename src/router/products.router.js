@@ -221,24 +221,22 @@ router.put("/:pid", async (req, res) => {
     }
 });
 
-//! En proceso
+router.delete("/:pid", async (req, res) => {
+    try {
+        const productId = parseInt(req.params.pid);
+        const productPorId = await productManagerMongo.getProductById(productId);
 
-//TODO ELEMENTOS PARA AGREGAR CON MONGO
-// router.delete("/:pid", async (req, res) => {
-//     try {
-//         const productId = parseInt(req.params.pid);
-//         const productPorId = await productManagerMongo.getProductById(productId);
-
-//         if (typeof productPorId === "string") {
-//             res.status(404).json({ Error: "No se encontro el producto solicitado" });
-//         } else {
-//             await productManagerMongo.deleteProduct(productId);
-//             res.status(201).json({ message: "Producto eliminado correctamente" });
-//         }
-//     } catch (error) {
-//         console.error("Error al eliminar el producto:", error);
-//         res.status(500).json({ error: "Hubo un error al eliminar el producto" });
-//     }
-// });
+        if (productPorId === null) {
+            console.error(`No se encontró el producto con id:'${productId}'`);
+            res.status(404).json({ Error: `No se encontró el producto con id:'${productId}'` });
+        } else {
+            await productManagerMongo.deleteProduct(productId);
+            res.status(201).json({ message: "Producto eliminado correctamente" });
+        }
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+        res.status(500).json({ error: "Hubo un error al eliminar el producto" });
+    }
+});
 
 export default router;

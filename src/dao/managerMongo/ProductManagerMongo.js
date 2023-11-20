@@ -119,6 +119,15 @@ class ProductManagerMongo {
             throw error;
         }
     }
+
+    deleteProduct = async (pid) => {
+        try {
+            await ProductModel.deleteOne({ id: pid })
+            console.log(`Producto con id:${pid} se eliminó correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
