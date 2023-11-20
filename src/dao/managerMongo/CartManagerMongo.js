@@ -1,16 +1,18 @@
 import mongoose from "mongoose"
 import ProductModel from "../models/products.model.js"
+import ProductManagerMongo from "./ProductManagerMongo.js";
 import __dirname from "../../utils.js"
 
-const productManager = new ProductManager()
+// const productManager = new ProductManager()
+const productManagerMongo = new ProductManagerMongo();
 
 class CartManager {
-    constructor() {
-        this.path = __dirname + "/api/carrito.json";
-        this.carts = [];
+    // constructor() {
+    //     this.path = __dirname + "/api/carrito.json";
+    //     this.carts = [];
 
-        this.counter = 0;
-    }
+    //     this.counter = 0;
+    // }
 
     createCart = async () => {
         try {
