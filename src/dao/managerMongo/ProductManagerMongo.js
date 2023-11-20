@@ -56,14 +56,14 @@ class ProductManagerMongo {
             if (valorMaximo.id === todosLosProductos.length - 1) return valorMaximo.id + 1
 
             //*Buscamos cual id falta en la sucesión de números ID.
-            return await this.encontrarIdFaltante();
+            return await this.findID();
         } catch (error) {
             console.error("Hubo un error en la creación del ID❗❗❗\n", error);
             throw error;
         }
     }
 
-    encontrarIdFaltante = async () => {
+    findID = async () => {
         try {
             // Obtener todos los documentos de la colección "products" 
             const todosLosProductos = await ProductModel.find({}, 'id').lean();

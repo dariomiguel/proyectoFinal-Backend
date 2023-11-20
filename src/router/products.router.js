@@ -1,10 +1,10 @@
 import { Router } from "express";
-import ProductManager from "../dao/managerFS/ProductManager.js";
+// import ProductManager from "../dao/managerFS/ProductManager.js";
 import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js"
 import __dirname from "../utils.js";
 
 const router = Router();
-const productManager = new ProductManager();
+// const productManager = new ProductManager();
 const productManagerMongo = new ProductManagerMongo();
 
 // ** Métodos  con file system
