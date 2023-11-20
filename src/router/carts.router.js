@@ -1,10 +1,11 @@
-import { Router } from "express";
-import CartManager from "../dao/managerFS/CartManager.js";
-import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
 // import ProductManager from "../dao/managerFS/ProductManager.js";
+// import CartManager from "../dao/managerFS/CartManager.js"; 
+import { Router } from "express";
+import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
+import CartManagerMongo from "../dao/managerMongo/CartManagerMongo.js";
 
 const router = Router();
-const cartManager = new CartManager();
+const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
 // const productManager = new ProductManager();
 
@@ -70,22 +71,22 @@ const productManagerMongo = new ProductManagerMongo();
 // =-               M O N G O   D B               -=
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=`
 
-//!En Proceso
-
 router.post("/", async (req, res) => {
     try {
-        const cart = await cartManager.createCart()
-        res.send(cart)
+        const cart = await cartManagerMongo.createCart();
+        console.log("Carrito creado con éxito!");
+        res.status(201).json({ status: "success", payload: cart });
     }
     catch (error) {
+        console.error("Error al crear el carrito:", error);
         res.status(500).send("Error al crea el carrito" + error)
     }
 })
 
-//TODO
+//!En Proceso
 // router.get('/', async (req, res) => {
 //     try {
-//         const carts = await cartManager.getCarts()
+//         const carts = await cartManagerMongo.getCarts()
 //         res.send(carts)
 
 //     } catch (error) {
@@ -94,9 +95,10 @@ router.post("/", async (req, res) => {
 // })
 
 
+//TODO
 // router.get("/:cid", async (req, res) => {
 //     try {
-//         const cartPorId = await cartManager.getCartById(req.params.cid);
+//         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
 
 //         if (typeof cartPorId === "string") {
 //             res.json({ Error: cartPorId });
@@ -115,7 +117,7 @@ router.post("/", async (req, res) => {
 //         const pid = parseInt(req.params.pid)
 
 //         const productPorId = await productManager.getProductById(pid);
-//         const result = await cartManager.addProductInCart(cid, pid);
+//         const result = await cartManagerMongo.addProductInCart(cid, pid);
 
 //         if (result === 'Carrito not found') return res.status(404).json({ Error: "No se encontró el carrito" });
 //         if (typeof productPorId === "string") return res.status(404).json({ Error: "No se encontro el producto solicitado" });

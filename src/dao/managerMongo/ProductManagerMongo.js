@@ -141,7 +141,7 @@ class ProductManagerMongo {
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {
-        console.log("DB connected.");
+        console.log("ProductDB connected.");
     })
     .catch(() => {
         console.error("Error conecting to DB");
