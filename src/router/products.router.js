@@ -155,32 +155,41 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-
         const { title, description, code, price, stock, category, thumbnails } = req.body;
 
-        productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails)
-            .then(result => {
-                console.log("Producto agregado correctamente:", result);
-                res.status(201).json({ message: "Producto agregado correctamente" })
-            })
-            .catch(error => {
-                if (error.code === 11000) {
-                    console.log(`No se pudo agregar el producto. Ya existe un producto con el código: ${error.keyValue.code}`);
-                    res
-                        .status(400)
-                        .json({ error: `Ya existe un producto con el código ${error.keyValue.code} ` });
-                } else {
-                    console.error("Hubo un error en la escritura de mongo, el producto no se agregó!\n", error);
-                    res
-                        .status(500)
-                        .json({ error: "Hubo un error en la escritura de la base de datos" });
-                }
-            });
+        const algunaPropiedadVacia = await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnails);
+        const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
 
+        if (algunaPropiedadVacia) {
+            res
+                .status(400)
+                .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
+            console.log("\nVerifique que las propiedades no esten vacías😶.\n");
+        } else {
+            console.log("Producto agregado correctamente:", productoAgregado);
+            res
+                .status(201)
+                .json({ message: "Producto agregado correctamente.😄" });
+        }
     } catch (error) {
-        res.status(500).json({ error: "Hubo un error general en la escritura de la base de datos" });
+        if (error.code === 11000) {
+            console.error(`Ya existe un producto con el código '${error.keyValue.code}'.`);
+            return res
+                .status(400)
+                .json({ Error: `Ya existe un producto con el código '${error.keyValue.code}' ` });
+
+        } else if (error.name === "ValidationError") {
+            return res
+                .status(400)
+                .json({ Error: "Error de validación en los datos del producto" });
+        }
+
+        console.error("Hubo un error general en la escritura de la base de datos:", error);
+        res
+            .status(500)
+            .json({ error: "Hubo un error general en la escritura de la base de datos" });
     }
-})
+});
 
 router.get("/:pid", async (req, res) => {
     try {

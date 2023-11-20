@@ -84,6 +84,13 @@ class ProductManagerMongo {
         }
     };
 
+    isNotValidCode = async (title, description, code, price, stock, category, thumbnails) => {
+        //Verificamos que esten todos los productos en la carga de datos no estan vacíos.
+        const someValid = !title || !description || !price || !thumbnails || !code || !stock || !category;
+        //Si envía true significa que uno de los elementos está vacío.
+        return someValid;
+    }
+
     getProductById = async (pId) => {
         try {
             //* Buscamos elementos por Id en base de datos
