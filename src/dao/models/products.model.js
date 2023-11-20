@@ -11,7 +11,7 @@ const productsSchema = new mongoose.Schema({
     "status": Boolean,
     "stock": Number,
     "category": String,
-    "thumbnails": String
+    "thumbnail": String
 })
 
 const productsModel = mongoose.model(productsCollection, productsSchema);

@@ -20,7 +20,7 @@ router.setSocketServer = (server) => {
                 data.price,
                 data.stock,
                 data.category,
-                data.thumbnails
+                data.thumbnail
             );
 
             if (!validador) {
@@ -31,7 +31,7 @@ router.setSocketServer = (server) => {
                     data.price,
                     data.stock,
                     data.category,
-                    data.thumbnails
+                    data.thumbnail
                 );
 
                 console.log("Producto agregado exitosamente");

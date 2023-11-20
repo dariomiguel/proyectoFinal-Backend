@@ -57,9 +57,9 @@ const productManagerMongo = new ProductManagerMongo();
 
 //? router.post("/", async (req, res) => {
 //     try {
-//         const { title, description, code, price, stock, category, thumbnails } = req.body;
+//         const { title, description, code, price, stock, category, thumbnail } = req.body;
 
-//         if (await productManager.isNotValidCode( title, description, code, price, stock, category, thumbnails)) {
+//         if (await productManager.isNotValidCode( title, description, code, price, stock, category, thumbnail)) {
 //             return res
 //                 .status(400)
 //                 .json({
@@ -74,7 +74,7 @@ const productManagerMongo = new ProductManagerMongo();
 //             price,
 //             stock,
 //             category,
-//             thumbnails
+//             thumbnail
 //         );
 
 //         // socket.emit("ServerAddProducts", productoAgregado)
@@ -155,9 +155,9 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const { title, description, code, price, stock, category, thumbnails } = req.body;
+        const { title, description, code, price, stock, category, thumbnail } = req.body;
 
-        const algunaPropiedadVacia = await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnails);
+        const algunaPropiedadVacia = await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnail);
 
         if (algunaPropiedadVacia) {
             res
@@ -165,7 +165,7 @@ router.post("/", async (req, res) => {
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
-            const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
+            const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
             console.log("Producto agregado correctamente: \n", productoAgregado);
             res
                 .status(201)

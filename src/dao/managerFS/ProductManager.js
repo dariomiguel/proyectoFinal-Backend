@@ -32,12 +32,12 @@ class ProductManager {
     }
 
     //Se crea el método para agregar productos validando previamente.
-    addProduct = async (title, description, code, price, stock, category, thumbnails) => {
+    addProduct = async (title, description, code, price, stock, category, thumbnail) => {
 
         try {
             if (!fs.existsSync(this.path)) await fs.promises.writeFile(this.path, JSON.stringify([]), "utf-8");
             //Antes de agregar verifica si es válido o no
-            if (await this.isNotValidCode(title, description, code, price, stock, category, thumbnails)) {
+            if (await this.isNotValidCode(title, description, code, price, stock, category, thumbnail)) {
                 return console.log("Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!");
             }
 
@@ -51,7 +51,7 @@ class ProductManager {
                 price,
                 stock,
                 category,
-                thumbnails);
+                thumbnail);
 
             const data = JSON.stringify(this.products, null, "\t");
             await fs.promises.writeFile(this.path, data, "utf-8");
@@ -63,7 +63,7 @@ class ProductManager {
     }
 
     //Se crea un método para agregar un nuevo producto a la lista de productos.
-    add(title, description, code, price, stock, category, thumbnails) {
+    add(title, description, code, price, stock, category, thumbnail) {
         const product = {
             id: this.createID(),
             title: title,
@@ -73,19 +73,19 @@ class ProductManager {
             status: true,
             stock: stock,
             category: category,
-            thumbnails: thumbnails,
+            thumbnail: thumbnail,
         };
         this.products.push(product);
         this.memoria = product.id;
     }
 
     //Validación para verificar que el código no se repita o que no se hayan cargado todos los datos.
-    isNotValidCode = async (title, description, code, price, stock, category, thumbnails) => {
+    isNotValidCode = async (title, description, code, price, stock, category, thumbnail) => {
         this.products = await this.getProducts();
         //Verificamos que existe un codigo con el mismo nombre.
         const checker = this.products.some((product) => product.code === code);
         //Verificamos que esten todos los productos en la carga de datos.
-        const someValid = !title || !description || !price || !thumbnails || !code || !stock || !category;
+        const someValid = !title || !description || !price || !thumbnail || !code || !stock || !category;
 
         return checker || someValid;
     }

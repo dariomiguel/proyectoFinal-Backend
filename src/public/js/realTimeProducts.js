@@ -10,7 +10,7 @@ function initIO() {
 initIO();
 
 // Función para enviar un nuevo producto al servidor
-function sendAddProducts(title, price, description, code, stock, category, thumbnails) {
+function sendAddProducts(title, price, description, code, stock, category, thumbnail) {
     socket.emit("clientAddProduct", {
         title,
         price,
@@ -18,7 +18,7 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
         code,
         stock,
         category,
-        thumbnails
+        thumbnail
     });
 }
 
@@ -34,7 +34,7 @@ socket.on("ServerAddProducts", (datos) => {
             <li>Código de producto: ${datos.code}</li>
             <li>Stock: ${datos.stock}</li>
             <li>Categoría: ${datos.category}</li>
-            <li>${datos.thumbnails}</li>
+            <li>${datos.thumbnail}</li>
         </ul>
         <hr />
     `;
@@ -62,7 +62,7 @@ productsAddForm.addEventListener("submit", (event) => {
         const codeInput = document.getElementById("codeAdd");
         const stockAdd = document.getElementById("stockAdd");
         const categoryInput = document.getElementById("categoryAdd");
-        const thumbnailsInput = document.getElementById("thumbnailsAdd");
+        const thumbnailInput = document.getElementById("thumbnailAdd");
 
         const title = titleInput.value;
         const price = priceInput.value;
@@ -70,7 +70,7 @@ productsAddForm.addEventListener("submit", (event) => {
         const code = codeInput.value;
         const stock = stockAdd.value;
         const category = categoryInput.value;
-        const thumbnails = thumbnailsInput.value;
+        const thumbnail = thumbnailInput.value;
 
         sendAddProducts(
             title,
@@ -79,7 +79,7 @@ productsAddForm.addEventListener("submit", (event) => {
             code,
             stock,
             category,
-            thumbnails
+            thumbnail
         );
 
         titleInput.value = "";
@@ -88,7 +88,7 @@ productsAddForm.addEventListener("submit", (event) => {
         codeInput.value = "";
         stockAdd.value = "";
         categoryInput.value = "";
-        thumbnailsInput.value = "";
+        thumbnailInput.value = "";
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }

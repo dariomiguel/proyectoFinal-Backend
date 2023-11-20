@@ -22,7 +22,7 @@ class ProductManagerMongo {
         }
     }
 
-    addProduct = async (title, description, code, price, stock, category, thumbnails) => {
+    addProduct = async (title, description, code, price, stock, category, thumbnail) => {
         try {
             const newId = await this.createID()
             const productToAdd = {
@@ -34,7 +34,7 @@ class ProductManagerMongo {
                 status: true,
                 stock: stock,
                 category: category,
-                thumbnails: thumbnails,
+                thumbnail: thumbnail,
             }
 
             const result = await ProductModel.create(productToAdd);
@@ -51,12 +51,12 @@ class ProductManagerMongo {
             const valorMaximo = await ProductModel.findOne().sort('-id').exec();
             if (!valorMaximo) return 0;
 
-            //*Buscamos si hay alguna id que falta en la sucesión de números ID.
-            const valorIdFaltante = await this.encontrarIdFaltante();
+            //*Obtenemos todos los "products" para saber cuantos hay y verificar que coincida con el valor máximo (.lean se usa para convertilo en un objeto javascript)
+            const todosLosProductos = await ProductModel.find({}, 'id').lean();
+            if (valorMaximo.id === todosLosProductos.length - 1) return valorMaximo.id + 1
 
-            if (valorMaximo.id + 1 !== valorIdFaltante) return valorIdFaltante;
-            return valorMaximo.id + 1;
-
+            //*Buscamos cual id falta en la sucesión de números ID.
+            return await this.encontrarIdFaltante();
         } catch (error) {
             console.error("Hubo un error en la creación del ID❗❗❗\n", error);
             throw error;
@@ -65,28 +65,27 @@ class ProductManagerMongo {
 
     encontrarIdFaltante = async () => {
         try {
-            // Obtener todos los documentos de la colección "products" (.lean se usa para convertilo en un objeto javascript)
+            // Obtener todos los documentos de la colección "products" 
             const todosLosProductos = await ProductModel.find({}, 'id').lean();
             // Extraer todos los IDs existentes en un array
             const idsExistente = todosLosProductos.map(producto => producto.id);
 
-            let idFaltante;
+            let idFaltante = 0;
             for (let i = 0; i < idsExistente.length; i++) {
                 if (!idsExistente.includes(i)) {
                     idFaltante = i;
                     break;
                 }
             }
-
             return idFaltante
         } catch (error) {
-            console.error("Error al encontrar el ID que falta:", error);
+            console.error("Error al encontrar el ID que falta:\n", error);
         }
     };
 
-    isNotValidCode = async (title, description, code, price, stock, category, thumbnails) => {
+    isNotValidCode = async (title, description, code, price, stock, category, thumbnail) => {
         //Verificamos que esten todos los productos en la carga de datos no estan vacíos.
-        const someValid = !title || !description || !price || !thumbnails || !code || !stock || !category;
+        const someValid = !title || !description || !price || !thumbnail || !code || !stock || !category;
         //Si envía true significa que uno de los elementos está vacío.
         return someValid;
     }
