@@ -1,12 +1,9 @@
 import mongoose from "mongoose"
-import ProductModel from "../models/products.model.js"
 import ProductManagerMongo from "./ProductManagerMongo.js";
-import __dirname from "../../utils.js"
 import CartModel from "../models/carts.model.js";
+import __dirname from "../../utils.js"
 
-// const productManager = new ProductManager()
 const productManagerMongo = new ProductManagerMongo();
-
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 class CartManagerMongo {
@@ -39,6 +36,7 @@ class CartManagerMongo {
 
             //*Buscamos cual id falta en la sucesión de números ID.
             return await this.findID();
+
         } catch (error) {
             console.error("Hubo un error en la creación del ID❗❗❗\n", error);
             throw error;
@@ -59,12 +57,23 @@ class CartManagerMongo {
                     break;
                 }
             }
-            return idFaltante
+            return idFaltante;
+
         } catch (error) {
             console.error("Error al encontrar el ID que falta:\n", error);
         }
     };
 
+    getCarts = async () => {
+        try {
+            const lectura = await CartModel.find();
+            return lectura || []
+
+        } catch (error) {
+            console.log("Hubo un error en la lectura de la base de datos.", error);
+            throw error;
+        }
+    }
 
 
 
@@ -78,22 +87,6 @@ class CartManagerMongo {
 
 
 
-
-
-
-    // createID() {
-    //     // Verificar si hay productos en el array
-    //     if (this.carts.length === 0) {
-    //         this.counter = 0;
-    //     } else {
-    //         // Obtener el ID más grande del array de productos
-    //         const maxID = Math.max(...this.carts.map((cart) => cart.id));
-    //         // Incrementar el contador en 1 y devolverlo como el próximo ID
-    //         this.counter = maxID + 1;
-    //     }
-
-    //     return this.counter;
-    // }
 
     // getCarts = async () => {
     //     //Verificamos que exista el archivo antes de leerlo

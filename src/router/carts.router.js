@@ -74,6 +74,7 @@ const productManagerMongo = new ProductManagerMongo();
 router.post("/", async (req, res) => {
     try {
         const cart = await cartManagerMongo.createCart();
+
         console.log("Carrito creado con éxito!");
         res.status(201).json({ status: "success", payload: cart });
     }
@@ -83,19 +84,21 @@ router.post("/", async (req, res) => {
     }
 })
 
+router.get('/', async (req, res) => {
+    try {
+        const carts = await cartManagerMongo.getCarts();
+
+        console.log("Carrito creado con éxito!");
+        res.status(201).json({ status: "success", payload: carts });
+    } catch (error) {
+        console.error("Error al obtener los carritos:", error);
+        res.status(500).send("Error al obtener los carritos" + error)
+    }
+})
+
+
 //!En Proceso
-// router.get('/', async (req, res) => {
-//     try {
-//         const carts = await cartManagerMongo.getCarts()
-//         res.send(carts)
 
-//     } catch (error) {
-//         res.status(500).send("Error al obtener los carritos" + error)
-//     }
-// })
-
-
-//TODO
 // router.get("/:cid", async (req, res) => {
 //     try {
 //         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
@@ -111,6 +114,7 @@ router.post("/", async (req, res) => {
 // });
 
 
+//TODO
 // router.post('/:cid/product/:pid', async (req, res) => {
 //     try {
 //         const cid = parseInt(req.params.cid)
