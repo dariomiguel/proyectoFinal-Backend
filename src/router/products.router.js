@@ -214,10 +214,19 @@ router.put("/:pid", async (req, res) => {
     try {
         const productId = req.params.pid;
         const { key, value } = req.body;
+
+        const productPorId = await productManagerMongo.getProductById(req.params.pid);
+        if (productPorId === null) {
+            console.error(`No se encontro el producto con id: ${productId}.`)
+            return res
+                .status(404)
+                .json({ Error: `No se encontro el producto con id: ${productId}.` });
+        }
+
         const resultOfValid = await productManagerMongo.validateProperty(productId, key);
 
         if (resultOfValid === undefined) {
-            console.error(`No se encontró la propiedad '${[key]}.`);
+            console.error(`No se encontró la propiedad '${[key]}'.`);
             return res
                 .status(404)
                 .json({ Error: `No se encontró la propiedad '${[key]}'.` });

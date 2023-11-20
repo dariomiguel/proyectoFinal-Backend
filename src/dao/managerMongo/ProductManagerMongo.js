@@ -119,7 +119,10 @@ class ProductManagerMongo {
         try {
             const idProducto = productId;
             const validador = await ProductModel.findOne({ id: idProducto, [keyUpdate]: { $exists: true } });
+
+            if (keyUpdate === "id") return undefined;
             if (validador !== null) return validador;
+
         } catch (error) {
             console.error('No se pudo validar el documento:\n', error);
             throw error;
