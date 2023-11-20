@@ -158,7 +158,6 @@ router.post("/", async (req, res) => {
         const { title, description, code, price, stock, category, thumbnails } = req.body;
 
         const algunaPropiedadVacia = await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnails);
-        const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
 
         if (algunaPropiedadVacia) {
             res
@@ -166,11 +165,13 @@ router.post("/", async (req, res) => {
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
-            console.log("Producto agregado correctamente:", productoAgregado);
+            const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnails);
+            console.log("Producto agregado correctamente: \n", productoAgregado);
             res
                 .status(201)
                 .json({ message: "Producto agregado correctamente.😄" });
         }
+
     } catch (error) {
         if (error.code === 11000) {
             console.error(`Ya existe un producto con el código '${error.keyValue.code}'.`);
