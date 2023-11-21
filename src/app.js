@@ -6,6 +6,7 @@ import productsRouter from "./router/products.router.js";
 import cartsRouter from "./router/carts.router.js";
 import viewsRouter from "./router/views.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
+import chatRouter from "./router/chat.router.js"
 import mongoose from "mongoose";
 
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
@@ -23,17 +24,31 @@ app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"))
 
 //Creamos una variable para el servidor  
-const io = app.listen(8080, () => console.log("En linea..."));
+const httpServer = app.listen(8080, () => console.log("En linea..."));
 //Creamos una variable que contenga el servidor socket basado en http
-const socketServer = new Server(io);
+const io = new Server(httpServer);
 //Socket que utlizaremos en el router
-realtimeproductsRouter.setSocketServer(socketServer);
+realtimeproductsRouter.setSocketServer(io);
+// chatRouter.setSocketServer(io);
 
+const messages = [];
+
+io.on("connection", socket => {
+    console.log("new socket :D");
+
+    socket.on("message", data => {
+        console.log(data);
+        messages.push(data)
+        io.emit("logs", messages)
+    })
+})
 
 //Ruta de vistas
 app.use("/", viewsRouter)
 //Ruta de realtimeProducts
 app.use("/realtimeproducts", realtimeproductsRouter);
+//Ruta de chat
+app.use("/chat", chatRouter);
 //Ruta de producto
 app.use("/api/products", productsRouter);
 //Ruta de carrito
