@@ -142,7 +142,22 @@ router.post('/:cid/product/:pid', async (req, res) => {
     }
 })
 
-//TODO
-//delete
+router.delete("/:cid", async (req, res) => {
+    try {
+        const cId = parseInt(req.params.cid);
+        const buscarCartPorId = await cartManagerMongo.getCartById(cId);
+
+        if (buscarCartPorId === null) {
+            console.error(`No se encontró el carrito con id:'${cId}'`);
+            res.status(404).json({ Error: `No se encontró el carrito con id:'${cId}'` });
+        } else {
+            await cartManagerMongo.deleteCart(cId);
+            res.status(201).json({ message: "Carrito eliminado correctamente" });
+        }
+    } catch (error) {
+        console.error("Error al eliminar el carrito:", error);
+        res.status(500).json({ error: "Hubo un error al eliminar el carrito" });
+    }
+});
 
 export default router

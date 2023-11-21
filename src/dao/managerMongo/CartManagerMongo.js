@@ -112,6 +112,15 @@ class CartManagerMongo {
             throw error
         }
     }
+
+    deleteCart = async (cid) => {
+        try {
+            await CartModel.deleteOne({ id: cid })
+            console.log(`Carrito con id:${cid} se eliminó correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
