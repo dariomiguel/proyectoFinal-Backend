@@ -1,11 +1,5 @@
-import mongoose from "mongoose"
-import ProductManagerMongo from "./ProductManagerMongo.js";
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
-import ProductsModel from "../models/products.model.js";
-
-const productManagerMongo = new ProductManagerMongo();
-const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 class CartManagerMongo {
 
@@ -122,13 +116,5 @@ class CartManagerMongo {
         }
     }
 }
-
-mongoose.connect(urlMongo, { dbName: "ecommerce" })
-    .then(() => {
-        console.log("CartDB connected.");
-    })
-    .catch(() => {
-        console.error("Error conecting to CartDB");
-    })
 
 export default CartManagerMongo

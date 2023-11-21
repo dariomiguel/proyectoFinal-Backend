@@ -6,6 +6,9 @@ import productsRouter from "./router/products.router.js";
 import cartsRouter from "./router/carts.router.js";
 import viewsRouter from "./router/views.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
+import mongoose from "mongoose";
+
+const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 const app = express();
 app.use(express.json());
@@ -36,3 +39,10 @@ app.use("/api/products", productsRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
 
+mongoose.connect(urlMongo, { dbName: "ecommerce" })
+    .then(() => {
+        console.log("DB connected.");
+    })
+    .catch(() => {
+        console.error("Error conecting to DB");
+    })

@@ -1,8 +1,5 @@
-import mongoose from "mongoose"
 import ProductModel from "../models/products.model.js"
 import __dirname from "../../utils.js"
-
-const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 class ProductManagerMongo {
 
@@ -138,13 +135,5 @@ class ProductManagerMongo {
         }
     }
 }
-
-mongoose.connect(urlMongo, { dbName: "ecommerce" })
-    .then(() => {
-        console.log("ProductDB connected.");
-    })
-    .catch(() => {
-        console.error("Error conecting to DB");
-    })
 
 export default ProductManagerMongo
