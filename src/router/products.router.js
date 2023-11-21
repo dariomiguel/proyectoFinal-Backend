@@ -144,7 +144,7 @@ router.get("/", async (req, res) => {
             }
         }
 
-        res.json({ status: "success", payload: products })
+        res.status(200).json({ status: "success", payload: products })
     } catch (error) {
         console.error("Products, Error al obtener la lista de productos:", error);
         res
@@ -168,6 +168,7 @@ router.post("/", async (req, res) => {
             const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
             console.log("Producto agregado correctamente: \n", productoAgregado);
             res
+                //*201 para creaciones exitosas
                 .status(201)
                 .json({ message: "Producto agregado correctamente.😄" });
         }
@@ -201,7 +202,7 @@ router.get("/:pid", async (req, res) => {
                 .status(404)
                 .json({ Error: "No se encontro el producto solicitado" });
         } else {
-            res.json({ status: "success", payload: productPorId })
+            res.status(200).json({ status: "success", payload: productPorId })
         }
     } catch (error) {
         res

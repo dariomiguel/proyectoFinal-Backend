@@ -2,6 +2,7 @@ import mongoose from "mongoose"
 import ProductManagerMongo from "./ProductManagerMongo.js";
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
+import ProductsModel from "../models/products.model.js";
 
 const productManagerMongo = new ProductManagerMongo();
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
@@ -75,72 +76,42 @@ class CartManagerMongo {
         }
     }
 
+    getCartById = async (cId) => {
+        try {
+            //* Buscamos elementos por Id en base de datos
+            const carritoBuscado = await CartModel.findOne({ id: cId });
+            return carritoBuscado;
+        } catch (error) {
+            console.error("No se encontró el carrito solicitado\n", error);
+            throw error;
+        }
+    }
 
+    addProductInCart = async (cId, pId) => {
+        try {
 
+            // Buscar el carrito por su ID
+            const cart = await CartModel.findOne({ id: cId });
+            // Si el carrito ya existe, verificar si el producto ya está en el array
+            const existingProduct = cart.products.find(
+                (item) => item.product === pId
+            );
 
+            //Analizamos si existe el producto
+            existingProduct ?
+                // Si el producto ya existe, sumar al quantity
+                existingProduct.quantity += 1 :
+                // Si el producto no existe, agregarlo al array con quantity 1
+                cart.products.push({ product: pId, quantity: 1 })
 
-
-
-
-
-
-
-
-
-
-    // getCarts = async () => {
-    //     //Verificamos que exista el archivo antes de leerlo
-    //     try {
-    //         if (!fs.existsSync(this.path)) return [];
-
-    //         const lectura = await fs.promises.readFile(this.path, "utf-8");
-    //         if (!lectura) return this.carts;
-
-    //         return this.carts = JSON.parse(lectura) || [];
-
-    //     } catch (error) {
-    //         console.log("Hubo un error en el READ", error);
-    //         throw error;
-    //     }
-    // }
-
-    // getCartById = async (id) => {
-    //     try {
-    //         const data = await fs.promises.readFile(this.path, 'utf-8')
-    //         this.carts = JSON.parse(data)
-    //         const carrito = this.carts.find(cart => cart.id == id)
-
-    //         if (!carrito) return `No hay un producto con el número de ID ${id}.`
-    //         return carrito
-    //     } catch (error) {
-    //         return error
-    //     }
-    // }
-
-    // addProductInCart = async (cid, pid) => {
-    //     try {
-    //         const data = await fs.promises.readFile(this.path, 'utf-8')
-    //         this.carts = JSON.parse(data)
-    //         const carrito = this.carts.find(cart => cart.id === cid)
-    //         const prod = await productManager.getProductById(pid)
-
-    //         if (prod === 'Not found') return 'Producto not found'
-    //         if (!carrito) return 'Carrito not found'
-
-    //         const product = carrito.products.find(p => p.pid === pid)
-
-    //         if (!product) {
-    //             carrito.products.push({ pid: pid, quantity: 1 })
-    //         } else {
-    //             product.quantity++
-    //         }
-
-    //         await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, '\t'))
-    //         return 'Se agrego el producto correctamente'
-    //     } catch (error) {
-    //         return error
-    //     }
-    // }
+            // Guardar el carrito actualizado
+            await cart.save();
+            console.log("Producto actualizado en el carrito:", cart);
+            return cart
+        } catch (error) {
+            throw error
+        }
+    }
 }
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
