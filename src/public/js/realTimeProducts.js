@@ -53,7 +53,7 @@ const sendDelete = async (id) => {
         });
 };
 
-productsAddForm.addEventListener("submit", (event) => {
+productsAddForm.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
         const titleInput = document.getElementById("titleAdd");
@@ -72,15 +72,18 @@ productsAddForm.addEventListener("submit", (event) => {
         const category = categoryInput.value;
         const thumbnail = thumbnailInput.value;
 
-        sendAddProducts(
-            title,
-            price,
-            description,
-            code,
-            stock,
-            category,
-            thumbnail
-        );
+        await fetch("http://localhost:8080/api/products"), {
+            method: "POST",
+            body: JSON.stringify({
+                title,
+                price,
+                description,
+                code,
+                stock,
+                category,
+                thumbnail
+            })
+        }
 
         titleInput.value = "";
         priceInput.value = "";
