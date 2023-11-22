@@ -131,7 +131,7 @@ router.get("/", async (req, res) => {
         // Listamos con límites
         const limit = req.query.limit;
         let products = await productManagerMongo.getProducts();
-        console.log("Productos :", products);
+        // console.log("Productos :", products);
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;

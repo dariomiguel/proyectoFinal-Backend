@@ -72,8 +72,24 @@ productsAddForm.addEventListener("submit", async (event) => {
         const category = categoryInput.value;
         const thumbnail = thumbnailInput.value;
 
-        await fetch("http://localhost:8080/api/products"), {
+        // await fetch("http://localhost:8080/api/products"), {
+        //     method: "POST",
+        //     body: JSON.stringify({
+        //         title,
+        //         price,
+        //         description,
+        //         code,
+        //         stock,
+        //         category,
+        //         thumbnail
+        //     })
+        // }
+
+        const response = await fetch("http://localhost:8080/api/products", {
             method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
             body: JSON.stringify({
                 title,
                 price,
@@ -81,8 +97,13 @@ productsAddForm.addEventListener("submit", async (event) => {
                 code,
                 stock,
                 category,
-                thumbnail
-            })
+                thumbnail,
+            }),
+        });
+        if (response.ok) {
+            console.log("Product added successfully!");
+        } else {
+            console.error("Error adding product:", response.statusText);
         }
 
         titleInput.value = "";

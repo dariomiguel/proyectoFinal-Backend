@@ -66,6 +66,7 @@ router.get("/", async (req, res) => {
         const reversedproducts = [...products].reverse().filter((p) => p.title);
 
         res.render("realtimeproducts", {
+            style: "realTimeProducts.css",
             reversedproducts,
         });
     } catch (error) {
