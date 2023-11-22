@@ -1,47 +1,47 @@
-console.log('Init my chat')
+console.log("Init my chat")
 let socket
 
-let user = sessionStorage.getItem('user') || ''
+let user = sessionStorage.getItem("user") || ""
 
 if (user) {
-    document.querySelector('#username').innerHTML = user + ': '
+    document.querySelector("#username").innerHTML = user + ": "
     initIO()
 } else {
     Swal.fire({
-        title: 'Hola! 👋',
-        input: 'text',
-        text: 'Configura el nombre que usarás en este chat:',
+        title: "Hola! 👋",
+        input: "text",
+        text: "Configura el nombre que usarás en este chat:",
         inputValidator: value => {
-            return !value.trim() && 'Por favor. Escriba un nombre de usuario'
+            return !value.trim() && "Por favor. Escriba un nombre de usuario"
         },
         allowOutsideClick: false
     }).then(result => {
         user = result.value
-        sessionStorage.setItem('user', user)
-        document.querySelector('#username').innerHTML = user + ': '
+        sessionStorage.setItem("user", user)
+        document.querySelector("#username").innerHTML = user + ": "
         initIO()
     })
 }
 
-const input = document.querySelector('#chatInput')
-input.addEventListener('keyup', event => {
-    if (event.key === 'Enter') sendMessage(event.currentTarget.value)
+const input = document.querySelector("#chatInput")
+input.addEventListener("keyup", event => {
+    if (event.key === "Enter") sendMessage(event.currentTarget.value)
 })
-document.querySelector('#send').addEventListener('click', event => sendMessage(input.value))
+document.querySelector("#send").addEventListener("click", event => sendMessage(input.value))
 
 function sendMessage(message) {
     if (message.trim().length > 0) {
-        socket.emit('message', { user, message })
-        input.value = ''
+        socket.emit("message", { user, message })
+        input.value = ""
     }
 }
 
 function initIO() {
     socket = io()
 
-    socket.on('logs', messages => {
-        const box = document.querySelector('#chatBox')
-        let html = ''
+    socket.on("logs", messages => {
+        const box = document.querySelector("#chatBox")
+        let html = ""
 
         messages.reverse().forEach(message => {
             html += `<p><i>${message.user}</i>: ${message.message}</p>`

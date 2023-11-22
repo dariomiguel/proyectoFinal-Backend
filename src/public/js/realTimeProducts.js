@@ -88,8 +88,28 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
         if (response.ok) {
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Agregado',
+                text: 'El producto se ha agregado correctamente.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            })
+            // .then(result => {
+            //     user = result.value
+            //     sessionStorage.setItem('user', user)
+            //     document.querySelector('#username').innerHTML = user + ': '
+            //     initIO()
+            // })
             console.log("Se agregó correctacemte un producto desde el formulario cliente!");
         } else {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: 'No se pudo agregar el producto. Por favor, inténtalo de nuevo.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Cerrar'
+            });
             console.error("Error agregando el producto desde formulario cliente:", response.statusText);
         }
 
