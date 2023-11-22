@@ -1,7 +1,7 @@
 import express from "express";
-import ProductManager from "../dao/managerFS/ProductManager.js";
+import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
 
-const productManager = new ProductManager();
+const productManager = new ProductManagerMongo();
 const router = express.Router();
 
 let socketServer; // Variable para almacenar la instancia de socketServer
@@ -22,6 +22,7 @@ router.setSocketServer = (server) => {
                 data.category,
                 data.thumbnail
             );
+            console.log("El validador es :", validador);
 
             if (!validador) {
                 await productManager.addProduct(
@@ -50,6 +51,7 @@ router.get("/", async (req, res) => {
     try {
         const limit = req.query.limit;
         let products = await productManager.getProducts();
+        products = JSON.parse(JSON.stringify(products));
 
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });

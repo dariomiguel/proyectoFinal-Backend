@@ -72,19 +72,6 @@ productsAddForm.addEventListener("submit", async (event) => {
         const category = categoryInput.value;
         const thumbnail = thumbnailInput.value;
 
-        // await fetch("http://localhost:8080/api/products"), {
-        //     method: "POST",
-        //     body: JSON.stringify({
-        //         title,
-        //         price,
-        //         description,
-        //         code,
-        //         stock,
-        //         category,
-        //         thumbnail
-        //     })
-        // }
-
         const response = await fetch("http://localhost:8080/api/products", {
             method: "POST",
             headers: {
@@ -101,9 +88,9 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
         if (response.ok) {
-            console.log("Product added successfully!");
+            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
         } else {
-            console.error("Error adding product:", response.statusText);
+            console.error("Error agregando el producto desde formulario cliente:", response.statusText);
         }
 
         titleInput.value = "";
