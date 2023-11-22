@@ -2,6 +2,7 @@ import { Router } from "express";
 // import ProductManager from "../dao/managerFS/ProductManager.js";
 import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js"
 import __dirname from "../utils.js";
+import { io } from "../app.js"
 
 const router = Router();
 // const productManager = new ProductManager();
@@ -131,7 +132,7 @@ router.get("/", async (req, res) => {
         // Listamos con límites
         const limit = req.query.limit;
         let products = await productManagerMongo.getProducts();
-        console.log("Productos :", products);
+        // console.log("Productos :", products);
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
@@ -157,9 +158,11 @@ router.post("/", async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
 
+
         const algunaPropiedadVacia = await productManagerMongo.isNotValidCode(title, description, code, price, stock, category, thumbnail);
 
         if (algunaPropiedadVacia) {
+            console.log({ title, description, code, price, stock, category, thumbnail });
             res
                 .status(400)
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
@@ -167,6 +170,8 @@ router.post("/", async (req, res) => {
         } else {
             const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
             console.log("Producto agregado correctamente: \n", productoAgregado);
+
+            io.emit("ServerAddProducts", productoAgregado)
             res
                 //*201 para creaciones exitosas
                 .status(201)
@@ -174,6 +179,7 @@ router.post("/", async (req, res) => {
         }
 
     } catch (error) {
+        console.log("Salto un error");
         if (error.code === 11000) {
             console.error(`Ya existe un producto con el código '${error.keyValue.code}'.`);
             return res

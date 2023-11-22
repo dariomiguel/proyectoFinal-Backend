@@ -10,17 +10,17 @@ function initIO() {
 initIO();
 
 // Función para enviar un nuevo producto al servidor
-function sendAddProducts(title, price, description, code, stock, category, thumbnail) {
-    socket.emit("clientAddProduct", {
-        title,
-        price,
-        description,
-        code,
-        stock,
-        category,
-        thumbnail
-    });
-}
+//! function sendAddProducts(title, price, description, code, stock, category, thumbnail) {
+//     socket.emit("clientAddProduct", {
+//         title,
+//         price,
+//         description,
+//         code,
+//         stock,
+//         category,
+//         thumbnail
+//     });
+// }
 
 socket.on("ServerAddProducts", (datos) => {
     const div = document.createElement("div");
@@ -53,10 +53,11 @@ const sendDelete = async (id) => {
         });
 };
 
-productsAddForm.addEventListener("submit", async (event) => {
+productsAddForm.addEventListener("submit", (event) => {
     event.preventDefault();
+    console.log(event.target);
     try {
-        const titleInput = document.getElementById("titleAdd");
+        const titleInput = document.querySelector("#titleAdd");
         const priceInput = document.getElementById("priceAdd");
         const descriptionInput = document.getElementById("descriptionAdd");
         const codeInput = document.getElementById("codeAdd");
@@ -72,7 +73,17 @@ productsAddForm.addEventListener("submit", async (event) => {
         const category = categoryInput.value;
         const thumbnail = thumbnailInput.value;
 
-        await fetch("http://localhost:8080/api/products"), {
+        console.log("los elementos son:", {
+            title,
+            price,
+            description,
+            code,
+            stock,
+            category,
+            thumbnail
+        });
+
+        fetch("http://localhost:8080/api/products", {
             method: "POST",
             body: JSON.stringify({
                 title,
@@ -83,17 +94,22 @@ productsAddForm.addEventListener("submit", async (event) => {
                 category,
                 thumbnail
             })
-        }
+        })
+        // .then(
+        //     () => {
+        //         titleInput.value = "";
+        //         priceInput.value = "";
+        //         descriptionInput.value = "";
+        //         codeInput.value = "";
+        //         stockAdd.value = "";
+        //         categoryInput.value = "";
+        //         thumbnailInput.value = "";
+        //     }
+        // )
 
-        titleInput.value = "";
-        priceInput.value = "";
-        descriptionInput.value = "";
-        codeInput.value = "";
-        stockAdd.value = "";
-        categoryInput.value = "";
-        thumbnailInput.value = "";
+
     } catch (error) {
-        console.error("Error al agregar el producto:", error);
+        console.log("Error al agregar el producto:", error);
     }
 });
 
