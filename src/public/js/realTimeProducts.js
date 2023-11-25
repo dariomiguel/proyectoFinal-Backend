@@ -22,19 +22,21 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
     });
 }
 
-socket.on("ServerAddProducts", (datos) => {
+socket.on("logueados", (datos) => {
+    console.log("objeto 🤔 ", datos);
+    console.log("El precio 🤑 ", datos.producto.price);
     const div = document.createElement("div");
-    div.id = datos.id;
+    div.id = datos.producto.id;
     div.innerHTML = `
-        <h3>${datos.title}</h3>
+        <h3>${datos.producto.title}</h3>
         <ul>
-            <li>$ ${datos.price}</li>
-            <li>N° Id: ${datos.id}</li>
-            <li>${datos.description}</li>
-            <li>Código de producto: ${datos.code}</li>
-            <li>Stock: ${datos.stock}</li>
-            <li>Categoría: ${datos.category}</li>
-            <li>${datos.thumbnail}</li>
+            <li>$ ${datos.producto.price}</li>
+            <li>N° Id: ${datos.producto.id}</li>
+            <li>${datos.producto.description}</li>
+            <li>Código de producto: ${datos.producto.code}</li>
+            <li>Stock: ${datos.producto.stock}</li>
+            <li>Categoría: ${datos.producto.category}</li>
+            <li>${datos.producto.thumbnail}</li>
         </ul>
         <hr />
     `;
@@ -119,13 +121,13 @@ productsAddForm.addEventListener("submit", async (event) => {
             });
         }
 
-        titleInput.value = "";
-        priceInput.value = "";
-        descriptionInput.value = "";
-        codeInput.value = "";
-        stockAdd.value = "";
-        categoryInput.value = "";
-        thumbnailInput.value = "";
+        // titleInput.value = "";
+        // priceInput.value = "";
+        // descriptionInput.value = "";
+        // codeInput.value = "";
+        // stockAdd.value = "";
+        // categoryInput.value = "";
+        // thumbnailInput.value = "";
 
     } catch (error) {
         console.error("Error al agregar el producto:", error);
@@ -144,17 +146,3 @@ function sendProduct(producto) {
     console.log("Este es un producto desde la función: ", producto);
 }
 
-// function initIO() {
-//     socket = io()
-
-//     socket.on("logs", messages => {
-//         const box = document.querySelector("#chatBox")
-//         let html = ""
-
-//         messages.reverse().forEach(message => {
-//             html += `<p><i>${message.user}</i>: ${message.message}</p>`
-//         })
-
-//         box.innerHTML = html
-//     })
-// }

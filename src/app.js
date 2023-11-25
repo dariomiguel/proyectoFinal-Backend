@@ -43,7 +43,7 @@ io.on("connection", socket => {
     })
 
     socket.on("ClienteEnvioProducto", data => {
-        console.log("hola este es data del producto:", data);
+        io.emit("logueados", data)
     })
 })
 
