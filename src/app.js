@@ -40,7 +40,7 @@ io.on("connection", socket => {
     })
 
     socket.on("ClienteEnvioProducto", data => {
-        io.emit("logueados", data)
+        io.emit("mostrandoProductos", data)
     })
 })
 

@@ -22,7 +22,7 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
     });
 }
 
-socket.on("logueados", (datos) => {
+socket.on("mostrandoProductos", (datos) => {
     if (datos.producto) {
         const div = document.createElement("div");
         div.id = datos.producto.id;
