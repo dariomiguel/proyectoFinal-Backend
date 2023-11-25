@@ -90,10 +90,10 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
         if (response.ok) {
+            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             sendProduct({
                 title, price, description, code, stock, category, thumbnail
             })
-            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             Swal.fire({
                 icon: 'success',
                 title: 'Producto Agregado',
