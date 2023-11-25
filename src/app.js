@@ -27,9 +27,6 @@ app.use(express.static(__dirname + "/public"))
 const httpServer = app.listen(8080, () => console.log("En linea..."));
 //Creamos una variable que contenga el servidor socket basado en http
 const io = new Server(httpServer);
-//Socket que utlizaremos en el router
-// realtimeproductsRouter.setSocketServer(io);
-// chatRouter.setSocketServer(io);
 
 const messages = [];
 

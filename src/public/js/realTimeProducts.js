@@ -23,37 +23,41 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
 }
 
 socket.on("logueados", (datos) => {
-    console.log("objeto 🤔 ", datos);
-    console.log("El precio 🤑 ", datos.producto.price);
-    const div = document.createElement("div");
-    div.id = datos.producto.id;
-    div.innerHTML = `
-        <h3>${datos.producto.title}</h3>
-        <ul>
-            <li>$ ${datos.producto.price}</li>
-            <li>N° Id: ${datos.producto.id}</li>
-            <li>${datos.producto.description}</li>
-            <li>Código de producto: ${datos.producto.code}</li>
-            <li>Stock: ${datos.producto.stock}</li>
-            <li>Categoría: ${datos.producto.category}</li>
-            <li>${datos.producto.thumbnail}</li>
-        </ul>
-        <hr />
-    `;
+    if (datos.producto) {
+        const div = document.createElement("div");
+        div.id = datos.producto.id;
+        div.innerHTML = `
+            <h3>${datos.producto.title}</h3>
+            <ul>
+                <li>$ ${datos.producto.price}</li>
+                <li>N° Id: ${datos.producto.id}</li>
+                <li>${datos.producto.description}</li>
+                <li>Código de producto: ${datos.producto.code}</li>
+                <li>Stock: ${datos.producto.stock}</li>
+                <li>Categoría: ${datos.producto.category}</li>
+                <li>${datos.producto.thumbnail}</li>
+            </ul>
+            <hr />
+        `;
 
-    //Agregamos en la parte superior
-    nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
+        //Agregamos en la parte superior
+        nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
+    } else {
+        console.error("No se recibió un producto válido:", datos);
+    }
 });
 
 const sendDelete = async (id) => {
-    await fetch(`/api/products/${id}`, {
-        method: "DELETE",
-    })
-        .then((data) => data.json())
-        .then((json) => {
-            document.getElementById(id).innerHTML = "";
+    try {
+        await fetch(`/api/products/${id}`, {
+            method: "DELETE",
         });
+        document.getElementById(id).innerHTML = "";
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+    }
 };
+
 
 productsAddForm.addEventListener("submit", async (event) => {
 
@@ -82,24 +86,12 @@ productsAddForm.addEventListener("submit", async (event) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                title,
-                price,
-                description,
-                code,
-                stock,
-                category,
-                thumbnail,
+                title, price, description, code, stock, category, thumbnail,
             }),
         });
         if (response.ok) {
             sendProduct({
-                title,
-                price,
-                description,
-                code,
-                stock,
-                category,
-                thumbnail
+                title, price, description, code, stock, category, thumbnail
             })
             console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             Swal.fire({
@@ -111,16 +103,17 @@ productsAddForm.addEventListener("submit", async (event) => {
             });
 
         } else {
-            console.error("Error agregando el producto desde formulario cliente:", response.statusText);
+            console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
-                text: 'No se pudo agregar el producto. Por favor, inténtalo de nuevo.',
+                text: 'No se pudo agregar el producto. Ya existe un producto con ese código.',
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Cerrar'
             });
         }
 
+        //!Para agregar en un boton de limpiar
         // titleInput.value = "";
         // priceInput.value = "";
         // descriptionInput.value = "";
@@ -136,13 +129,14 @@ productsAddForm.addEventListener("submit", async (event) => {
 
 document.querySelector("#btnDelete").addEventListener("click", (event) => {
     event.preventDefault();
-    const titleInput = document.getElementById("titleDelete").value;
-    sendDelete(titleInput);
+    const titleInput = document.getElementById("titleDelete");
+    const title = titleInput.value
+    sendDelete(title);
+    titleInput.value = "";
 });
 
 
 function sendProduct(producto) {
     socket.emit("ClienteEnvioProducto", { producto })
-    console.log("Este es un producto desde la función: ", producto);
 }
 

@@ -131,7 +131,6 @@ router.get("/", async (req, res) => {
         // Listamos con límites
         const limit = req.query.limit;
         let products = await productManagerMongo.getProducts();
-        // console.log("Productos :", products);
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
@@ -166,7 +165,6 @@ router.post("/", async (req, res) => {
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
             const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
-            // console.log("Producto agregado correctamente: \n", productoAgregado);
             res
                 //*201 para creaciones exitosas
                 .status(201)
