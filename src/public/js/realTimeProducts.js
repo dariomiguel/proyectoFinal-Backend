@@ -54,24 +54,26 @@ const sendDelete = async (id) => {
 };
 
 productsAddForm.addEventListener("submit", async (event) => {
+
     event.preventDefault();
+
+    const titleInput = document.getElementById("titleAdd");
+    const priceInput = document.getElementById("priceAdd");
+    const descriptionInput = document.getElementById("descriptionAdd");
+    const codeInput = document.getElementById("codeAdd");
+    const stockAdd = document.getElementById("stockAdd");
+    const categoryInput = document.getElementById("categoryAdd");
+    const thumbnailInput = document.getElementById("thumbnailAdd");
+
+    const title = titleInput.value;
+    const price = priceInput.value;
+    const description = descriptionInput.value;
+    const code = codeInput.value;
+    const stock = stockAdd.value;
+    const category = categoryInput.value;
+    const thumbnail = thumbnailInput.value;
+
     try {
-        const titleInput = document.getElementById("titleAdd");
-        const priceInput = document.getElementById("priceAdd");
-        const descriptionInput = document.getElementById("descriptionAdd");
-        const codeInput = document.getElementById("codeAdd");
-        const stockAdd = document.getElementById("stockAdd");
-        const categoryInput = document.getElementById("categoryAdd");
-        const thumbnailInput = document.getElementById("thumbnailAdd");
-
-        const title = titleInput.value;
-        const price = priceInput.value;
-        const description = descriptionInput.value;
-        const code = codeInput.value;
-        const stock = stockAdd.value;
-        const category = categoryInput.value;
-        const thumbnail = thumbnailInput.value;
-
         const response = await fetch("http://localhost:8080/api/products", {
             method: "POST",
             headers: {
@@ -88,21 +90,26 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
         if (response.ok) {
+            sendProduct({
+                title,
+                price,
+                description,
+                code,
+                stock,
+                category,
+                thumbnail
+            })
+            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             Swal.fire({
                 icon: 'success',
                 title: 'Producto Agregado',
                 text: 'El producto se ha agregado correctamente.',
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
-            })
-            // .then(result => {
-            //     user = result.value
-            //     sessionStorage.setItem('user', user)
-            //     document.querySelector('#username').innerHTML = user + ': '
-            //     initIO()
-            // })
-            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
+            });
+
         } else {
+            console.error("Error agregando el producto desde formulario cliente:", response.statusText);
             Swal.fire({
                 icon: 'error',
                 title: 'Error',
@@ -110,7 +117,6 @@ productsAddForm.addEventListener("submit", async (event) => {
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Cerrar'
             });
-            console.error("Error agregando el producto desde formulario cliente:", response.statusText);
         }
 
         titleInput.value = "";
@@ -120,6 +126,7 @@ productsAddForm.addEventListener("submit", async (event) => {
         stockAdd.value = "";
         categoryInput.value = "";
         thumbnailInput.value = "";
+
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }
@@ -130,3 +137,24 @@ document.querySelector("#btnDelete").addEventListener("click", (event) => {
     const titleInput = document.getElementById("titleDelete").value;
     sendDelete(titleInput);
 });
+
+
+function sendProduct(producto) {
+    socket.emit("ClienteEnvioProducto", { producto })
+    console.log("Este es un producto desde la función: ", producto);
+}
+
+// function initIO() {
+//     socket = io()
+
+//     socket.on("logs", messages => {
+//         const box = document.querySelector("#chatBox")
+//         let html = ""
+
+//         messages.reverse().forEach(message => {
+//             html += `<p><i>${message.user}</i>: ${message.message}</p>`
+//         })
+
+//         box.innerHTML = html
+//     })
+// }

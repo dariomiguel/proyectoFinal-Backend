@@ -28,7 +28,7 @@ const httpServer = app.listen(8080, () => console.log("En linea..."));
 //Creamos una variable que contenga el servidor socket basado en http
 const io = new Server(httpServer);
 //Socket que utlizaremos en el router
-realtimeproductsRouter.setSocketServer(io);
+// realtimeproductsRouter.setSocketServer(io);
 // chatRouter.setSocketServer(io);
 
 const messages = [];
@@ -39,7 +39,11 @@ io.on("connection", socket => {
     socket.on("message", data => {
         console.log(data);
         messages.push(data)
-        io.emit("logs", messages)
+        io.emit("logs", messages)//Envia a todos incluyendo el que envia
+    })
+
+    socket.on("ClienteEnvioProducto", data => {
+        console.log("hola este es data del producto:", data);
     })
 })
 
@@ -58,6 +62,8 @@ mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {
         console.log("DB connected.");
     })
-    .catch(() => {
-        console.error("Error conecting to DB");
+    .catch((error) => {
+        console.error("Error conecting to DB", error);
     })
+
+export { httpServer }

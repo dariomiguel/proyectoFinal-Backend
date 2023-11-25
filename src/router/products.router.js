@@ -166,7 +166,7 @@ router.post("/", async (req, res) => {
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
             const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
-            console.log("Producto agregado correctamente: \n", productoAgregado);
+            // console.log("Producto agregado correctamente: \n", productoAgregado);
             res
                 //*201 para creaciones exitosas
                 .status(201)
