@@ -10,7 +10,7 @@ function initIO() {
 initIO();
 
 // Función para enviar un nuevo producto al servidor
-function sendAddProducts(title, price, description, code, stock, category, thumbnails) {
+function sendAddProducts(title, price, description, code, stock, category, thumbnail) {
     socket.emit("clientAddProduct", {
         title,
         price,
@@ -18,77 +18,142 @@ function sendAddProducts(title, price, description, code, stock, category, thumb
         code,
         stock,
         category,
-        thumbnails
+        thumbnail
     });
 }
 
-socket.on("ServerAddProducts", (datos) => {
-    const div = document.createElement("div");
-    div.id = datos.id;
-    div.innerHTML = `
-        <h3>${datos.title}</h3>
-        <ul>
-            <li>$ ${datos.price}</li>
-            <li>N° Id: ${datos.id}</li>
-            <li>${datos.description}</li>
-            <li>Código de producto: ${datos.code}</li>
-            <li>Stock: ${datos.stock}</li>
-            <li>Categoría: ${datos.category}</li>
-            <li>${datos.thumbnails}</li>
-        </ul>
-        <hr />
-    `;
+socket.on("mostrandoProductos", (datos) => {
+    if (datos.producto) {
+        const div = document.createElement("div");
+        div.id = datos.producto.id;
+        div.innerHTML = `
+            <h3>${datos.producto.title}</h3>
+            <ul>
+                <li>$ ${datos.producto.price}</li>
+                <li>N° Id: ${datos.producto.id}</li>
+                <li>${datos.producto.description}</li>
+                <li>Código de producto: ${datos.producto.code}</li>
+                <li>Stock: ${datos.producto.stock}</li>
+                <li>Categoría: ${datos.producto.category}</li>
+                <li>${datos.producto.thumbnail}</li>
+            </ul>
+            <hr />
+        `;
 
-    //Agregamos en la parte superior
-    nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
+        //Agregamos en la parte superior
+        nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
+    } else {
+        console.error("No se recibió un producto válido:", datos);
+    }
 });
 
 const sendDelete = async (id) => {
-    await fetch(`/api/products/${id}`, {
-        method: "DELETE",
-    })
-        .then((data) => data.json())
-        .then((json) => {
-            document.getElementById(id).innerHTML = "";
+    try {
+        const response = await fetch(`/api/products/${id}`, {
+            method: "DELETE",
         });
+        if (response.ok) {
+            console.log("Se eliminó corectamente el elemento con ID: ", id);
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Eliminado!',
+                text: '🗑️',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+
+        } else {
+            console.error("Error elimando el producto desde formulario cliente:", response);
+            Swal.fire({
+                icon: 'error',
+                title: 'Id no encontrado',
+                text: 'No se pudo eliminar el producto.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Cerrar'
+            });
+        }
+        document.getElementById(id).innerHTML = "";
+    } catch (error) {
+        console.error("Error al eliminar el producto:", error);
+    }
 };
 
-productsAddForm.addEventListener("submit", (event) => {
+
+productsAddForm.addEventListener("submit", async (event) => {
+
     event.preventDefault();
+
+    const titleInput = document.getElementById("titleAdd");
+    const priceInput = document.getElementById("priceAdd");
+    const descriptionInput = document.getElementById("descriptionAdd");
+    const codeInput = document.getElementById("codeAdd");
+    const stockAdd = document.getElementById("stockAdd");
+    const categoryInput = document.getElementById("categoryAdd");
+    const thumbnailInput = document.getElementById("thumbnailAdd");
+
+    const title = titleInput.value;
+    const price = priceInput.value;
+    const description = descriptionInput.value;
+    const code = codeInput.value;
+    const stock = stockAdd.value;
+    const category = categoryInput.value;
+    const thumbnail = thumbnailInput.value;
+
     try {
-        const titleInput = document.getElementById("titleAdd");
-        const priceInput = document.getElementById("priceAdd");
-        const descriptionInput = document.getElementById("descriptionAdd");
-        const codeInput = document.getElementById("codeAdd");
-        const stockAdd = document.getElementById("stockAdd");
-        const categoryInput = document.getElementById("categoryAdd");
-        const thumbnailsInput = document.getElementById("thumbnailsAdd");
+        const response = await fetch("http://localhost:8080/api/products", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                title, price, description, code, stock, category, thumbnail,
+            }),
+        });
 
-        const title = titleInput.value;
-        const price = priceInput.value;
-        const description = descriptionInput.value;
-        const code = codeInput.value;
-        const stock = stockAdd.value;
-        const category = categoryInput.value;
-        const thumbnails = thumbnailsInput.value;
+        if (response.ok) {
+            let lastAddedProduct;
+            const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
 
-        sendAddProducts(
-            title,
-            price,
-            description,
-            code,
-            stock,
-            category,
-            thumbnails
-        );
+            if (obtainID.ok) {
+                const responseData = await obtainID.json();
+                lastAddedProduct = responseData.payload;
+                console.log("Esto es con obtainId:", lastAddedProduct);
+            } else {
+                console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
+            }
+            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
+            sendProduct(lastAddedProduct)
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Agregado',
+                text: 'El producto se ha agregado correctamente.',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
 
-        titleInput.value = "";
-        priceInput.value = "";
-        descriptionInput.value = "";
-        codeInput.value = "";
-        stockAdd.value = "";
-        categoryInput.value = "";
-        thumbnailsInput.value = "";
+        } else {
+            console.error("Error agregando el producto desde formulario cliente:", response);
+            Swal.fire({
+                icon: 'error',
+                title: 'Código incorrecto!',
+                text: 'No se pudo agregar el producto. Ya existe un producto con ese código.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Cerrar'
+            });
+        }
+
+        //!Para agregar en un boton de limpiar
+        // titleInput.value = "";
+        // priceInput.value = "";
+        // descriptionInput.value = "";
+        // codeInput.value = "";
+        // stockAdd.value = "";
+        // categoryInput.value = "";
+        // thumbnailInput.value = "";
+
     } catch (error) {
         console.error("Error al agregar el producto:", error);
     }
@@ -96,6 +161,14 @@ productsAddForm.addEventListener("submit", (event) => {
 
 document.querySelector("#btnDelete").addEventListener("click", (event) => {
     event.preventDefault();
-    const titleInput = document.getElementById("titleDelete").value;
-    sendDelete(titleInput);
+    const titleInput = document.getElementById("titleDelete");
+    const title = titleInput.value
+    sendDelete(title);
+    titleInput.value = "";
 });
+
+function sendProduct(producto) {
+    console.log("Este es el útimo producto agregado desde la función donde esta el emit", producto);
+    socket.emit("ClienteEnvioProducto", { producto })
+}
+
