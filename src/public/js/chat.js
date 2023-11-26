@@ -1,6 +1,6 @@
 let socket
 
-let user// = sessionStorage.getItem("user") || ""
+let user = sessionStorage.getItem("user") || ""
 
 if (user) {
     document.querySelector("#username").innerHTML = user + ": "
@@ -23,36 +23,42 @@ if (user) {
 }
 
 const input = document.querySelector("#chatInput")
-input.addEventListener("keyup", event => {
-    if (event.key === "Enter") sendMessage(event.currentTarget.value)
-})
 
-document.querySelector("#send").addEventListener("click", createMessage)
+input.addEventListener("keyup", event => {
+    if (event.key === "Enter") {
+        handleUserInput();
+    }
+});
+
+document.querySelector("#send").addEventListener("click", handleUserInput);
+
+async function handleUserInput() {
+    createMessage();
+    sendMessage(input.value);
+}
 
 async function createMessage() {
     const message = input.value;
-
-    try {
-        console.log("se mete en el try?");
-        const response = await fetch("http://localhost:8080/chat", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                user, message
-            }),
-        });
-        console.log(`Se ven los mensajes? ${user} y ${message}`);
-        if (response.ok) {
-            console.log("Se agregó correctacemte el mensaje desde el formulario cliente!");
-
-        } else {
-            console.error("Error agregando el producto desde formulario cliente:", response);
+    if (message !== "") {
+        try {
+            const response = await fetch("http://localhost:8080/chat", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    user,
+                    message
+                }),
+            });
+            if (response.ok) {
+                console.log("Se agregó correctamente el mensaje desde el formulario cliente!");
+            } else {
+                console.error("Error agregando el producto desde formulario cliente:", response);
+            }
+        } catch (error) {
+            console.error("Error al agregar el producto:", error);
         }
-        sendMessage(message);
-    } catch (error) {
-        console.error("Error al agregar el producto:", error);
     }
 }
 
