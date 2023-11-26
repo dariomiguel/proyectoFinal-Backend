@@ -8,14 +8,14 @@ class ProductManagerMongo {
         this.counter;
     }
 
-    getProducts = async () => {
+    getProducts = async (limit, page) => {
         try {
             // const lectura = await ProductModel.find();
             // return lectura || []
 
             const result = await ProductModel.paginate({}, {
-                page: 1,
-                limit: 4,
+                page: page,
+                limit: limit,
                 lean: true
             })
 

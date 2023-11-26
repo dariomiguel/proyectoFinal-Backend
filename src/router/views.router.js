@@ -59,7 +59,10 @@ router.get("/", async (req, res) => {
         // //Se realiza una limpieza para asegurar que el producto pueda ser usado por handlebars.
         // products = JSON.parse(JSON.stringify(products));
 
-        const products = await productManagerMongo.getProducts();
+        const limit = parseInt(req.query?.limit ?? 4);
+        const page = parseInt(req.query?.page ?? 1);
+
+        const products = await productManagerMongo.getProducts(limit, page);
 
         res.render("home", {
             products
