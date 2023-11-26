@@ -7,6 +7,7 @@ import cartsRouter from "./router/carts.router.js";
 import viewsRouter from "./router/views.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import chatRouter from "./router/chat.router.js";
+import lastProductRouter from "./router/lastProduct.router.js";
 import mongoose from "mongoose";
 
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
@@ -36,6 +37,8 @@ app.use("/realtimeproducts", realtimeproductsRouter);
 app.use("/chat", chatRouter);
 //Ruta de producto
 app.use("/api/products", productsRouter);
+//Ruta de último producto
+app.use("/api/lastProduct", lastProductRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
 

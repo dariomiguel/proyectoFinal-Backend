@@ -6,6 +6,7 @@ import __dirname from "../utils.js";
 const router = Router();
 // const productManager = new ProductManager();
 const productManagerMongo = new ProductManagerMongo();
+let ultimoProductoAgregado = null;
 
 // ** Métodos  con file system
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
@@ -165,10 +166,12 @@ router.post("/", async (req, res) => {
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
             const productoAgregado = await productManagerMongo.addProduct(title, description, code, price, stock, category, thumbnail);
+            console.log("Esto es producto Agregado: ", productoAgregado);
+            ultimoProductoAgregado = productoAgregado;
             res
                 //*201 para creaciones exitosas
                 .status(201)
-                .json({ message: "Producto agregado correctamente.😄" });
+                .json({ message: "Producto agregado correctamente.😄", productoAgregado });
         }
 
     } catch (error) {
@@ -254,6 +257,33 @@ router.delete("/:pid", async (req, res) => {
     } catch (error) {
         console.error("Error al eliminar el producto:", error);
         res.status(500).json({ error: "Hubo un error al eliminar el producto" });
+    }
+});
+
+// Ruta para obtener el último producto
+router.get("/last", async (req, res) => {
+    try {
+        // Listamos con límites
+        const limit = req.query.limit;
+        let products = await productManagerMongo.getProducts();
+        if (products.length === 0) {
+            res.status(404).json({ Error: "No se encontraron productos" });
+            return;
+        }
+
+        if (limit) {
+            const limitNumber = parseInt(limit, 10);
+            if (!isNaN(limitNumber) && limitNumber >= 0) {
+                products = products.slice(0, limitNumber);
+            }
+        }
+
+        res.status(200).json({ status: "success", payload: products })
+    } catch (error) {
+        console.error("Products, Error al obtener la lista de productos:", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
     }
 });
 

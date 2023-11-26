@@ -89,6 +89,7 @@ productsAddForm.addEventListener("submit", async (event) => {
                 title, price, description, code, stock, category, thumbnail,
             }),
         });
+
         if (response.ok) {
             console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             sendProduct({
@@ -101,7 +102,13 @@ productsAddForm.addEventListener("submit", async (event) => {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
             });
-
+            const obtainID = await fetch("http://localhost:8080/api/products/last", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            // console.log("Esto es con obtainId, ", obtainID.product.id);
         } else {
             console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
             Swal.fire({

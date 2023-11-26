@@ -93,7 +93,7 @@ class ProductManagerMongo {
             const productoBuscado = await ProductModel.findOne({ id: pId });
             return productoBuscado;
         } catch (error) {
-            console.error("No se encontró el producto solicitado\n", error);
+            console.error("🤔No se encontró el producto solicitado\n", error);
             throw error;
         }
     }
@@ -134,6 +134,27 @@ class ProductManagerMongo {
             throw error;
         }
     }
+
+    findLastId = async () => {
+        try {
+            // Intenta encontrar el último producto sin especificar el id
+            const ultimoProducto = await ProductModel.findOne().sort({ createdAt: -1 }).limit(1);
+            console.log("que es ultimo ptroducto=??", ultimoProducto);
+            if (!ultimoProducto) {
+                // Manejar el caso en el que no se encuentre ningún producto
+                console.log("No se encontró ningún producto");
+                return null;
+            }
+
+            // Devolver el _id del último producto
+            return ultimoProducto._id.toString(); // Convierte el ObjectId a string
+        } catch (error) {
+            // Manejar errores
+            console.error("Error al obtener el último ID:", error);
+            throw error; // O puedes manejar el error de una manera específica para tu aplicación
+        }
+    }
 }
+
 
 export default ProductManagerMongo
