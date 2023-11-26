@@ -135,7 +135,7 @@ productsAddForm.addEventListener("submit", async (event) => {
             });
 
         } else {
-            console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
+            console.error("Error agregando el producto desde formulario cliente:", response);
             Swal.fire({
                 icon: 'error',
                 title: 'Código incorrecto!',
