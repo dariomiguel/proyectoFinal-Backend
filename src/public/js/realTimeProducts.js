@@ -49,9 +49,29 @@ socket.on("mostrandoProductos", (datos) => {
 
 const sendDelete = async (id) => {
     try {
-        await fetch(`/api/products/${id}`, {
+        const response = await fetch(`/api/products/${id}`, {
             method: "DELETE",
         });
+        if (response.ok) {
+            console.log("Se eliminó corectamente el elemento con ID: ", id);
+            Swal.fire({
+                icon: 'success',
+                title: 'Producto Eliminado!',
+                text: '🗑️',
+                confirmButtonColor: '#3085d6',
+                confirmButtonText: 'Aceptar'
+            });
+
+        } else {
+            console.error("Error elimando el producto desde formulario cliente:", response);
+            Swal.fire({
+                icon: 'error',
+                title: 'Id no encontrado',
+                text: 'No se pudo eliminar el producto.',
+                confirmButtonColor: '#d33',
+                confirmButtonText: 'Cerrar'
+            });
+        }
         document.getElementById(id).innerHTML = "";
     } catch (error) {
         console.error("Error al eliminar el producto:", error);
@@ -118,7 +138,7 @@ productsAddForm.addEventListener("submit", async (event) => {
             console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
             Swal.fire({
                 icon: 'error',
-                title: 'Error',
+                title: 'Código incorrecto!',
                 text: 'No se pudo agregar el producto. Ya existe un producto con ese código.',
                 confirmButtonColor: '#d33',
                 confirmButtonText: 'Cerrar'
