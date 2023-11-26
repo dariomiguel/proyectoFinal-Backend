@@ -102,13 +102,21 @@ productsAddForm.addEventListener("submit", async (event) => {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
             });
-            const obtainID = await fetch("http://localhost:8080/api/products/last", {
+            const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
                 },
             });
-            // console.log("Esto es con obtainId, ", obtainID.product.id);
+
+            if (obtainID.ok) {
+                const responseData = await obtainID.json();
+                const lastProductId = responseData.payload;
+                console.log("Esto es con obtainId:", lastProductId);
+            } else {
+                console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
+            }
+
         } else {
             console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
             Swal.fire({

@@ -15,7 +15,7 @@ const configureSocket = (httpServer) => {
         });
 
         socket.on("ClienteEnvioProducto", (data) => {
-            console.log("Se agregó un producto nuevo! 😃", data);
+            console.log("Se agregó un producto nuevo!😐", data);
             io.emit("mostrandoProductos", data);
         });
     });
