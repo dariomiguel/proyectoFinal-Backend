@@ -137,7 +137,7 @@ class ProductManagerMongo {
 
     findLastId = async () => {
         try {
-            // Intenta encontrar el último producto sin especificar el id
+            // Intenta encontrar el último producto que se agregó a la base de datos.
             const ultimoProducto = await ProductModel.findOne().sort({ $natural: -1 });
             if (!ultimoProducto) {
                 // Manejar el caso en el que no se encuentre ningún producto
@@ -145,13 +145,11 @@ class ProductManagerMongo {
                 return null;
             }
 
-            // Devolver el _id del último producto
-            console.log("Esto se ve? es el findLastID", ultimoProducto.id.toString());
-            return ultimoProducto.toString(); // Convierte el ObjectId a string
+            return ultimoProducto
         } catch (error) {
             // Manejar errores
             console.error("Error al obtener el último ID:", error);
-            throw error; // O puedes manejar el error de una manera específica para tu aplicación
+            throw error;
         }
     }
 }

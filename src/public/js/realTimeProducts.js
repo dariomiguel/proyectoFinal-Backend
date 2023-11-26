@@ -91,10 +91,22 @@ productsAddForm.addEventListener("submit", async (event) => {
         });
 
         if (response.ok) {
+            let lastAddedProduct;
+            const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            });
+            if (obtainID.ok) {
+                const responseData = await obtainID.json();
+                lastAddedProduct = responseData.payload;
+                console.log("Esto es con obtainId:", lastAddedProduct);
+            } else {
+                console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
+            }
             console.log("Se agregó correctacemte un producto desde el formulario cliente!");
-            sendProduct({
-                title, price, description, code, stock, category, thumbnail
-            })
+            sendProduct(lastAddedProduct)
             Swal.fire({
                 icon: 'success',
                 title: 'Producto Agregado',
@@ -102,20 +114,7 @@ productsAddForm.addEventListener("submit", async (event) => {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
             });
-            const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
-                method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-            });
 
-            if (obtainID.ok) {
-                const responseData = await obtainID.json();
-                const lastProductId = responseData.payload;
-                console.log("Esto es con obtainId:", lastProductId);
-            } else {
-                console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
-            }
 
         } else {
             console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
@@ -152,6 +151,7 @@ document.querySelector("#btnDelete").addEventListener("click", (event) => {
 
 
 function sendProduct(producto) {
+    console.log("Este es el útimo producto agregado desde la función donde esta el emit", producto);
     socket.emit("ClienteEnvioProducto", { producto })
 }
 
