@@ -24,11 +24,6 @@ app.set("view engine", "handlebars");
 //Agregamos la propiedad de Express para poder seleccionar la carpeta public
 app.use(express.static(__dirname + "/public"))
 
-//Creamos una variable para el servidor  
-const httpServer = app.listen(8080, () => console.log("En linea..."));
-//Creamos una variable que contenga el servidor socket basado en http
-const io = configureSocket(httpServer);
-
 //Ruta de vistas
 app.use("/", viewsRouter)
 //Ruta de realtimeProducts
@@ -45,9 +40,13 @@ app.use("/api/carts", cartsRouter);
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {
         console.log("DB connected.");
+        //Creamos una variable para el servidor  
+        const httpServer = app.listen(8080, () => console.log("En linea..."));
+        //Creamos una variable que contenga el servidor socket basado en http
+        const io = configureSocket(httpServer);
+
     })
     .catch((error) => {
         console.error("Error conecting to DB", error);
     })
 
-export { httpServer }
