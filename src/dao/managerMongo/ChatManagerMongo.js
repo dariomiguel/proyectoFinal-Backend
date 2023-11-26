@@ -5,7 +5,6 @@ class ChatManagerMongo {
 
     constructor() {
         this.chats = this.getChats();
-        this.counter;
     }
 
     getChats = async () => {
@@ -21,11 +20,9 @@ class ChatManagerMongo {
 
     addChat = async (user, message) => {
         try {
-            // const newId = await this.createID()
             const productToAdd = {
                 user: user,
                 message: message,
-                // id: newId
             }
 
             const result = await ChatModel.create(productToAdd);

@@ -4,10 +4,36 @@ import ChatManagerMongo from "../dao/managerMongo/ChatManagerMongo.js";
 const router = express.Router();
 const chatManagerMongo = new ChatManagerMongo();
 
-router.get("/", (req, res) => {
-    res.render("chat", {
-        style: "chat.css"
-    })
+router.get("/", async (req, res) => {
+    try {
+        const limit = req.query.limit;
+        let chats = await chatManagerMongo.getChats();
+        chats = JSON.parse(JSON.stringify(chats));
+
+        if (chats.length === 0) {
+            res.status(404).json({ Error: "No se encontraron chats" });
+            return;
+        }
+
+        if (limit) {
+            const limitNumber = parseInt(limit, 10);
+            if (!isNaN(limitNumber) && limitNumber >= 0) {
+                chats = chats.slice(0, limitNumber);
+            }
+        }
+
+        const reversedchats = [...chats].reverse().filter((p) => p.user);
+
+        res.render("chat", {
+            style: "chat.css",
+            reversedchats
+        })
+    } catch (error) {
+        console.error("Error al obtener el historial del chat:\n", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
 });
 
 router.post("/", async (req, res) => {
