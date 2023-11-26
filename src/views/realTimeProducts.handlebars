@@ -4,23 +4,44 @@
 <h2>Agregar Nuevo Producto</h2>
 <form id="productForm">
     <p>Titulo: </p>
-    <input type="text" id="titleAdd" placeholder="Título del producto" />
+    <input
+        type="text"
+        id="titleAdd"
+        placeholder="Título del producto"
+        required
+    />
     <p>Precio: </p>
-    <input type="number" id="priceAdd" placeholder="Precio del producto" />
+    <input
+        type="number"
+        id="priceAdd"
+        placeholder="Precio del producto"
+        required
+    />
     <p>Descripción: </p>
     <input
         type="text"
         id="descriptionAdd"
         placeholder="Descripción del producto"
+        required
     />
     <p>Código: </p>
-    <input type="text" id="codeAdd" placeholder="Código de producto" />
+    <input type="text" id="codeAdd" placeholder="Código de producto" required />
     <p>Stocks: </p>
-    <input type="number" id="stockAdd" placeholder="Cantidad en stock" />
+    <input
+        type="number"
+        id="stockAdd"
+        placeholder="Cantidad en stock"
+        required
+    />
     <p>Categoría: </p>
-    <input type="text" id="categoryAdd" placeholder="Categoría del producto" />
+    <input
+        type="text"
+        id="categoryAdd"
+        placeholder="Categoría del producto"
+        required
+    />
     <p>Miniatura:</p>
-    <input type="text" id="thumbnailAdd" placeholder="URL de imagén" />
+    <input type="text" id="thumbnailAdd" placeholder="URL de imagén" required />
     <button type="submit" id="btnAdd">Agregar Producto</button>
 </form>
 <hr />

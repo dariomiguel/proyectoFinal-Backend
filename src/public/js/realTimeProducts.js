@@ -94,10 +94,9 @@ productsAddForm.addEventListener("submit", async (event) => {
             let lastAddedProduct;
             const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
                 method: "GET",
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                headers: { "Content-Type": "application/json" }
             });
+
             if (obtainID.ok) {
                 const responseData = await obtainID.json();
                 lastAddedProduct = responseData.payload;
@@ -114,7 +113,6 @@ productsAddForm.addEventListener("submit", async (event) => {
                 confirmButtonColor: '#3085d6',
                 confirmButtonText: 'Aceptar'
             });
-
 
         } else {
             console.error("Error agregando el producto desde formulario cliente:", response);//.statusText);
@@ -148,7 +146,6 @@ document.querySelector("#btnDelete").addEventListener("click", (event) => {
     sendDelete(title);
     titleInput.value = "";
 });
-
 
 function sendProduct(producto) {
     console.log("Este es el útimo producto agregado desde la función donde esta el emit", producto);
