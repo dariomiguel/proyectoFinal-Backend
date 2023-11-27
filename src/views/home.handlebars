@@ -1,4 +1,21 @@
+
 <h1>Lista de productos</h1>
+
+Total productos :
+{{result.totalDocs}}
+<br />
+Pages:
+{{result.page}}
+/
+{{result.totalPages}}<br />
+Limit:
+<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
+
+<input id="prevPage" type="hidden" value="{{result.prevPage}}">
+<input id="nextPage" type="hidden" value="{{result.nextPage}}">
+
+<a id="btnPrev" href="#" {{#unless result.hasPrevPage}}style="display:none" {{/unless}}>Previous</a>
+<a id="btnNext" href="#" {{#unless result.hasNextPage}}style="display:none" {{/unless}}>Next</a>
 
 {{#each result.products}}
     <div>
@@ -14,19 +31,6 @@
     </div>
 {{/each}}
 
-Total productos :
-{{result.totalDocs}}<br />
-pages
-{{result.page}}
-/
-{{result.totalPages}}<br />
-
-{{#if result.hasPrevPage}}
-    <a href="/?page={{result.prevPage}}&limit{{result.limit}}">Previous</a>
-{{/if}}
-{{#if result.hasNextPage}}
-    <a href="/?page={{result.nextPage}}&limit{{result.limit}}">Next</a>
-{{/if}}
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>
