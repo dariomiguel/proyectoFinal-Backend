@@ -52,14 +52,14 @@ router.get("/", async (req, res) => {
         const limit = parseInt(req.query?.limit ?? 10);
         const page = parseInt(req.query?.page ?? 1);
         const query = req.query?.query ?? "";
+        const category = req.query?.category || "";
 
-        const result = await productManagerMongo.getProducts(limit, page, query);
+        const result = await productManagerMongo.getProducts(limit, page, query, category);
 
         result.products = result.docs;
         result.query = query;
         delete result.docs
 
-        console.log("Products:", result);
         res.render("home", {
             style: "home.css",
             result

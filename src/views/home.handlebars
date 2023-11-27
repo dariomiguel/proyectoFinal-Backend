@@ -10,9 +10,18 @@ Pages:
 {{result.totalPages}}<br />
 Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
 Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric" />
-<button id="btnSearch">Search</button>
+<br>
 Busquedad por título: <input id="query" type="text" value="{{result.query}}">
-
+<label for="category">Seleccionar Categoría:</label>
+<select id="category" name="category">
+    <option value="">---</option>
+    <option value="cuadros">Cuadros</option>
+    <option value="artesanias">Artesanías</option>
+    <option value="bordados">Bordados</option>
+    <option value="esculturas">Esculturas</option>
+</select>
+<button id="btnSearch">Search</button>
+<br>
 <input id="prevPage" type="hidden" value="{{result.prevPage}}">
 <input id="nextPage" type="hidden" value="{{result.nextPage}}">
 
