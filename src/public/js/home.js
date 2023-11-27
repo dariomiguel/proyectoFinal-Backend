@@ -1,41 +1,37 @@
+// Función para obtener los valores de los elementos
+const getFormValues = () => {
+    return {
+        limit: document.querySelector("#limit").value,
+        query: document.querySelector("#query").value,
+        category: document.querySelector("#category").value,
+        stockAvailability: document.querySelector("#stockAvailability").value,
+        priceOrder: document.querySelector("#priceOrder").value,
+    };
+};
+
 // Función para construir la URL y redireccionar
-const redirectToPage = (page, limit, query, category, stockAvailability, priceOrder) => {
-    const url = `/?page=${page}&limit=${limit}&query=${query}&category=${category}&stockAvailability=${stockAvailability}&priceOrder=${priceOrder}`;
+const redirectToPage = (page, values) => {
+    const url = `/?page=${page}&limit=${values.limit}&query=${values.query}&category=${values.category}&stockAvailability=${values.stockAvailability}&priceOrder=${values.priceOrder}`;
     document.location.href = url;
 };
 
 // Evento para el botón "Prev"
 document.querySelector("#btnPrev").onclick = () => {
     const prevPage = document.querySelector("#prevPage").value;
-    const limit = document.querySelector("#limit").value;
-    const query = document.querySelector("#query").value;
-    const category = document.querySelector("#category").value;
-    const stockAvailability = document.querySelector("#stockAvailability").value;
-    const priceOrder = document.querySelector("#priceOrder").value;
-
-    redirectToPage(prevPage, limit, query, category, stockAvailability, priceOrder);
+    const values = getFormValues();
+    redirectToPage(prevPage, values);
 };
 
 // Evento para el botón "Next"
 document.querySelector("#btnNext").onclick = () => {
     const nextPage = document.querySelector("#nextPage").value;
-    const limit = document.querySelector("#limit").value;
-    const query = document.querySelector("#query").value;
-    const category = document.querySelector("#category").value;
-    const stockAvailability = document.querySelector("#stockAvailability").value;
-    const priceOrder = document.querySelector("#priceOrder").value;
-
-    redirectToPage(nextPage, limit, query, category, stockAvailability, priceOrder);
+    const values = getFormValues();
+    redirectToPage(nextPage, values);
 };
 
 // Evento para el botón "Search"
 document.querySelector("#btnSearch").onclick = () => {
     const nextPage = document.querySelector("#page").value;
-    const limit = document.querySelector("#limit").value;
-    const query = document.querySelector("#query").value;
-    const category = document.querySelector("#category").value;
-    const stockAvailability = document.querySelector("#stockAvailability").value;
-    const priceOrder = document.querySelector("#priceOrder").value;
-
-    redirectToPage(nextPage, limit, query, category, stockAvailability, priceOrder);
+    const values = getFormValues();
+    redirectToPage(nextPage, values);
 };
