@@ -15,3 +15,12 @@ document.querySelector("#btnNext").onclick = () => {
 
     document.location.href = url;
 }
+
+document.querySelector("#btnSearch").onclick = () => {
+    const nextPage = document.querySelector("#page").value;
+    const limit = document.querySelector("#limit").value;
+
+    const url = `/?page=${nextPage}&limit=${limit}`;
+
+    document.location.href = url;
+}

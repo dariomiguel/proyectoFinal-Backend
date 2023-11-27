@@ -8,8 +8,9 @@ Pages:
 {{result.page}}
 /
 {{result.totalPages}}<br />
-Limit:
-<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
+Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
+Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric" />
+<button id="btnSearch">Search</button>
 
 <input id="prevPage" type="hidden" value="{{result.prevPage}}">
 <input id="nextPage" type="hidden" value="{{result.nextPage}}">
