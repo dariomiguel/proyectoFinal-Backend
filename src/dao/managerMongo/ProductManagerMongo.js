@@ -8,9 +8,12 @@ class ProductManagerMongo {
         this.counter;
     }
 
-    getProducts = async (limit, page) => {
+    getProducts = async (limit, page, query) => {
         try {
-            const result = await ProductModel.paginate({}, {
+            const search = {};
+            if (query) search.title = { "$regex": query, "$options": "i" }
+
+            const result = await ProductModel.paginate(search, {
                 page: page,
                 limit: limit,
                 lean: true
