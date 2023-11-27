@@ -44,28 +44,23 @@ const productManagerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
     try {
-        // const limit = req.query.limit;
         // let products = await productManagerMongo.getProducts();
         // if (products.length === 0) {
         //     return res.status(404).json({ Error: "No se encontraron productos" });
         // }
 
-        // if (limit) {
-        //     const limitNumber = parseInt(limit, 10);
-        //     if (!isNaN(limitNumber) && limitNumber >= 0) {
-        //         products = products.slice(0, limitNumber);
-        //     }
-        // }
-        // //Se realiza una limpieza para asegurar que el producto pueda ser usado por handlebars.
-        // products = JSON.parse(JSON.stringify(products));
-
         const limit = parseInt(req.query?.limit ?? 4);
         const page = parseInt(req.query?.page ?? 1);
 
-        const products = await productManagerMongo.getProducts(limit, page);
+        const result = await productManagerMongo.getProducts(limit, page);
 
+        result.products = result.docs
+        delete result.docs
+
+        console.log("Products:", result);
         res.render("home", {
-            products
+            style: "home.css",
+            result
         })
 
     } catch (error) {

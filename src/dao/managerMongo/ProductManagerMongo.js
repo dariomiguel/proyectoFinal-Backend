@@ -10,19 +10,13 @@ class ProductManagerMongo {
 
     getProducts = async (limit, page) => {
         try {
-            // const lectura = await ProductModel.find();
-            // return lectura || []
-
             const result = await ProductModel.paginate({}, {
                 page: page,
                 limit: limit,
                 lean: true
             })
 
-            result.products = result.docs
-            delete result.docs
-
-            return result.products;
+            return result;
 
         } catch (error) {
             console.log("Hubo un error en la lectura de la base de datos.", error);

@@ -1,6 +1,6 @@
 <h1>Lista de productos</h1>
 
-{{#each products}}
+{{#each result.products}}
     <div>
         <p>{{this.title}}</p>
         <p>$ {{this.price}}</p>
@@ -13,6 +13,20 @@
         <hr />
     </div>
 {{/each}}
+
+Total productos :
+{{result.totalDocs}}<br />
+pages
+{{result.page}}
+/
+{{result.totalPages}}<br />
+
+{{#if result.hasPrevPage}}
+    <a href="/?page={{result.prevPage}}&limit{{result.limit}}">Previous</a>
+{{/if}}
+{{#if result.hasNextPage}}
+    <a href="/?page={{result.nextPage}}&limit{{result.limit}}">Next</a>
+{{/if}}
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>
