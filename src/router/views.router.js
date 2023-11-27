@@ -53,8 +53,10 @@ router.get("/", async (req, res) => {
         const page = parseInt(req.query?.page ?? 1);
         const query = req.query?.query ?? "";
         const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
 
-        const result = await productManagerMongo.getProducts(limit, page, query, category);
+        const result = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
         result.products = result.docs;
         result.query = query;

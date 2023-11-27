@@ -8,16 +8,22 @@ class ProductManagerMongo {
         this.counter;
     }
 
-    getProducts = async (limit, page, query, category) => {
+    getProducts = async (limit, page, query, category, stockAvailability, priceOrder) => {
         try {
             const search = {};
             if (query) search.title = { "$regex": query, "$options": "i" }
             if (category) search.category = category;
+            if (stockAvailability !== "all") search.stock = (stockAvailability === "inStock");
+
+            const sort = {};
+            if (priceOrder === "ascending") sort.price = 1;
+            else if (priceOrder === "descending") sort.price = -1;
 
             const result = await ProductModel.paginate(search, {
                 page: page,
                 limit: limit,
-                lean: true
+                lean: true,
+                sort: sort
             })
 
             return result;

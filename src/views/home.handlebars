@@ -22,6 +22,19 @@ Busquedad por título: <input id="query" type="text" value="{{result.query}}">
 </select>
 <button id="btnSearch">Search</button>
 <br>
+<label for="stockAvailability">Disponibilidad de Stock:</label>
+<select id="stockAvailability" name="stockAvailability">
+    <option value="all">Todos</option>
+    <option value="inStock">En Stock</option>
+    <option value="outOfStock">Agotado</option>
+</select>
+
+<label for="priceOrder">Ordenar por Precio:</label>
+<select id="priceOrder" name="priceOrder">
+    <option value="ascending">Ascendente</option>
+    <option value="descending">Descendente</option>
+</select>
+<br>
 <input id="prevPage" type="hidden" value="{{result.prevPage}}">
 <input id="nextPage" type="hidden" value="{{result.nextPage}}">
 
