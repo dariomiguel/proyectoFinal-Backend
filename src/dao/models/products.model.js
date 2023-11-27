@@ -11,7 +11,11 @@ const productsSchema = new mongoose.Schema({
     "price": Number,
     "status": Boolean,
     "stock": Number,
-    "category": String,
+    "category": {
+        type: String,
+        enum: ["cuadros", "artesanias", "bordados", "esculturas"],
+        default: "cuadros"
+    },
     "thumbnail": String
 })
 

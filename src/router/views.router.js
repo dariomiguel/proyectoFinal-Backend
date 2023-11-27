@@ -44,12 +44,12 @@ const productManagerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
     try {
-        // let products = await productManagerMongo.getProducts();
-        // if (products.length === 0) {
-        //     return res.status(404).json({ Error: "No se encontraron productos" });
-        // }
+        let products = await productManagerMongo.getProducts();
+        if (products.length === 0) {
+            return res.status(404).json({ Error: "No se encontraron productos" });
+        }
 
-        const limit = parseInt(req.query?.limit ?? 4);
+        const limit = parseInt(req.query?.limit ?? 10);
         const page = parseInt(req.query?.page ?? 1);
         const query = req.query?.query ?? "";
 
