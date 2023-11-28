@@ -49,23 +49,40 @@ router.get("/", async (req, res) => {
             return res.status(404).json({ Error: "No se encontraron productos" });
         }
 
-        const limit = parseInt(req.query?.limit ?? 10);
-        const page = parseInt(req.query?.page ?? 1);
-        const query = req.query?.query ?? "";
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
         const category = req.query?.category || "";
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
         const result = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-        result.products = result.docs;
-        result.query = query;
-        delete result.docs
 
-        res.render("home", {
-            style: "home.css",
-            result
-        })
+        let status = "success";
+        if (result.docs.length === 0) {
+            status = "error";
+        }
+
+        const response = {
+            status: status,
+            payload: result.docs,
+            totalPages: result.totalPages,
+            prevPage: result.prevPage,
+            nextPage: result.nextPage,
+            page: result.page,
+            hasPrevPage: result.hasPrevPage,
+            hasNextPage: result.hasNextPage,
+            prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
+            nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
+            totalDocs: result.totalDocs //?Agregado para ver la cantidad de productos preguntar si eliminar o no
+        };
+
+        res
+            .render("home", {
+                style: "home.css",
+                result: response
+            })
 
     } catch (error) {
         console.error("Products, Error al obtener la lista de productos:", error);

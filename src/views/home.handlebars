@@ -41,7 +41,7 @@ Busquedad por título: <input id="query" type="text" value="{{result.query}}">
 <a id="btnPrev" href="#" {{#unless result.hasPrevPage}}style="display:none" {{/unless}}>Previous</a>
 <a id="btnNext" href="#" {{#unless result.hasNextPage}}style="display:none" {{/unless}}>Next</a>
 
-{{#each result.products}}
+{{#each result.payload}}
     <div>
         <p>{{this.title}}</p>
         <p>$ {{this.price}}</p>
