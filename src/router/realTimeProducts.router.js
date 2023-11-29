@@ -6,10 +6,6 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
-        // let products = await productManager.getProducts();
-        // if (products.length === 0) {
-        //     return res.status(404).json({ Error: "No se encontraron productos" });
-        // }
 
         const limit = parseInt(req.query?.limit ?? 10);
         const page = parseInt(req.query?.page ?? 1);
