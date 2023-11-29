@@ -53,8 +53,6 @@ router.get("/", async (req, res) => {
 
         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-        console.log("Que es response.payload en views.router", response.payload);
-
         res
             .render("home", {
                 style: "home.css",

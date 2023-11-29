@@ -34,12 +34,13 @@
         required
     />
     <p>Categoría: </p>
-    <input
-        type="text"
-        id="categoryAdd"
-        placeholder="Categoría del producto"
-        required
-    />
+    <select id="categoryAdd" required>
+        <option value=""> </option>
+        <option value="cuadros">Cuadros</option>
+        <option value="artesanias">Artesanías</option>
+        <option value="bordados">Bordados</option>
+        <option value="esculturas">Esculturas</option>
+    </select>
     <p>Miniatura:</p>
     <input type="text" id="thumbnailAdd" placeholder="URL de imagén" required />
     <button type="submit" id="btnAdd">Agregar Producto</button>
@@ -61,7 +62,7 @@
 <h2>Productos</h2>
 <div id="nuevoProductoAgregado"></div>
 
-{{#each result.products}}
+{{#each response.payload}}
     <div id={{this.id}}>
         <h3>{{this.title}}</h3>
         <ul>

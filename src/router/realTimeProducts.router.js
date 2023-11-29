@@ -6,20 +6,22 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
     try {
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
 
-        const limit = parseInt(req.query?.limit ?? 10);
-        const page = parseInt(req.query?.page ?? 1);
-        const query = req.query?.query ?? "";
+        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-        const result = await productManager.getProducts(limit, page, query);
-
-        result.products = result.docs;
-        result.query = query;
-        delete result.docs
-
+        if (response.payload.length === 0) {
+            res.status(404).json({ Error: "No se encontraron productos" });
+            return;
+        }
         res.render("realtimeproducts", {
             style: "realTimeProducts.css",
-            result,
+            response,
         });
     } catch (error) {
         console.error("Error al obtener la lista de productos:", error);
