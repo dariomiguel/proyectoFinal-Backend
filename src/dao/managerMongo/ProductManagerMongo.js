@@ -4,11 +4,10 @@ import __dirname from "../../utils.js"
 class ProductManagerMongo {
 
     constructor() {
-        this.products = this.getProducts();
         this.counter;
     }
 
-    getProducts = async (limit, page, query, category, stockAvailability, priceOrder) => {
+    getProducts = async (limit = 10, page = 1, query = "", category = "", stockAvailability = "all", priceOrder = "ascending") => {
         try {
             const search = {};
             if (query) search.title = { "$regex": query, "$options": "i" }
@@ -26,7 +25,27 @@ class ProductManagerMongo {
                 sort: sort
             })
 
-            return result;
+            let status = "success";
+            if (result.docs.length === 0) status = "error";
+
+            const response = {
+                status: status,
+                payload: result.docs,
+                totalPages: result.totalPages,
+                prevPage: result.prevPage,
+                nextPage: result.nextPage,
+                page: result.page,
+                hasPrevPage: result.hasPrevPage,
+                hasNextPage: result.hasNextPage,
+                prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
+                nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
+                totalDocs: result.totalDocs //?Agregado para ver la cantidad de productos preguntar si eliminar o no
+            };
+
+            // console.log("Contador de Repetición");
+            // console.log("Que es response en views?", response.payload);
+
+            return response;
 
         } catch (error) {
             console.log("Hubo un error en la lectura de la base de datos.", error);

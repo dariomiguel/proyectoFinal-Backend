@@ -44,11 +44,6 @@ const productManagerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
     try {
-        let products = await productManagerMongo.getProducts();
-        if (products.length === 0) {
-            return res.status(404).json({ Error: "No se encontraron productos" });
-        }
-
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);
         const query = req.query?.query || "";
@@ -56,27 +51,9 @@ router.get("/", async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const result = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-
-        let status = "success";
-        if (result.docs.length === 0) {
-            status = "error";
-        }
-
-        const response = {
-            status: status,
-            payload: result.docs,
-            totalPages: result.totalPages,
-            prevPage: result.prevPage,
-            nextPage: result.nextPage,
-            page: result.page,
-            hasPrevPage: result.hasPrevPage,
-            hasNextPage: result.hasNextPage,
-            prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
-            nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
-            totalDocs: result.totalDocs //?Agregado para ver la cantidad de productos preguntar si eliminar o no
-        };
+        console.log("Que es response.payload en views.router", response.payload);
 
         res
             .render("home", {

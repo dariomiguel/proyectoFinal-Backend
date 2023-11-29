@@ -130,8 +130,8 @@ router.get("/", async (req, res) => {
     try {
         // Listamos con límites
         const limit = req.query.limit;
-        let products = await productManagerMongo.getProducts();
-        if (products.length === 0) {
+        let result = await productManagerMongo.getProducts();
+        if (result.payload.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
         }
@@ -143,12 +143,12 @@ router.get("/", async (req, res) => {
             }
         }
 
-        res.status(200).json({ status: "success", payload: products })
+        res.status(200).json({ status: "success", payload: result.payload })
     } catch (error) {
         console.error("Products, Error al obtener la lista de productos:", error);
         res
             .status(500)
-            .json({ Error: "Hubo un error al obtener la lista de productos" });
+            .json({ Error: "Hubo un error en products.router al obtener la lista de productos" });
     }
 });
 
