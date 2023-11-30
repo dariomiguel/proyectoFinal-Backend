@@ -67,4 +67,29 @@ router.get("/", async (req, res) => {
     }
 });
 
+router.get("/products", async (req, res) => {
+    try {
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
+
+        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+
+        res
+            .render("products", {
+                style: "products.css",
+                result: response
+            })
+
+    } catch (error) {
+        console.error("Products, Error al obtener la lista de productos:", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
+});
+
 export default router;

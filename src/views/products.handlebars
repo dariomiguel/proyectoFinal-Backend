@@ -1,0 +1,62 @@
+
+<h1>Lista de productos</h1>
+
+Total productos :
+{{result.totalDocs}}
+<br />
+Pages:
+{{result.page}}
+/
+{{result.totalPages}}<br />
+Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
+Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric" />
+<br>
+Busquedad por título: <input id="query" type="text" value="{{result.query}}">
+<label for="category">Seleccionar Categoría:</label>
+<select id="category" name="category">
+    <option value="">---</option>
+    <option value="cuadros">Cuadros</option>
+    <option value="artesanias">Artesanías</option>
+    <option value="bordados">Bordados</option>
+    <option value="esculturas">Esculturas</option>
+</select>
+<button id="btnSearch">Search</button>
+<br>
+<label for="stockAvailability">Disponibilidad de Stock:</label>
+<select id="stockAvailability" name="stockAvailability">
+    <option value="all">Todos</option>
+    <option value="inStock">En Stock</option>
+    <option value="outOfStock">Agotado</option>
+</select>
+
+<label for="priceOrder">Ordenar por Precio:</label>
+<select id="priceOrder" name="priceOrder">
+    <option value="ascending">Ascendente</option>
+    <option value="descending">Descendente</option>
+</select>
+<br>
+<input id="prevPage" type="hidden" value="{{result.prevPage}}">
+<input id="nextPage" type="hidden" value="{{result.nextPage}}">
+
+<a id="btnPrev" href="#" {{#unless result.hasPrevPage}}style="display:none" {{/unless}}>Previous</a>
+<a id="btnNext" href="#" {{#unless result.hasNextPage}}style="display:none" {{/unless}}>Next</a>
+
+{{#each result.payload}}
+    <div>
+        <p>{{this.title}}</p>
+        <p>$ {{this.price}}</p>
+        <p>N° Id: {{this.id}}</p>
+        <p>{{this.description}}</p>
+        <p>Código de producto: {{this.code}}</p>
+        <p>Cant. Stock:{{this.stock}}</p>
+        <p>Categoría: {{this.category}}</p>
+        <p>{{this.thumbnail}}</p>
+        <button id="btnAddCart" data-product-id="{{this.id}}">Agregar al carrito</button>
+        <hr />
+    </div>
+{{/each}}
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/home.js"></script>
+<script src="/js/products.js"></script>
