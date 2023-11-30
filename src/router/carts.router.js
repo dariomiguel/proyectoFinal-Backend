@@ -115,28 +115,47 @@ router.get("/:cid", async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const cid = parseInt(req.params.cid);
-        const pid = req.params.pid; // pid ahora es un ObjectId
+        const cId = parseInt(req.params.cid);
+        const pId = req.params.pid;
+        const quantity = req.body.quantity || 1;
 
-        const productPorId = await productManagerMongo.getProductById(pid);
-        if (!productPorId) {
-            console.log("No se encontró el producto para agregar.");
-            return res.status(404).json({ Error: "No se encontró el producto solicitado" });
+        console.log("La cantidad de productos que se va a agregar al carrito es: ", quantity);
+        const existingCart = await cartManagerMongo.getCartById(cId);
+
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id: ${cId}`);
+            return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
         }
 
-        const cartPorId = await cartManagerMongo.getCartById(cid);
-        if (!cartPorId) {
-            console.log("No se encontró el carrito solicitado.");
-            return res.status(404).json({ Error: "No se encontró el carrito solicitado" });
+        const productsIds = existingCart.products.map(product => {
+            if (product.product && product.product._id) {
+                const productObject = product.product.toJSON();
+                return productObject._id.toString();
+            }
+            return null;
+        });
+
+        // Busca el índice del _id en la lista de _id
+        const productIndex = productsIds.indexOf(pId);
+
+
+        if (productIndex !== -1) {
+            // Si el producto ya existe, incrementar la cantidad
+            existingCart.products[productIndex].quantity += quantity;
+        } else {
+            // Si el producto no existe, agregarlo al carrito con la cantidad especificada
+            existingCart.products.push({ product: pId, quantity });
         }
 
-        const productToAdd = await cartManagerMongo.addProductInCart(cid, pid);
-        res.status(201).json({ status: "success", payload: productToAdd });
+        // Actualizar el carrito en la base de datos
+        await cartManagerMongo.updateCart(cId, existingCart);
+
+        res.status(200).json({ message: `Producto con id: ${pId} agregado al carrito con id: ${cId} correctamente!` });
     } catch (error) {
-        console.error("Hubo un error al agregar producto al carrito:", error);
-        res.status(500).json({ Error: "Hubo un error al agregar producto al carrito" });
+        console.error("Error al agregar producto al carrito:", error);
+        res.status(500).json({ error: "Hubo un error al agregar producto al carrito" });
     }
-});
+})
 
 router.delete("/:cid", async (req, res) => {
     try {

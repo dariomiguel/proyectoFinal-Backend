@@ -11,7 +11,11 @@ const getFormValues = () => {
 
 // Función para construir la URL y redireccionar
 const redirectToPage = (page, values) => {
-    const url = `/?page=${page}&limit=${values.limit}&query=${values.query}&category=${values.category}&stockAvailability=${values.stockAvailability}&priceOrder=${values.priceOrder}`;
+    //Construye una ruta relativa para reutilizar
+    const currentPath = window.location.pathname;
+
+    const url = `${currentPath}?page=${page}&limit=${values.limit}&query=${values.query}&category=${values.category}&stockAvailability=${values.stockAvailability}&priceOrder=${values.priceOrder}`;
+
     document.location.href = url;
 };
 

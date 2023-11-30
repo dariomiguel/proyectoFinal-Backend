@@ -110,6 +110,7 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
 
+        console.log("Que se agrega?", title, price, description, code, stock, category, thumbnail);
         if (response.ok) {
             let lastAddedProduct;
             const obtainID = await fetch("http://localhost:8080/api/lastProduct", {

@@ -1,5 +1,6 @@
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
+import mongoose from "mongoose";
 
 class CartManagerMongo {
 
@@ -84,22 +85,35 @@ class CartManagerMongo {
     addProductInCart = async (cId, pId) => {
         try {
             const cart = await CartModel.findOne({ id: cId });
-            // Verificar si el producto ya está en el array
+            if (!cart) {
+                console.log("Carrito no encontrado");
+                return;
+            }
+
+            console.log("Se encontró el carrito", cart);
+
+            if (!cart.products) {
+                console.log("El carrito no tiene productos");
+                return;
+            }
+
             const existingProduct = cart.products.find(
-                (item) => item.product.toString() === pId
+                (item) => item.product.toString() === pIdString
             );
 
             //Analizamos si existe el producto
-            existingProduct ?
+            if (existingProductIndex !== -1) {
                 // Si el producto ya existe, sumar al quantity
-                existingProduct.quantity += 1 :
+                existingProduct.quantity += 1
+            } else {
                 // Si el producto no existe, agregarlo al array con quantity 1
-                cart.products.push({ product: pId, quantity: 1 })
+                cart.products.push({ "_id": pId, "quantity": 1 })
 
-            // Guardar el carrito actualizado
-            await cart.save();
-            // Devolver el carrito actualizado
-            return cart;
+                // Guardar el carrito actualizado
+                await cart.save();
+                // Devolver el carrito actualizado
+                return cart;
+            }
         } catch (error) {
             throw error;
         }
