@@ -98,14 +98,18 @@ router.get("/", async (req, res) => {
 router.get("/:cid", async (req, res) => {
     try {
         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
-
+        console.log("Q es cart por id 🤔", cartPorId);
         if (cartPorId === null) {
             res
                 .status(404)
                 .json({ Error: "No se encontró el carrito solicitado" });
         } else {
             //*200 para respuestas exitosas
-            res.status(200).json({ status: "success", payload: cartPorId })
+            // res.status(200).json({ status: "success", payload: cartPorId })
+            res.render("cartDetails", {
+                style: "cartDetails.css",
+                cartPorId
+            })
         }
 
     } catch (error) {
