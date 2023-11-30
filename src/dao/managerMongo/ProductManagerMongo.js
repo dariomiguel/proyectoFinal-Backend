@@ -124,6 +124,7 @@ class ProductManagerMongo {
     getProductById = async (pId) => {
         try {
             //* Buscamos elementos por Id en base de datos
+            console.log("El id es :", pId)
             const productoBuscado = await ProductModel.findOne({ id: pId });
             return productoBuscado;
         } catch (error) {

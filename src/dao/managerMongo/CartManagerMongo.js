@@ -115,6 +115,34 @@ class CartManagerMongo {
             throw error;
         }
     }
+
+    deleteProductFromCart = async (cid, pid) => {
+        try {
+            const cart = await CartModel.findOne({ id: cid });
+
+            if (!cart) {
+                console.log(`No se encontró el carrito con id:${cid}`);
+                return;
+            }
+
+            // Encuentra el índice del producto en el carrito
+            const index = cart.products.findIndex(product => product.product === pid);
+
+            if (index !== -1) {
+                // Elimina el producto del array
+                cart.products.splice(index, 1);
+
+                // Actualiza el carrito en la base de datos
+                await CartModel.updateOne({ id: cid }, { $set: { products: cart.products } });
+
+                console.log(`Producto con id:${pid} eliminado del carrito con id:${cid} correctamente`);
+            } else {
+                console.log(`No se encontró el producto con id:${pid} en el carrito con id:${cid}`);
+            }
+        } catch (error) {
+            throw error;
+        }
+    };
 }
 
 export default CartManagerMongo
