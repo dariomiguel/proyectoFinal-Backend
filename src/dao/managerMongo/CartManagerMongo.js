@@ -142,7 +142,18 @@ class CartManagerMongo {
         } catch (error) {
             throw error;
         }
-    };
+    }
+
+    updateCart = async (cId, updatedCart) => {
+        try {
+            await CartModel.updateOne({ id: cId }, updatedCart);
+            console.log(`Carrito con id:${cId} actualizado correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+
 }
 
 export default CartManagerMongo

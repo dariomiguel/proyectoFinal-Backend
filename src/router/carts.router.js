@@ -176,4 +176,30 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     }
 });
 
+router.put("/:cid", async (req, res) => {
+    try {
+        const cId = parseInt(req.params.cid);
+        const updatedProducts = req.body.products;
+
+        // Validar si el carrito existe
+        const existingCart = await cartManagerMongo.getCartById(cId);
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id:'${cId}'`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id:'${cId}'` });
+        }
+
+        // Actualizar los productos en el carrito
+        existingCart.products = updatedProducts;
+
+        // Actualizar el carrito en la base de datos
+        await cartManagerMongo.updateCart(cId, existingCart);
+
+        res.status(200).json({ message: `Carrito con id:${cId} actualizado correctamente` });
+    } catch (error) {
+        console.error("Error al actualizar el carrito:", error);
+        res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
+    }
+});
+
+
 export default router
