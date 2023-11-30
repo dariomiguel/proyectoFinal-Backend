@@ -162,6 +162,14 @@ class CartManagerMongo {
         }
     }
 
+    deleteAllProductsFromCart = async (cId) => {
+        try {
+            await CartModel.updateOne({ id: cId }, { $set: { products: [] } });
+            console.log(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
 
 }
 
