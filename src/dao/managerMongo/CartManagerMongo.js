@@ -73,7 +73,7 @@ class CartManagerMongo {
     getCartById = async (cId) => {
         try {
             //* Buscamos elementos por Id en base de datos
-            const carritoBuscado = await CartModel.findOne({ id: cId });
+            const carritoBuscado = await CartModel.findOne({ id: cId }).populate("products.product")
             return carritoBuscado;
         } catch (error) {
             console.error("No se encontró el carrito solicitado\n", error);
@@ -83,12 +83,10 @@ class CartManagerMongo {
 
     addProductInCart = async (cId, pId) => {
         try {
-
-            // Buscar el carrito por su ID
             const cart = await CartModel.findOne({ id: cId });
-            // Si el carrito ya existe, verificar si el producto ya está en el array
+            // Verificar si el producto ya está en el array
             const existingProduct = cart.products.find(
-                (item) => item.product === pId
+                (item) => item.product.toString() === pId
             );
 
             //Analizamos si existe el producto
@@ -100,10 +98,10 @@ class CartManagerMongo {
 
             // Guardar el carrito actualizado
             await cart.save();
-            console.log("Producto actualizado en el carrito:", cart);
-            return cart
+            // Devolver el carrito actualizado
+            return cart;
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 

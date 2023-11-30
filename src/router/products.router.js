@@ -172,10 +172,10 @@ router.post("/", async (req, res) => {
 
     } catch (error) {
         if (error.code === 11000) {
-            console.error(`Ya existe un producto con el código '${error.keyValue.code}'.`);
+            console.error(`Ya existe un producto con el código "${error.keyValue.code}".`);
             return res
                 .status(400)
-                .json({ Error: `Ya existe un producto con el código '${error.keyValue.code}' ` });
+                .json({ Error: `Ya existe un producto con el código "${error.keyValue.code}" ` });
 
         } else if (error.name === "ValidationError") {
             return res
@@ -224,14 +224,14 @@ router.put("/:pid", async (req, res) => {
         const resultOfValid = await productManager.validateProperty(productId, key);
 
         if (resultOfValid === undefined) {
-            console.error(`No se encontró la propiedad '${[key]}'.`);
+            console.error(`No se encontró la propiedad "${[key]}".`);
             return res
                 .status(404)
-                .json({ Error: `No se encontró la propiedad '${[key]}'.` });
+                .json({ Error: `No se encontró la propiedad "${[key]}".` });
         }
 
         const resultOfUpdate = await productManager.updateProductById(productId, key, value);
-        if (resultOfUpdate !== null) res.status(201).json({ message: `Se actualizó la propiedad '${key}' del producto con id:'${productId}' correctamente!` });
+        if (resultOfUpdate !== null) res.status(201).json({ message: `Se actualizó la propiedad "${key}" del producto con id:"${productId}" correctamente!` });
 
     } catch (error) {
         res.status(500).json({ error: "Hubo un error al actualizar el producto" });
@@ -244,8 +244,8 @@ router.delete("/:pid", async (req, res) => {
         const productPorId = await productManager.getProductById(productId);
 
         if (productPorId === null) {
-            console.error(`No se encontró el producto con id:'${productId}'`);
-            res.status(404).json({ Error: `No se encontró el producto con id:'${productId}'` });
+            console.error(`No se encontró el producto con id:"${productId}"`);
+            res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
         } else {
             await productManager.deleteProduct(productId);
             res.status(201).json({ message: "Producto eliminado correctamente" });

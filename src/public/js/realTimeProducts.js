@@ -55,21 +55,21 @@ const sendDelete = async (id) => {
         if (response.ok) {
             console.log("Se eliminó corectamente el elemento con ID: ", id);
             Swal.fire({
-                icon: 'success',
-                title: 'Producto Eliminado!',
-                text: '🗑️',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Aceptar'
+                icon: "success",
+                title: "Producto Eliminado!",
+                text: "🗑️",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Aceptar"
             });
 
         } else {
             console.error("Error elimando el producto desde formulario cliente:", response);
             Swal.fire({
-                icon: 'error',
-                title: 'Id no encontrado',
-                text: 'No se pudo eliminar el producto.',
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Cerrar'
+                icon: "error",
+                title: "Id no encontrado",
+                text: "No se pudo eliminar el producto.",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "Cerrar"
             });
         }
         document.getElementById(id).innerHTML = "";
@@ -127,21 +127,21 @@ productsAddForm.addEventListener("submit", async (event) => {
             console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             sendProduct(lastAddedProduct)
             Swal.fire({
-                icon: 'success',
-                title: 'Producto Agregado',
-                text: 'El producto se ha agregado correctamente.',
-                confirmButtonColor: '#3085d6',
-                confirmButtonText: 'Aceptar'
+                icon: "success",
+                title: "Producto Agregado",
+                text: "El producto se ha agregado correctamente.",
+                confirmButtonColor: "#3085d6",
+                confirmButtonText: "Aceptar"
             });
 
         } else {
             console.error("Error agregando el producto desde formulario cliente:", response);
             Swal.fire({
-                icon: 'error',
-                title: 'Código incorrecto!',
-                text: 'No se pudo agregar el producto. Ya existe un producto con ese código.',
-                confirmButtonColor: '#d33',
-                confirmButtonText: 'Cerrar'
+                icon: "error",
+                title: "Código incorrecto!",
+                text: "No se pudo agregar el producto. Ya existe un producto con ese código.",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "Cerrar"
             });
         }
 

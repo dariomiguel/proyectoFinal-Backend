@@ -79,11 +79,11 @@ class ProductManagerMongo {
     createID = async () => {
         try {
             //*Buscamos el resultado que sea mas grande en la base de datos.
-            const valorMaximo = await ProductModel.findOne().sort('-id').exec();
+            const valorMaximo = await ProductModel.findOne().sort("-id").exec();
             if (!valorMaximo) return 0;
 
             //*Obtenemos todos los "products" para saber cuantos hay y verificar que coincida con el valor máximo (.lean se usa para convertilo en un objeto javascript)
-            const todosLosProductos = await ProductModel.find({}, 'id').lean();
+            const todosLosProductos = await ProductModel.find({}, "id").lean();
             if (valorMaximo.id === todosLosProductos.length - 1) return valorMaximo.id + 1
 
             //*Buscamos cual id falta en la sucesión de números ID.
@@ -97,7 +97,7 @@ class ProductManagerMongo {
     findID = async () => {
         try {
             // Obtener todos los documentos de la colección "products" 
-            const todosLosProductos = await ProductModel.find({}, 'id').lean();
+            const todosLosProductos = await ProductModel.find({}, "id").lean();
             // Extraer todos los IDs existentes en un array
             const idsExistente = todosLosProductos.map(producto => producto.id);
 
@@ -125,7 +125,7 @@ class ProductManagerMongo {
         try {
             //* Buscamos elementos por Id en base de datos
             console.log("El id es :", pId)
-            const productoBuscado = await ProductModel.findOne({ id: pId });
+            const productoBuscado = await ProductModel.findOne({ _id: pId });
             return productoBuscado;
         } catch (error) {
             console.error("🤔No se encontró el producto solicitado\n", error);
@@ -139,10 +139,10 @@ class ProductManagerMongo {
 
         try {
             await ProductModel.updateOne({ id: idProducto }, { $set: nuevosDatos })
-            console.log(`Se actualizó la propiedad '${[keyUpdate]}' del producto con id:'${idProducto}' correctamente!`);
+            console.log(`Se actualizó la propiedad "${[keyUpdate]}" del producto con id:"${idProducto}" correctamente!`);
 
         } catch (error) {
-            console.error('Error al actualizar el documento:\n', error);
+            console.error("Error al actualizar el documento:\n", error);
             throw error;
         }
     }
@@ -156,7 +156,7 @@ class ProductManagerMongo {
             if (validador !== null) return validador;
 
         } catch (error) {
-            console.error('No se pudo validar el documento:\n', error);
+            console.error("No se pudo validar el documento:\n", error);
             throw error;
         }
     }
