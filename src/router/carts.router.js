@@ -201,5 +201,38 @@ router.put("/:cid", async (req, res) => {
     }
 });
 
+router.put("/:cid/products/:pid", async (req, res) => {
+    try {
+        const cId = parseInt(req.params.cid);
+        const pId = parseInt(req.params.pid);
+        const newQuantity = req.body.quantity;
+
+        console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
+        const existingCart = await cartManagerMongo.getCartById(cId);
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id:'${cId}'`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id:'${cId}'` });
+        }
+
+        const productIndex = existingCart.products.findIndex(product => product.product === pId);
+
+        if (productIndex !== -1) {
+            // Actualiza solo la cantidad del producto en el carrito
+            existingCart.products[productIndex].quantity = newQuantity;
+
+            // Actualiza el carrito en la base de datos
+            await cartManagerMongo.updateProductQuantity(cId, existingCart, newQuantity, pId);
+
+            res.status(200).json({ message: `Nueva cantidad del producto (${newQuantity}) con id:${pId} en el carrito con id:${cId}, se actualizó correctamente!` });
+        } else {
+            console.log(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);
+            res.status(404).json({ Error: `No se encontró el producto con id:${pId} en el carrito con id:${cId}` });
+        }
+    } catch (error) {
+        console.error("Error al actualizar la cantidad del producto en el carrito:", error);
+        res.status(500).json({ error: "Hubo un error al actualizar la cantidad del producto en el carrito" });
+    }
+});
+
 
 export default router

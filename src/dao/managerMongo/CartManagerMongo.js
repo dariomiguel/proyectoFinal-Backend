@@ -153,6 +153,15 @@ class CartManagerMongo {
         }
     }
 
+    updateProductQuantity = async (cId, updatedCart, quantity, producttoUpdate) => {
+        try {
+            await CartModel.updateOne({ id: cId }, { $set: updatedCart });
+            console.log(`Se actualizó con una cantidad de ${quantity} el producto ${producttoUpdate} del carrito con id:${cId}!`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 
 }
 
