@@ -155,13 +155,26 @@ router.post("/", async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
 
+        //Manejo de excepciones para no permitir valores incorrectos
         const algunaPropiedadVacia = await productManager.isNotValidCode(title, description, code, price, stock, category, thumbnail);
-
+        if (isNaN(price)) {
+            console.log("\nEl precio debe ser un valor numérico.\n");
+            return res.status(400).json({ error: "El precio debe ser un valor numérico" });
+        }
+        if (isNaN(stock)) {
+            console.log("\nEl stock debe ser un valor numérico.\n");
+            return res.status(400).json({ error: "El stock debe ser un valor numérico" });
+        }
+        if (category !== "cuadros" && category !== "artesanias" && category !== "bordados" && category !== "esculturas") {
+            console.log("La categoría no es válida");
+            return res.status(400).json({ error: "Debes seleccionar una de estas categorías: cuadros-artesanias-bordados-esculturas" });
+        }
         if (algunaPropiedadVacia) {
             res
                 .status(400)
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
+
         } else {
             const productoAgregado = await productManager.addProduct(title, description, code, price, stock, category, thumbnail);
             res
