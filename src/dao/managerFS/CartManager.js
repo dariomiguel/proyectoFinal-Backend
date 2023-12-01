@@ -1,5 +1,5 @@
-import fs from 'fs'
-import ProductManager from './ProductManager.js'
+import fs from "fs"
+import ProductManager from "./ProductManager.js"
 import __dirname from "../../utils.js";
 
 const productManager = new ProductManager()
@@ -21,11 +21,11 @@ class CartManager {
                 }
 
                 this.carts.push(cart)
-                await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, '\t'))
-                return 'Carrito creado con éxito'
+                await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, "\t"))
+                return "Carrito creado con éxito"
             }
 
-            const data = await fs.promises.readFile(this.path, 'utf-8')
+            const data = await fs.promises.readFile(this.path, "utf-8")
             this.carts = JSON.parse(data)
             const cart = {
                 id: this.createID(),
@@ -33,8 +33,8 @@ class CartManager {
             }
 
             this.carts.push(cart)
-            await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, '\t'))
-            return 'Carrito creado con éxito'
+            await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, "\t"))
+            return "Carrito creado con éxito"
         } catch (error) {
             return error
         }
@@ -72,7 +72,7 @@ class CartManager {
 
     getCartById = async (id) => {
         try {
-            const data = await fs.promises.readFile(this.path, 'utf-8')
+            const data = await fs.promises.readFile(this.path, "utf-8")
             this.carts = JSON.parse(data)
             const carrito = this.carts.find(cart => cart.id == id)
 
@@ -85,13 +85,13 @@ class CartManager {
 
     addProductInCart = async (cid, pid) => {
         try {
-            const data = await fs.promises.readFile(this.path, 'utf-8')
+            const data = await fs.promises.readFile(this.path, "utf-8")
             this.carts = JSON.parse(data)
             const carrito = this.carts.find(cart => cart.id === cid)
             const prod = await productManager.getProductById(pid)
 
-            if (prod === 'Not found') return 'Producto not found'
-            if (!carrito) return 'Carrito not found'
+            if (prod === "Not found") return "Producto not found"
+            if (!carrito) return "Carrito not found"
 
             const product = carrito.products.find(p => p.pid === pid)
 
@@ -101,8 +101,8 @@ class CartManager {
                 product.quantity++
             }
 
-            await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, '\t'))
-            return 'Se agrego el producto correctamente'
+            await fs.promises.writeFile(this.path, JSON.stringify(this.carts, null, "\t"))
+            return "Se agrego el producto correctamente"
         } catch (error) {
             return error
         }

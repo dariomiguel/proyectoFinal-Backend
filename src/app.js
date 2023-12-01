@@ -1,5 +1,7 @@
 import express from "express";
 import handlebars from "express-handlebars";
+import exphbs from "express-handlebars";
+
 import __dirname from "./utils.js";
 import { configureSocket } from "./socketConfig.js";
 import productsRouter from "./router/products.router.js";
@@ -17,7 +19,12 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 //Configuramos el motor de plantillas
-app.engine("handlebars", handlebars.engine());
+app.engine("handlebars", handlebars.engine({
+    //habilitamos el uso de las propiedades como propietarios
+    runtimeOptions: {
+        allowProtoPropertiesByDefault: true,
+    },
+}));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");
 

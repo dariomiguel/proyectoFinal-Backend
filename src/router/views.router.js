@@ -44,24 +44,45 @@ const productManagerMongo = new ProductManagerMongo();
 
 router.get("/", async (req, res) => {
     try {
-        const limit = req.query.limit;
-        let products = await productManagerMongo.getProducts();
-        if (products.length === 0) {
-            return res.status(404).json({ Error: "No se encontraron productos" });
-        }
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
 
-        if (limit) {
-            const limitNumber = parseInt(limit, 10);
-            if (!isNaN(limitNumber) && limitNumber >= 0) {
-                products = products.slice(0, limitNumber);
-            }
-        }
-        //Se realiza una limpieza para asegurar que el producto pueda ser usado por handlebars.
-        products = JSON.parse(JSON.stringify(products));
+        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-        res.render("home", {
-            products
-        })
+        res
+            .render("home", {
+                style: "home.css",
+                result: response
+            })
+
+    } catch (error) {
+        console.error("Products, Error al obtener la lista de productos:", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
+});
+
+router.get("/products", async (req, res) => {
+    try {
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
+
+        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+
+        res
+            .render("products", {
+                style: "products.css",
+                result: response
+            })
 
     } catch (error) {
         console.error("Products, Error al obtener la lista de productos:", error);

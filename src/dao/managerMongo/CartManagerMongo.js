@@ -1,5 +1,6 @@
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
+import mongoose from "mongoose";
 
 class CartManagerMongo {
 
@@ -73,7 +74,7 @@ class CartManagerMongo {
     getCartById = async (cId) => {
         try {
             //* Buscamos elementos por Id en base de datos
-            const carritoBuscado = await CartModel.findOne({ id: cId });
+            const carritoBuscado = await CartModel.findOne({ id: cId }).populate("products.product")
             return carritoBuscado;
         } catch (error) {
             console.error("No se encontró el carrito solicitado\n", error);
@@ -83,27 +84,38 @@ class CartManagerMongo {
 
     addProductInCart = async (cId, pId) => {
         try {
-
-            // Buscar el carrito por su ID
             const cart = await CartModel.findOne({ id: cId });
-            // Si el carrito ya existe, verificar si el producto ya está en el array
+            if (!cart) {
+                console.log("Carrito no encontrado");
+                return;
+            }
+
+            console.log("Se encontró el carrito", cart);
+
+            if (!cart.products) {
+                console.log("El carrito no tiene productos");
+                return;
+            }
+
             const existingProduct = cart.products.find(
-                (item) => item.product === pId
+                (item) => item.product.toString() === pIdString
             );
 
             //Analizamos si existe el producto
-            existingProduct ?
+            if (existingProductIndex !== -1) {
                 // Si el producto ya existe, sumar al quantity
-                existingProduct.quantity += 1 :
+                existingProduct.quantity += 1
+            } else {
                 // Si el producto no existe, agregarlo al array con quantity 1
-                cart.products.push({ product: pId, quantity: 1 })
+                cart.products.push({ "_id": pId, "quantity": 1 })
 
-            // Guardar el carrito actualizado
-            await cart.save();
-            console.log("Producto actualizado en el carrito:", cart);
-            return cart
+                // Guardar el carrito actualizado
+                await cart.save();
+                // Devolver el carrito actualizado
+                return cart;
+            }
         } catch (error) {
-            throw error
+            throw error;
         }
     }
 
@@ -115,6 +127,62 @@ class CartManagerMongo {
             throw error;
         }
     }
+
+    deleteProductFromCart = async (cid, pid) => {
+        try {
+            const cart = await CartModel.findOne({ id: cid });
+
+            if (!cart) {
+                console.log(`No se encontró el carrito con id:${cid}`);
+                return;
+            }
+
+            // Encuentra el índice del producto en el carrito
+            const index = cart.products.findIndex(product => product.product === pid);
+
+            if (index !== -1) {
+                // Elimina el producto del array
+                cart.products.splice(index, 1);
+
+                // Actualiza el carrito en la base de datos
+                await CartModel.updateOne({ id: cid }, { $set: { products: cart.products } });
+
+                console.log(`Producto con id:${pid} eliminado del carrito con id:${cid} correctamente`);
+            } else {
+                console.log(`No se encontró el producto con id:${pid} en el carrito con id:${cid}`);
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    updateCart = async (cId, updatedCart) => {
+        try {
+            await CartModel.updateOne({ id: cId }, updatedCart);
+            console.log(`Carrito con id:${cId} actualizado correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    updateProductQuantity = async (cId, updatedCart, quantity, producttoUpdate) => {
+        try {
+            await CartModel.updateOne({ id: cId }, { $set: updatedCart });
+            console.log(`Se actualizó con una cantidad de ${quantity} el producto ${producttoUpdate} del carrito con id:${cId}!`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    deleteAllProductsFromCart = async (cId) => {
+        try {
+            await CartModel.updateOne({ id: cId }, { $set: { products: [] } });
+            console.log(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
+        } catch (error) {
+            throw error;
+        }
+    }
+
 }
 
 export default CartManagerMongo

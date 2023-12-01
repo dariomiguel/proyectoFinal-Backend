@@ -24,7 +24,7 @@ const productManagerMongo = new ProductManagerMongo();
 //     }
 // })
 
-//? router.get('/', async (req, res) => {
+//? router.get("/", async (req, res) => {
 //     try {
 //         const carts = await cartManager.getCarts()
 //         res.send(carts)
@@ -49,7 +49,7 @@ const productManagerMongo = new ProductManagerMongo();
 // });
 
 
-//? router.post('/:cid/product/:pid', async (req, res) => {
+//? router.post("/:cid/product/:pid", async (req, res) => {
 //     try {
 //         const cid = parseInt(req.params.cid)
 //         const pid = parseInt(req.params.pid)
@@ -57,7 +57,7 @@ const productManagerMongo = new ProductManagerMongo();
 //         const productPorId = await productManager.getProductById(pid);
 //         const result = await cartManager.addProductInCart(cid, pid);
 
-//         if (result === 'Carrito not found') return res.status(404).json({ Error: "No se encontró el carrito" });
+//         if (result === "Carrito not found") return res.status(404).json({ Error: "No se encontró el carrito" });
 //         if (typeof productPorId === "string") return res.status(404).json({ Error: "No se encontro el producto solicitado" });
 
 //         res.send(result);
@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
     }
 })
 
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
     try {
         const carts = await cartManagerMongo.getCarts();
 
@@ -98,14 +98,20 @@ router.get('/', async (req, res) => {
 router.get("/:cid", async (req, res) => {
     try {
         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
-
+        console.log("Q es cart por id 🤔", cartPorId);
         if (cartPorId === null) {
             res
                 .status(404)
-                .json({ Error: "No se encontro el producto solicitado" });
+                .json({ Error: "No se encontró el carrito solicitado" });
         } else {
-            //*200 para respuestas exitosas
-            res.status(200).json({ status: "success", payload: cartPorId })
+            //Si estoy usando un postman uso res.status
+            if (req.headers['user-agent'].includes('Postman')) {
+                return res.status(200).json({ status: "success", payload: cartPorId });
+            }
+            res.render("cartDetails", {
+                style: "cartDetails.css",
+                cartPorId
+            })
         }
 
     } catch (error) {
@@ -113,51 +119,141 @@ router.get("/:cid", async (req, res) => {
     }
 });
 
-router.post('/:cid/product/:pid', async (req, res) => {
+router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const cid = parseInt(req.params.cid)
-        const pid = parseInt(req.params.pid)
+        const cId = parseInt(req.params.cid);
+        const pId = req.params.pid;
+        const quantity = req.body.quantity || 1;
 
-        const productPorId = await productManagerMongo.getProductById(pid);
-        if (productPorId === null) {
-            console.log("No se encontró el producto para agregar.");
-            return res
-                .status(404)
-                .json({ Error: "No se encontró el producto solicitado" });
+        console.log("La cantidad de productos que se va a agregar al carrito es: ", quantity);
+
+        const existingCart = await cartManagerMongo.getCartById(cId);
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id: ${cId}`);
+            return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
+        }
+        const existingProduct = await productManagerMongo.getProductById(pId);
+        console.log("Existing product es :", existingProduct);
+        if (!existingProduct) {
+            console.error(`No se encontró el producto con id: ${pId}`);
+            return res.status(404).json({ error: `No se encontró el carrito con id: ${pId}` });
         }
 
-        const cartPorId = await cartManagerMongo.getCartById(cid);
-        if (cartPorId === null) {
-            console.log("No se encontró el carrito solicitado.");
-            return res
-                .status(404)
-                .json({ Error: "No se encontro el carrito solicitado" });
+        const productsIds = existingCart.products.map(product => {
+            if (product.product && product.product._id) {
+                const productObject = product.product.toJSON();
+                return productObject._id.toString();
+            }
+            return null;
+        });
+
+        // Busca el índice del _id en la lista de _id
+        const productIndex = productsIds.indexOf(pId);
+
+
+        if (productIndex !== -1) {
+            // Si el producto ya existe, incrementar la cantidad
+            existingCart.products[productIndex].quantity += quantity;
+        } else {
+            // Si el producto no existe, agregarlo al carrito con la cantidad especificada
+            existingCart.products.push({ product: pId, quantity });
         }
 
-        const productToAdd = await cartManagerMongo.addProductInCart(cid, pid);
-        res.status(201).json({ status: "success", payload: productToAdd })
+        // Actualizar el carrito en la base de datos
+        await cartManagerMongo.updateCart(cId, existingCart);
 
+        res.status(200).json({ message: `Producto con id: ${pId} agregado al carrito con id: ${cId} correctamente!` });
     } catch (error) {
-        res.status(500).send({ Error: "Hubo un error al agregar producto al carrito " })
+        console.error("Error al agregar producto al carrito:", error);
+        res.status(500).json({ error: "Hubo un error al agregar producto al carrito" });
     }
 })
 
 router.delete("/:cid", async (req, res) => {
     try {
         const cId = parseInt(req.params.cid);
-        const buscarCartPorId = await cartManagerMongo.getCartById(cId);
 
-        if (buscarCartPorId === null) {
-            console.error(`No se encontró el carrito con id:'${cId}'`);
-            res.status(404).json({ Error: `No se encontró el carrito con id:'${cId}'` });
-        } else {
-            await cartManagerMongo.deleteCart(cId);
-            res.status(201).json({ message: "Carrito eliminado correctamente" });
-        }
+        await cartManagerMongo.deleteAllProductsFromCart(cId);
+
+        res.status(200).json({ message: `Todos los productos del carrito con id:${cId} se eliminaron correctamente` });
     } catch (error) {
-        console.error("Error al eliminar el carrito:", error);
-        res.status(500).json({ error: "Hubo un error al eliminar el carrito" });
+        console.error("Error al eliminar todos los productos del carrito:", error);
+        res.status(500).json({ error: "Hubo un error al eliminar todos los productos del carrito" });
     }
 });
+
+router.delete("/:cid/products/:pid", async (req, res) => {
+
+    try {
+        const cId = parseInt(req.params.cid);
+        const pId = parseInt(req.params.pid);
+
+        await cartManagerMongo.deleteProductFromCart(cId, pId);
+
+        res.status(200).json({ message: `Producto con id:${pId} eliminado del carrito con id:${cId} correctamente` });
+    } catch (error) {
+        console.error("Error al eliminar el producto del carrito:", error);
+        res.status(500).json({ error: "Hubo un error al eliminar el producto del carrito" });
+    }
+});
+
+router.put("/:cid", async (req, res) => {
+    try {
+        const cId = parseInt(req.params.cid);
+        const updatedProducts = req.body.products;
+
+        // Validar si el carrito existe
+        const existingCart = await cartManagerMongo.getCartById(cId);
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id:"${cId}"`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
+        }
+
+        // Actualizar los productos en el carrito
+        existingCart.products = updatedProducts;
+
+        // Actualizar el carrito en la base de datos
+        await cartManagerMongo.updateCart(cId, existingCart);
+
+        res.status(200).json({ message: `Carrito con id:${cId} actualizado correctamente` });
+    } catch (error) {
+        console.error("Error al actualizar el carrito:", error);
+        res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
+    }
+});
+
+router.put("/:cid/products/:pid", async (req, res) => {
+    try {
+        const cId = parseInt(req.params.cid);
+        const pId = parseInt(req.params.pid);
+        const newQuantity = req.body.quantity;
+
+        console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
+        const existingCart = await cartManagerMongo.getCartById(cId);
+        if (!existingCart) {
+            console.error(`No se encontró el carrito con id:"${cId}"`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
+        }
+
+        const productIndex = existingCart.products.findIndex(product => product.product === pId);
+
+        if (productIndex !== -1) {
+            // Actualiza solo la cantidad del producto en el carrito
+            existingCart.products[productIndex].quantity = newQuantity;
+
+            // Actualiza el carrito en la base de datos
+            await cartManagerMongo.updateProductQuantity(cId, existingCart, newQuantity, pId);
+
+            res.status(200).json({ message: `Nueva cantidad del producto (${newQuantity}) con id:${pId} en el carrito con id:${cId}, se actualizó correctamente!` });
+        } else {
+            console.log(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);
+            res.status(404).json({ Error: `No se encontró el producto con id:${pId} en el carrito con id:${cId}` });
+        }
+    } catch (error) {
+        console.error("Error al actualizar la cantidad del producto en el carrito:", error);
+        res.status(500).json({ error: "Hubo un error al actualizar la cantidad del producto en el carrito" });
+    }
+});
+
 
 export default router
