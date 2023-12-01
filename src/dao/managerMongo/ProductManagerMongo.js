@@ -10,7 +10,8 @@ class ProductManagerMongo {
     getProducts = async (limit = 10, page = 1, query = "", category = "", stockAvailability = "all", priceOrder = "ascending") => {
         try {
             const search = {};
-            if (query) search.title = { "$regex": query, "$options": "i" }
+
+            if (query) search.title = { "$regex": query, "$options": "i" };
             if (category) search.category = category;
             if (stockAvailability !== "all") search.stock = (stockAvailability === "inStock");
 
@@ -18,12 +19,16 @@ class ProductManagerMongo {
             if (priceOrder === "ascending") sort.price = 1;
             else if (priceOrder === "descending") sort.price = -1;
 
+            if (limit <= 0) limit = 10;
+
             const result = await ProductModel.paginate(search, {
                 page: page,
                 limit: limit,
                 lean: true,
                 sort: sort
             })
+
+            if (page > result.totalPages || page < 1 || (isNaN(page))) result.page = 1;
 
             let status = "success";
             if (result.docs.length === 0) status = "error";
@@ -39,11 +44,9 @@ class ProductManagerMongo {
                 hasNextPage: result.hasNextPage,
                 prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
                 nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
-                totalDocs: result.totalDocs //?Agregado para ver la cantidad de productos preguntar si eliminar o no
+                totalDocs: result.totalDocs, //?Agregado para ver la cantidad de productos preguntar si eliminar o no
+                limit: result.limit //?Agregado para saber el límite actual
             };
-
-            // console.log("Contador de Repetición");
-            // console.log("Que es response en views?", response.payload);
 
             return response;
 
