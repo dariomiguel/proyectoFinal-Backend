@@ -127,8 +127,8 @@ class ProductManagerMongo {
             const productoBuscado = await ProductModel.findOne({ _id: pId });
             return productoBuscado;
         } catch (error) {
-            console.error("🤔No se encontró el producto solicitado\n", error);
-            throw error;
+            console.error("\n🤔No se encontró el producto solicitado\n", error);
+            return false;
         }
     }
 
