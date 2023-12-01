@@ -8,8 +8,8 @@ Pages:
 {{result.page}}
 /
 {{result.totalPages}}<br />
-Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" />
-Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric" />
+Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" min="1" max="{{result.totalDocs}}"/>
+Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric"  min="1" max="{{result.totalPages}}"/>
 <br>
 Busquedad por título: <input id="query" type="text" value="{{result.query}}">
 <label for="category">Seleccionar Categoría:</label>
