@@ -111,11 +111,13 @@ router.get("/products", auth, async (req, res) => {
         const priceOrder = req.query?.priceOrder || "ascending";
 
         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const user = req.session.user
 
         res
             .render("products", {
                 style: "products.css",
-                result: response
+                result: response,
+                user: user
             })
 
     } catch (error) {
