@@ -1,32 +1,47 @@
-import { Router } from "express"
-import UserModel from "../dao/models/user.model.js"
+import { Router } from "express";
+import UserModel from "../dao/models/user.model.js";
 
 const router = Router();
 
 router.post("/login", async (req, res) => {
-    const { email, password } = req.body
-    const user = await UserModel.findOne({ email, password })
+    try {
+        const { email, password } = req.body
+        let user = await UserModel.findOne({ email, password })
 
-    if (!user) return res.status(404).send("User not Found");
+        if (!user) return res.status(401).send("Authentication failed");
 
-    req.session.user = user;
+        req.session.user = user;
+        return res.status(200).redirect("/products")
 
-    return res.redirect("/products")
+    } catch (error) {
+        console.error("Error en el controlador /login:", error);
+        return res.status(500)
+    }
 })
 
 router.post("/register", async (req, res) => {
-    const user = req.body
-    await UserModel.create(user)
+    try {
+        const user = req.body
+        await UserModel.create(user)
 
-    return res.redirect("/")
+        return res.redirect("/")
+    } catch (error) {
+        console.error("Error en el controlador /register:", error);
+        return res.status(500).send("Error en el servidor");
+    }
 })
 
 router.get("/logout", (req, res) => {
-    req.session.destroy(err => {
-        if (err) return res.send("logout error")
+    try {
+        req.session.destroy(err => {
+            if (err) return res.send("logout error")
 
-        return res.redirect("/")
-    })
-})
+            return res.redirect("/")
+        })
+    } catch (error) {
+        console.error("Error en el controlador /logout:", error);
+        return res.status(500).send("Error en el servidor");
+    }
+});
 
 export default router

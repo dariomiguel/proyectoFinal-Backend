@@ -1,8 +1,11 @@
 <h1>Login</h1>
 
-<form action="/api/session/login" method="post">
-    Email:<input type="text" name="email" /><br />
-    Password:<input type="text" name="password" /><br />
+<form id="sessionForm">
+    Email:<input type="text" name="email" id="emailLogin" /><br />
+    Password:<input type="password" name="password" id="passLogin" /><br />
 
     <button type="submit">Login</button>
 </form>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="/js/session.js"></script>

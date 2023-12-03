@@ -37,7 +37,7 @@ app.use(session({
     saveUninitialized: true
 }))
 
-app.use("/api/session", sessionRouter)
+
 
 //Configuramos el motor de plantillas
 app.engine("handlebars", handlebars.engine({
@@ -64,6 +64,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/lastProduct", lastProductRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
+//Ruta de los logins
+app.use("/api/session", sessionRouter)
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {
