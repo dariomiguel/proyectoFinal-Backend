@@ -1,21 +1,21 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import __dirname from "./utils.js";
-import { configureSocket } from "./socketConfig.js";
-import productsRouter from "./router/products.router.js";
-import cartsRouter from "./router/carts.router.js";
-import viewsRouter from "./router/views.router.js";
-import realtimeproductsRouter from "./router/realTimeProducts.router.js";
-import chatRouter from "./router/chat.router.js";
-import lastProductRouter from "./router/lastProduct.router.js";
 import mongoose from "mongoose";
 
-import FileStore from "session-file-store";
+import { configureSocket } from "./socketConfig.js";
+
+import __dirname from "./utils.js";
+
+import cartsRouter from "./router/carts.router.js";
+import chatRouter from "./router/chat.router.js";
+import lastProductRouter from "./router/lastProduct.router.js";
+import productsRouter from "./router/products.router.js";
+import realtimeproductsRouter from "./router/realTimeProducts.router.js";
+import viewsRouter from "./router/views.router.js";
+
 import session from "express-session";
 import MongoStore from "connect-mongo";
-// import loginRouter from "./router/login.router.js";
 import sessionRouter from "./router/session.router.js"
-
 
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
@@ -23,7 +23,6 @@ const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// app.use(cookieParser());
 app.use(session({
     store: MongoStore.create({
         mongoUrl: urlMongo,
@@ -33,7 +32,6 @@ app.use(session({
             useUnifiedTopology: true
         }
     }),
-    // ttl: 15,
     secret: "secret",
     resave: true,
     saveUninitialized: true
@@ -41,10 +39,9 @@ app.use(session({
 
 app.use("/api/session", sessionRouter)
 
-
 //Configuramos el motor de plantillas
 app.engine("handlebars", handlebars.engine({
-    //habilitamos el uso de las propiedades como propietarios
+    //habilitamos el uso de las propiedades de mongo como propietarios
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
     },
@@ -67,9 +64,6 @@ app.use("/api/products", productsRouter);
 app.use("/api/lastProduct", lastProductRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
-// //Ruta de login
-// app.use("/api/login", loginRouter)
-
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {

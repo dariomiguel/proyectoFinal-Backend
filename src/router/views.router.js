@@ -43,7 +43,7 @@ const productManagerMongo = new ProductManagerMongo();
 //* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 function justPublicWithoutSession(req, res, next) {
-    if (req.session?.user) return res.redirect("/profile")
+    if (req.session?.user) return res.redirect("/products")
 
     return next()
 }
@@ -54,9 +54,8 @@ function auth(req, res, next) {
     res.redirect("/login")
 }
 
-
 router.get("/", justPublicWithoutSession, (req, res) => {
-    return res.render("home")
+    return res.redirect("/products")
 })
 
 router.get("/login", justPublicWithoutSession, (req, res) => {
@@ -74,44 +73,33 @@ router.get("/profile", auth, (req, res) => {
 })
 
 
-// router.get("/home", async (req, res) => {
-//     try {
-//         if (req.session?.user) res.redirect("/profile")
+router.get("/home", justPublicWithoutSession, async (req, res) => {
+    try {
 
-//         const limit = parseInt(req.query?.limit || 10);
-//         const page = parseInt(req.query?.page || 1);
-//         const query = req.query?.query || "";
-//         const category = req.query?.category || "";
-//         const stockAvailability = req.query?.stockAvailability || "all";
-//         const priceOrder = req.query?.priceOrder || "ascending";
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
 
-//         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
-//         res
-//             .render("home", {
-//                 style: "home.css",
-//                 result: response
-//             })
+        res
+            .render("home", {
+                style: "home.css",
+                result: response
+            })
 
-//     } catch (error) {
-//         console.error("Products, Error al obtener la lista de productos:", error);
-//         res
-//             .status(500)
-//             .json({ Error: "Hubo un error al obtener la lista de productos" });
-//     }
-// })
+    } catch (error) {
+        console.error("Products, Error al obtener la lista de productos:", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
+})
 
-
-
-
-
-
-
-
-
-
-
-router.get("/products", async (req, res) => {
+router.get("/products", auth, async (req, res) => {
     try {
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);
