@@ -42,8 +42,42 @@ const productManagerMongo = new ProductManagerMongo();
 //* =-               M O N G O   D B               -=
 //* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
-router.get("/", async (req, res) => {
+function justPublicWithoutSession(req, res, next) {
+    if (req.session?.user) return res.redirect("/products")
+
+    return next()
+}
+
+function auth(req, res, next) {
+    if (req.session?.user) return next()
+
+    res.redirect("/login")
+}
+
+router.get("/", justPublicWithoutSession, (req, res) => {
+    return res.redirect("/products")
+})
+
+router.get("/login", justPublicWithoutSession, (req, res) => {
+    return res.render("login", {
+        style: "login.css"
+    })
+})
+
+router.get("/register", justPublicWithoutSession, (req, res) => {
+    return res.render("register", {})
+})
+
+router.get("/profile", auth, (req, res) => {
+    const user = req.session.user
+
+    res.render("profile", user)
+})
+
+
+router.get("/home", justPublicWithoutSession, async (req, res) => {
     try {
+
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);
         const query = req.query?.query || "";
@@ -65,9 +99,9 @@ router.get("/", async (req, res) => {
             .status(500)
             .json({ Error: "Hubo un error al obtener la lista de productos" });
     }
-});
+})
 
-router.get("/products", async (req, res) => {
+router.get("/products", auth, async (req, res) => {
     try {
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);
@@ -77,11 +111,13 @@ router.get("/products", async (req, res) => {
         const priceOrder = req.query?.priceOrder || "ascending";
 
         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const user = req.session.user
 
         res
             .render("products", {
                 style: "products.css",
-                result: response
+                result: response,
+                user: user
             })
 
     } catch (error) {
