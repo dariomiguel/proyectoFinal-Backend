@@ -4,7 +4,13 @@ import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
 const productManager = new ProductManagerMongo();
 const router = express.Router();
 
-router.get("/", async (req, res) => {
+function auth(req, res, next) {
+    if (req.session?.user) return next()
+
+    res.redirect("/login")
+}
+
+router.get("/", auth, async (req, res) => {
     try {
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);

@@ -4,7 +4,13 @@ import ChatManagerMongo from "../dao/managerMongo/ChatManagerMongo.js";
 const router = express.Router();
 const chatManagerMongo = new ChatManagerMongo();
 
-router.get("/", async (req, res) => {
+function auth(req, res, next) {
+    if (req.session?.user) return next()
+
+    res.redirect("/login")
+}
+
+router.get("/", auth, async (req, res) => {
     try {
         const limit = req.query.limit;
         let chats = await chatManagerMongo.getChats();

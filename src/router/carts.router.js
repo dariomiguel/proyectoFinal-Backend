@@ -7,6 +7,13 @@ import CartManagerMongo from "../dao/managerMongo/CartManagerMongo.js";
 const router = Router();
 const cartManagerMongo = new CartManagerMongo();
 const productManagerMongo = new ProductManagerMongo();
+
+function auth(req, res, next) {
+    if (req.session?.user) return next()
+
+    res.redirect("/login")
+}
+
 // const productManager = new ProductManager();
 
 // ** Métodos  con file system
@@ -95,7 +102,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.get("/:cid", async (req, res) => {
+router.get("/:cid", auth, async (req, res) => {
     try {
         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
         console.log("Q es cart por id 🤔", cartPorId);
