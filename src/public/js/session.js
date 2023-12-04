@@ -20,7 +20,6 @@ loginForm.addEventListener("submit", async (event) => {
                 email, password
             }),
         });
-        console.log("Respuesta del servidor:", response);
         if (response.status === 401) {
             Swal.fire({
                 icon: 'error',
@@ -28,7 +27,6 @@ loginForm.addEventListener("submit", async (event) => {
                 text: 'El usuario o la contraseña son incorrectos',
             })
         } else if (response.status === 200) {
-            // Redirige al usuario a la página deseada
             window.location.href = "/products";
         }
 
