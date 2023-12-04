@@ -8,7 +8,7 @@
 		"status": true,
 		"stock": 100,
 		"category": "Electrónicos",
-		"thumbnails": "imagen.jpg"
+		"thumbnail": "imagen.jpg"
 	},
 	{
 		"id": 1,
@@ -19,7 +19,7 @@
 		"status": true,
 		"stock": 12,
 		"category": "Ropa",
-		"thumbnails": "rremera.jpg"
+		"thumbnail": "rremera.jpg"
 	},
 	{
 		"id": 2,
@@ -30,7 +30,7 @@
 		"status": true,
 		"stock": 30,
 		"category": "Ropa",
-		"thumbnails": "zapatillas.jpg"
+		"thumbnail": "zapatillas.jpg"
 	},
 	{
 		"id": 3,
@@ -41,7 +41,7 @@
 		"status": true,
 		"stock": 20,
 		"category": "Ropa",
-		"thumbnails": "bolso.jpg"
+		"thumbnail": "bolso.jpg"
 	},
 	{
 		"id": 4,
@@ -52,7 +52,7 @@
 		"status": true,
 		"stock": 10,
 		"category": "Electrónica",
-		"thumbnails": "tablet.jpg"
+		"thumbnail": "tablet.jpg"
 	},
 	{
 		"id": 5,
@@ -63,7 +63,7 @@
 		"status": true,
 		"stock": 79,
 		"category": "Electrónica",
-		"thumbnails": "camara.jpg"
+		"thumbnail": "camara.jpg"
 	},
 	{
 		"id": 6,
@@ -74,7 +74,7 @@
 		"status": true,
 		"stock": 10,
 		"category": "Electrónica",
-		"thumbnails": "camara01.jpg"
+		"thumbnail": "camara01.jpg"
 	},
 	{
 		"id": 7,
@@ -85,7 +85,7 @@
 		"status": true,
 		"stock": 15,
 		"category": "Electrónica",
-		"thumbnails": "camara03.jpg"
+		"thumbnail": "camara03.jpg"
 	},
 	{
 		"id": 8,
@@ -96,7 +96,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnails": ""
+		"thumbnail": ""
 	},
 	{
 		"id": 9,
@@ -107,7 +107,7 @@
 		"status": true,
 		"stock": 7,
 		"category": "Electrónica",
-		"thumbnails": "camara05.jpg"
+		"thumbnail": "camara05.jpg"
 	},
 	{
 		"id": 10,
@@ -118,7 +118,7 @@
 		"status": true,
 		"stock": 10,
 		"category": "Ropa",
-		"thumbnails": "imagen.jpg"
+		"thumbnail": "imagen.jpg"
 	},
 	{
 		"id": 11,
@@ -129,7 +129,7 @@
 		"status": true,
 		"stock": "5",
 		"category": "5",
-		"thumbnails": "5"
+		"thumbnail": "5"
 	},
 	{
 		"id": 12,
@@ -140,7 +140,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnails": ""
+		"thumbnail": ""
 	},
 	{
 		"id": 13,
@@ -151,7 +151,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnails": ""
+		"thumbnail": ""
 	},
 	{
 		"id": 14,
@@ -162,7 +162,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnails": ""
+		"thumbnail": ""
 	},
 	{
 		"id": 15,
@@ -173,7 +173,7 @@
 		"status": "",
 		"stock": "",
 		"category": "",
-		"thumbnails": ""
+		"thumbnail": ""
 	},
 	{
 		"id": 16,
@@ -184,7 +184,7 @@
 		"status": true,
 		"stock": "1",
 		"category": "1",
-		"thumbnails": "1"
+		"thumbnail": "1"
 	},
 	{
 		"id": 17,
@@ -195,6 +195,6 @@
 		"status": true,
 		"stock": "2",
 		"category": "2",
-		"thumbnails": "2"
+		"thumbnail": "2"
 	}
 ]

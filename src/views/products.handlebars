@@ -1,5 +1,8 @@
 
 <h1>Lista de productos</h1>
+<h3>Bienvenido {{user.first_name}} {{user.last_name}}!!</h3>
+<h4><b>{{user.role}}</b></h4>
+<p>{{user.email}}</p>
 
 Total productos :
 {{result.totalDocs}}
@@ -51,6 +54,7 @@ Busquedad por título: <input id="query" type="text" value="{{result.query}}">
         <p>Cant. Stock:{{this.stock}}</p>
         <p>Categoría: {{this.category}}</p>
         <p>{{this.thumbnail}}</p>
+        <button class="btnAddCart" data-product-id="{{this._id}}">Agregar al carrito</button>
         <hr />
     </div>
 {{/each}}
@@ -58,3 +62,4 @@ Busquedad por título: <input id="query" type="text" value="{{result.query}}">
 
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>
+<script src="/js/products.js"></script>

@@ -3,21 +3,50 @@
 <!-- Agregar un nuevo producto con WebSockets -->
 <h2>Agregar Nuevo Producto</h2>
 <form id="productForm">
-    <input type="text" id="titleAdd" placeholder="Título del producto" />
-    <input type="number" id="priceAdd" placeholder="Precio del producto" />
+    <p>Titulo: </p>
+    <input
+        type="text"
+        id="titleAdd"
+        placeholder="Título del producto"
+        required
+    />
+    <p>Precio: </p>
+    <input
+        type="number"
+        id="priceAdd"
+        placeholder="Precio del producto"
+        required
+    />
+    <p>Descripción: </p>
     <input
         type="text"
         id="descriptionAdd"
         placeholder="Descripción del producto"
+        required
     />
-    <input type="text" id="codeAdd" placeholder="Código de producto" />
-    <input type="number" id="stockAdd" placeholder="Cantidad en stock" />
-    <input type="text" id="categoryAdd" placeholder="Categoría del producto" />
-    <input type="text" id="thumbnailsAdd" placeholder="URL de imagén" />
+    <p>Código: </p>
+    <input type="text" id="codeAdd" placeholder="Código de producto" required />
+    <p>Stocks: </p>
+    <input
+        type="number"
+        id="stockAdd"
+        placeholder="Cantidad en stock"
+        required
+    />
+    <p>Categoría: </p>
+    <select id="categoryAdd" required>
+        <option value=""> </option>
+        <option value="cuadros">Cuadros</option>
+        <option value="artesanias">Artesanías</option>
+        <option value="bordados">Bordados</option>
+        <option value="esculturas">Esculturas</option>
+    </select>
+    <p>Miniatura:</p>
+    <input type="text" id="thumbnailAdd" placeholder="URL de imagén" required />
     <button type="submit" id="btnAdd">Agregar Producto</button>
 </form>
 <hr />
-<!-- Elinar un producto usando WebSockets -->
+<!-- Eliminar un producto usando WebSockets -->
 <h2>Eliminar Producto por ID</h2>
 <form id="deleteProductForm">
     <input
@@ -28,10 +57,12 @@
     <button type="submit" id="btnDelete">Eliminar Producto</button>
 </form>
 <hr />
-
+<h2>Nuevo Producto</h2>
+<div id="newProductBox"></div>
 <h2>Productos</h2>
 <div id="nuevoProductoAgregado"></div>
-{{#each reversedproducts}}
+
+{{#each response.payload}}
     <div id={{this.id}}>
         <h3>{{this.title}}</h3>
         <ul>
@@ -41,11 +72,12 @@
             <li>Código de producto: {{this.code}}</li>
             <li>Stock:{{this.stock}}</li>
             <li>Categoría: {{this.category}}</li>
-            <li>{{this.thumbnails}}</li>
+            <li>{{this.thumbnail}}</li>
         </ul>
         <hr />
     </div>
 {{/each}}
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/socket.io/socket.io.js"></script>
 <script src="/js/realTimeProducts.js"></script>

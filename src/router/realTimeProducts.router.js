@@ -1,72 +1,33 @@
 import express from "express";
-import ProductManager from "../manager/ProductManager.js";
+import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
 
-const productManager = new ProductManager();
+const productManager = new ProductManagerMongo();
 const router = express.Router();
 
-let socketServer; // Variable para almacenar la instancia de socketServer
+function auth(req, res, next) {
+    if (req.session?.user) return next()
 
-// Método para configurar la instancia de socketServer
-router.setSocketServer = (server) => {
-    socketServer = server;
-    socketServer.on("connection", (socket) => {
-        console.log("Página actualizada", socket.id);
+    res.redirect("/login")
+}
 
-        socket.on("clientAddProduct", async (data) => {
-            let validador = await productManager.isNotValidCode(
-                data.title,
-                data.description,
-                data.code,
-                data.price,
-                data.stock,
-                data.category,
-                data.thumbnails
-            );
-
-            if (!validador) {
-                await productManager.addProduct(
-                    data.title,
-                    data.description,
-                    data.code,
-                    data.price,
-                    data.stock,
-                    data.category,
-                    data.thumbnails
-                );
-
-                console.log("Producto agregado exitosamente");
-                console.log("El id es : ", productManager.showId());
-
-                const dataProducts = { ...data, id: productManager.showId() };
-                socket.emit("ServerAddProducts", dataProducts);
-            } else {
-                console.error("el producto no es valido");
-            }
-        });
-    });
-};
-
-router.get("/", async (req, res) => {
+router.get("/", auth, async (req, res) => {
     try {
-        const limit = req.query.limit;
-        let products = await productManager.getProducts();
+        const limit = parseInt(req.query?.limit || 10);
+        const page = parseInt(req.query?.page || 1);
+        const query = req.query?.query || "";
+        const category = req.query?.category || "";
+        const stockAvailability = req.query?.stockAvailability || "all";
+        const priceOrder = req.query?.priceOrder || "ascending";
 
-        if (products.length === 0) {
+        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+
+        if (response.payload.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
         }
-
-        if (limit) {
-            const limitNumber = parseInt(limit, 10);
-            if (!isNaN(limitNumber) && limitNumber >= 0) {
-                products = products.slice(0, limitNumber);
-            }
-        }
-
-        const reversedproducts = [...products].reverse().filter((p) => p.title);
-
         res.render("realtimeproducts", {
-            reversedproducts,
+            style: "realTimeProducts.css",
+            response,
         });
     } catch (error) {
         console.error("Error al obtener la lista de productos:", error);
