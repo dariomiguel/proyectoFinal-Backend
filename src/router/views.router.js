@@ -87,6 +87,8 @@ router.get("/home", justPublicWithoutSession, async (req, res) => {
 
         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
+        if (response.status === "404") res.render("error404", {})
+
         res
             .render("home", {
                 style: "home.css",
@@ -113,6 +115,8 @@ router.get("/products", auth, async (req, res) => {
         const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
         const user = req.session.user
 
+        if (response.status === "404") return res.redirect("/error404")
+
         res
             .render("products", {
                 style: "products.css",
@@ -125,6 +129,21 @@ router.get("/products", auth, async (req, res) => {
         res
             .status(500)
             .json({ Error: "Hubo un error al obtener la lista de productos" });
+    }
+});
+
+router.get("/error404", auth, async (req, res) => {
+    try {
+        res
+            .render("error404", {
+                style: "products.css",
+            })
+
+    } catch (error) {
+        console.error("Products, Error al obtener la vista:", error);
+        res
+            .status(500)
+            .json({ Error: "Hubo un error al obtener la vista" });
     }
 });
 

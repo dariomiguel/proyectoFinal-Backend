@@ -28,10 +28,9 @@ class ProductManagerMongo {
                 sort: sort
             })
 
-            if (page > result.totalPages || page < 1 || (isNaN(page))) result.page = 1;
-
             let status = "success";
-            if (result.docs.length === 0) status = "error";
+
+            if (page > result.totalPages || page < 1 || (isNaN(page)) || result.docs.length === 0) status = "404"
 
             const response = {
                 status: status,
