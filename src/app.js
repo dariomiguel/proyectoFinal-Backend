@@ -1,9 +1,6 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import mongoose from "mongoose";
-
 import { configureSocket } from "./socketConfig.js";
-
 import __dirname from "./utils.js";
 
 import cartsRouter from "./router/carts.router.js";
@@ -13,9 +10,13 @@ import productsRouter from "./router/products.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import viewsRouter from "./router/views.router.js";
 
-import session from "express-session";
+import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
+import session from "express-session";
 import sessionRouter from "./router/session.router.js"
+
+import passport from "passport";
+import initializePassport from "./config/passport.config.js";
 
 const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
@@ -27,6 +28,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: urlMongo,
         dbName: "login",
+        ttl: 100,
         mongoOption: {
             useNewUrlParser: true,
             useUnifiedTopology: true
@@ -36,8 +38,6 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }))
-
-
 
 //Configuramos el motor de plantillas
 app.engine("handlebars", handlebars.engine({
@@ -64,6 +64,11 @@ app.use("/api/products", productsRouter);
 app.use("/api/lastProduct", lastProductRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
+
+//PASSPORT
+initializePassport()
+app.use(passport.initialize());
+app.use(passport.session())
 //Ruta de los logins
 app.use("/api/session", sessionRouter)
 
