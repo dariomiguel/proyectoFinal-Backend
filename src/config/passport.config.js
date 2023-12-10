@@ -11,6 +11,11 @@ const initializePassport = () => {
         usernameField: "email",
     }, async (username, password, done) => {
         try {
+            if (!username || !password) {
+                console.error("Nombre de usuario o contraseña no proporcionados");
+                return done(null, false, { message: "Nombre de usuario o contraseña no proporcionados" });
+            }
+
             if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
                 const user = {
                     first_name: "admin",
@@ -21,19 +26,23 @@ const initializePassport = () => {
                     role: "admin",
                     _id: 0
                 }
+
                 return done(null, user)
             }
             const user = await UserModel.findOne({ email: username }).lean().exec()
             if (!user) {
                 console.error("Usuario inexistente!");
-                return done(null, false)
+
+                return done({ status: 400 }, false, { message: "Usuario no encontrado" });
             }
             if (!isValidPassword(user, password)) {
-                console.error("Contraseña no valida")
-                return done(null, false)
+                const errorObject = { status: 403, message: "Contraseña incorrecta!" };
+                console.error("Error:", errorObject.status, errorObject.message);
+
+                return done(errorObject);
             }
 
-            return done(null, user)
+            done(null, user)
         } catch (error) {
             return done("Error Login", error)
         }
@@ -52,7 +61,8 @@ const initializePassport = () => {
         }
         try {
             const user = await UserModel.findOne({ email: username })
-            if (user) {
+
+            if (user || username === "adminCoder@coder.com") {
                 console.log("El usuario ya existe");
 
                 return done(null, false)
@@ -70,7 +80,7 @@ const initializePassport = () => {
 
             return done(null, result)
         } catch (error) {
-            done("error to register", error)
+            done(null, error)
         }
     }))
 
