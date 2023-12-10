@@ -43,11 +43,18 @@ const initializePassport = () => {
         passReqToCallback: true,
         usernameField: "email",
     }, async (req, username, password, done) => {
+
         const { first_name, last_name, email, age } = req.body;
+        if (!first_name || !last_name || !age || !email || !password) {
+            console.log("Faltan completar los campos");
+
+            return done(null, false)
+        }
         try {
             const user = await UserModel.findOne({ email: username })
             if (user) {
                 console.log("El usuario ya existe");
+
                 return done(null, false)
             }
 
@@ -60,6 +67,7 @@ const initializePassport = () => {
             }
 
             const result = await UserModel.create(newUser)
+
             return done(null, result)
         } catch (error) {
             done("error to register", error)
