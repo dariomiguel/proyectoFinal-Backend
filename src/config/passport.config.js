@@ -11,6 +11,18 @@ const initializePassport = () => {
         usernameField: "email",
     }, async (username, password, done) => {
         try {
+            if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
+                const user = {
+                    first_name: "admin",
+                    last_name: "admin",
+                    email: "adminCoder@coder.com",
+                    age: 0,
+                    password: "adminCod3r123",
+                    role: "admin",
+                    _id: 0
+                }
+                return done(null, user)
+            }
             const user = await UserModel.findOne({ email: username }).lean().exec()
             if (!user) {
                 console.error("Usuario inexistente!");
