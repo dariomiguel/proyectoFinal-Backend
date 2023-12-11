@@ -38,4 +38,18 @@ router.get("/logout", (req, res) => {
     }
 });
 
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => { });
+
+router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/error" }),
+    (req, res) => {
+        console.log("Callback: ", req.user);
+
+        req.session.user = req.user;
+        console.log("Session iniciada correctamante", req.session.user);
+
+        res.redirect("/")
+    })
+
+router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
+
 export default router

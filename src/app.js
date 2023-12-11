@@ -28,7 +28,7 @@ app.use(session({
     store: MongoStore.create({
         mongoUrl: urlMongo,
         dbName: "login",
-        ttl: 100,
+        ttl: 1000,
         mongoOption: {
             useNewUrlParser: true,
             useUnifiedTopology: true
