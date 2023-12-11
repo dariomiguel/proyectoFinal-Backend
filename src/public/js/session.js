@@ -20,16 +20,33 @@ loginForm.addEventListener("submit", async (event) => {
                 email, password
             }),
         });
-        if (response.status === 401) {
+
+        console.log("El status es:", response.status);
+
+        if (response.status === 400) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error de inicio de sesión',
-                text: 'El usuario o la contraseña son incorrectos',
+                text: 'Usuario incorrecto',
             })
-        } else if (response.status === 200) {
+        }
+        else if (response.status === 403) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Error de inicio de sesión',
+                text: 'La contraseña es incorrecta',
+            })
+        }
+        else if (response.status === 500) {
+            Swal.fire({
+                icon: 'error',
+                title: 'ERROR',
+                text: 'ha ocurrido un error en el sistema!!',
+            })
+        }
+        else if (response.status === 200) {
             window.location.href = "/products";
         }
-
 
     } catch (error) {
         console.error("Error en el login:", error);

@@ -1,42 +1,24 @@
 import { Router } from "express";
-import UserModel from "../dao/models/user.model.js";
+import passport from "passport";
 
 const router = Router();
 
-router.post("/login", async (req, res) => {
+router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
     try {
-        const { email, password } = req.body
-        if (email === "adminCoder@coder.com" && password === "adminCod3r123") {
-            const user = {
-                first_name: "admin",
-                last_name: "admin",
-                email: "adminCoder@coder.com",
-                age: 0,
-                password: "adminCod3r123",
-                role: "admin"
-            }
-            req.session.user = user;
-            return res.status(200).redirect("/products")
-        }
-        let user = await UserModel.findOne({ email, password })
+        if (!req.user) return res.status(400).send({ status: "error", error: "Credenciales no validas!" })
+        req.session.user = req.user
 
-        if (!user) return res.status(401).send("Authentication failed");
-
-        req.session.user = user;
         return res.status(200).redirect("/products")
-
-    } catch (error) {
+    } catch {
         console.error("Error en el controlador /login:", error);
+
         return res.status(500)
     }
 })
 
-router.post("/register", async (req, res) => {
+router.post("/register", passport.authenticate("register", { failureRedirect: "/" }), async (req, res) => {
     try {
-        const user = req.body
-        await UserModel.create(user)
-
-        return res.redirect("/")
+        return res.status(200).redirect("/")
     } catch (error) {
         console.error("Error en el controlador /register:", error);
         return res.status(500).send("Error en el servidor");
@@ -55,5 +37,19 @@ router.get("/logout", (req, res) => {
         return res.status(500).send("Error en el servidor");
     }
 });
+
+router.get("/github", passport.authenticate("github", { scope: ["user:email"] }), async (req, res) => { });
+
+router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/error" }),
+    (req, res) => {
+        console.log("Callback: ", req.user);
+
+        req.session.user = req.user;
+        console.log("Session iniciada correctamante", req.session.user);
+
+        res.redirect("/")
+    })
+
+router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
 
 export default router

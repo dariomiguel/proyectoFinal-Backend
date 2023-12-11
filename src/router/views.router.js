@@ -65,13 +65,18 @@ router.get("/login", justPublicWithoutSession, (req, res) => {
 })
 
 router.get("/register", justPublicWithoutSession, (req, res) => {
-    return res.render("register", {})
+    return res.render("register", {
+        style: "login.css"
+    })
 })
 
 router.get("/profile", auth, (req, res) => {
     const user = req.session.user
 
-    res.render("profile", user)
+    res.render("profile", {
+        style: "login.css",
+        user
+    })
 })
 
 
