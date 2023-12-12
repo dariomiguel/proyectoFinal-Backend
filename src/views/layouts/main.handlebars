@@ -9,22 +9,25 @@
         <title>Handlebars / Websockets</title>
         <link rel="stylesheet" href="/css/{{style}}" />
     </head>
+    
     <body>
-        {{#if showHeaderLite}}
-            {{> headerLite}}
-        {{!-- {{else if showHeader2}}
-            {{> header2}}
-        {{else if showHeader3}}
-            {{> header3}} --}}
-        {{/if}}
-        {{!-- <header>
-            <a href="/home">home</a><br />
-            <a href="/login">Login</a><br />
-            <a href="/register">Register</a><br />
-            <a href="/profile">Profile</a><br />
-            <hr />
-        </header> --}}
-        {{{body}}}
-
+        <div class="bodyContainer">
+            {{#if showHeaderLite}}
+                {{> headerLite}}
+            {{!-- {{else if showHeader2}}
+                {{> header2}}
+            {{else if showHeader3}}
+                {{> header3}} --}}
+            {{/if}}
+            {{!-- <header>
+                <a href="/home">home</a><br />
+                <a href="/login">Login</a><br />
+                <a href="/register">Register</a><br />
+                <a href="/profile">Profile</a><br />
+                <hr />
+            </header> --}}
+            {{{body}}}
+            {{> footer}}
+        </div>
     </body>
 </html>
