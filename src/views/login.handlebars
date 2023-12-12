@@ -1,19 +1,20 @@
-<h1>Login</h1>
+<div class="container">
+    <div class="container__column--left">
+        <h1>Ingresá tu e‑mail</h1>
+    </div>
 
-<form id="sessionForm">
-    Email:<input type="text" name="email" id="emailLogin" required /><br />
-    Password:<input
-        type="password"
-        name="password"
-        id="passLogin"
-        required
-    /><br />
-
-    <button type="submit">Login</button>
-</form>
+    <div class="container__column--right">
+        <form id="sessionForm">
+            <p>E-mail</p>
+            <input type="text" name="email" id="emailLogin" required />
+            <p>Password</p>
+            <input type="password" name="password" id="passLogin" required />
+            <button type="submit">Continuar</button>
+        </form>
+        <h2> Iniciar sesión con GITHUB</h2>
+        <a href="/api/session/github"><button>Login con GITHUB</button></a>
+    </div>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="/js/session.js"></script>
-
-<h1> Iniciar sesión con GITHUB</h1>
-<a href="/api/session/github"><button>Login con GITHUB</button></a>

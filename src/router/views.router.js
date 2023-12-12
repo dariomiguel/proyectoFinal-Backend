@@ -60,7 +60,8 @@ router.get("/", justPublicWithoutSession, (req, res) => {
 
 router.get("/login", justPublicWithoutSession, (req, res) => {
     return res.render("login", {
-        style: "login.css"
+        style: "style.css",
+        showHeaderLite: true
     })
 })
 
