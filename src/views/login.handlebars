@@ -1,9 +1,15 @@
 <div class="container">
     <div class="container__column--left">
-        <h1>Ingresá tu e‑mail</h1>
+        <div class="externalLoginContainer">
+            <h2> Iniciar sesión con GITHUB</h2>
+            <a href="/api/session/github"><button>Login con GITHUB</button></a>
+        </div>
     </div>
 
     <div class="container__column--right">
+        <div>
+            <h1>Ingresá tu e‑mail</h1>
+        </div>
         <form id="sessionForm">
             <p>E-mail</p>
             <input type="text" name="email" id="emailLogin" required />
@@ -12,8 +18,6 @@
             <button type="submit">Continuar</button>
             <a href="/register">Crear cuenta</a>
         </form>
-        <h2> Iniciar sesión con GITHUB</h2>
-        <a href="/api/session/github"><button>Login con GITHUB</button></a>
     </div>
 </div>
 
