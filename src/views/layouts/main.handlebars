@@ -12,13 +12,15 @@
     
     <body>
         <div class="bodyContainer">
-            {{#if showHeaderLite}}
-                {{> headerLite}}
-            {{!-- {{else if showHeader2}}
-                {{> header2}}
-            {{else if showHeader3}}
-                {{> header3}} --}}
-            {{/if}}
+            <header>
+                {{#if showHeaderLite}}
+                    {{> headerLite}}
+                {{else if showHeaderLogueado}}
+                    {{> headerLogueado}}
+                {{!-- {{else if showHeader3}}
+                    {{> header3}} --}}
+                {{/if}}
+            </header>
             {{!-- <header>
                 <a href="/home">home</a><br />
                 <a href="/login">Login</a><br />

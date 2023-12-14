@@ -9,6 +9,22 @@ a{
     text-decoration: none;
 }
 
+:root {
+    --color-primario: #a6f0f7;
+    --gris-borde:#bfbfbf;
+    --gris-bordeOscuro:#6e6e6e;
+    --gris-bordeClaro:#e6e6e6
+  }
+
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* =-          / *   H E A D E R S   * /          -= */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* =-            H E A D E R   L I T E            -= */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
 .bodyContainer{
     display: flex;
     flex-direction: column;
@@ -20,7 +36,7 @@ a{
     height: 3.5rem;
 }
 
-.container{
+.container__generalLogin{
     display: flex;
     flex-grow: 1; /*Importante para que el elemento ocupe el espacio sobrante */
     align-items: flex-start;
@@ -53,7 +69,7 @@ a{
     line-height: 22px;
 }
 
-button{
+.container__generalLogin  button{
     height: 2rem;
     padding: 0 1.5rem;
     margin: 1.5rem 0;
@@ -65,7 +81,7 @@ button{
     border-radius: 0.375rem;
 }
 
-button:hover{
+.container__generalLogin button:hover{
     cursor: pointer;
     transition: .2s ease-in;
     background-color: #2968c8;
@@ -91,4 +107,84 @@ button:hover{
     margin: 20px 0;
     text-align: left;
     flex-grow: 1;
+}
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* =-        H E A D E R   L O G U E A D O        -= */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+.headerLogueado{
+    height: 100px;
+    background-color: var(--color-primario);
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid #d5d5d5;
+}
+
+.headerLogueado .container{
+    margin: 0 4rem;
+    display: grid;
+    grid-template-columns: 10rem minmax(340px, 580px) minmax(350px, 390px);
+    align-items: center;
+    grid-column-gap: 24px ;
+    padding: 8px 10px 12px 10px;
+}
+
+.headerLogueado .container > :last-child {
+    align-self: end;
+}
+
+.logo{
+    height: 3.5rem;
+}
+
+.container__buscador{
+    height: 40px;
+    display: flex;
+    border-radius: 2px;
+    box-shadow: 0 1px 2px 0 rgba(0,0,0,.2);
+    background-color: #FFF;
+}
+
+.container__buscador *{
+    border:none;
+    background-color: #FFF;
+    border-radius: 2px;
+    font-size: 16px;
+}
+
+.container__buscador input{
+    flex-grow: 1;
+    padding-left: 1rem;
+}
+.container__buscador button {
+    padding: .5rem;
+    position: relative;
+}
+.container__buscador button:hover {
+    cursor: pointer;
+}
+/* linea que divide el input del boton */
+.container__buscador button::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    width: 1px;
+    height: 1.5rem;
+    background-color: var(--gris-bordeClaro);
+    cursor: pointer;
+}
+
+.container__menus{
+    display: flex;
+    justify-content: flex-end;
+}
+
+.container__menus a {
+    margin-left: 25px;
+    color:#000;
+    font-size: 14px;
+
 }

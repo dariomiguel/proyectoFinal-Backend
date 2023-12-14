@@ -125,7 +125,8 @@ router.get("/products", auth, async (req, res) => {
 
         res
             .render("products", {
-                style: "products.css",
+                style: "style.css",
+                showHeaderLogueado: true,
                 result: response,
                 user: user
             })

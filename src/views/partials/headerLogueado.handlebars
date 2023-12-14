@@ -1,7 +1,30 @@
-<header>
-    <a href="/home">home</a><br />
-    <a href="/login">Login</a><br />
-    <a href="/register">Register</a><br />
-    <a href="/profile">Profile</a><br />
-    <hr />
-</header>
+<nav class="headerLogueado">
+    <div class="container">
+        <div class="container__logo">
+            <a href="/home"><img
+                    src="/img/iconoCapyart.png"
+                    alt="logo CapyArt"
+                    class="logo"
+                />
+            </a>
+        </div>
+        <div class="container__buscador">
+            <input
+                id="query"
+                type="text"
+                value="{{result.query}}"
+                placeholder="Buscar productos"
+            />
+            <button
+                id="btnSearch"
+                {{! Colocamos un role y aria-label para mejorar accesibilidad }}
+                role="button"
+                aria-label="Search"
+            >Search</button>
+        </div>
+        <nav class="container__menus">
+            <a href="/profile">{{user.first_name}}</a>
+            <a href="/api/carts/0">Carrito</a>
+        </nav>
+    </div>
+</nav>
