@@ -17,17 +17,10 @@
                     {{> headerLite}}
                 {{else if showHeaderLogueado}}
                     {{> headerLogueado}}
-                {{!-- {{else if showHeader3}}
-                    {{> header3}} --}}
+                {{else}}
+                    {{> headerNoLog}}
                 {{/if}}
             </header>
-            {{!-- <header>
-                <a href="/home">home</a><br />
-                <a href="/login">Login</a><br />
-                <a href="/register">Register</a><br />
-                <a href="/profile">Profile</a><br />
-                <hr />
-            </header> --}}
             {{{body}}}
             {{> footer}}
         </div>
