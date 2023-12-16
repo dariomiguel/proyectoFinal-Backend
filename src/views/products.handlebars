@@ -1,9 +1,19 @@
 <div class="generalContainer__products">
     
-    <h1>Bienvenido {{user.first_name}} {{user.last_name}}!!</h1>
-    <p>{{user.email}}</p>
-    <h4><b>{{user.role}}</b></h4>
-    <br>
+    <div class="container__topSection">
+        <div class="userWelcome">
+            <h1>Bienvenido a CapyArt {{user.first_name}} {{user.last_name}}!!</h1>
+            <p>{{user.email}}</p>
+            <h4><b>{{user.role}}</b></h4>
+        </div>
+        <div class="container__priceOrder">
+            <label for="priceOrder">Ordenar por Precio:</label>
+            <select id="priceOrder" name="priceOrder">
+                <option value="ascending">Ascendente</option>
+                <option value="descending">Descendente</option>
+            </select>
+        </div>
+    </div>
     <div class="container__productsAndFilter">
         <div class="container__filter">
         
@@ -31,11 +41,7 @@
                 <option value="outOfStock">Agotado</option>
             </select><br />
         
-            <label for="priceOrder">Ordenar por Precio:</label>
-            <select id="priceOrder" name="priceOrder">
-                <option value="ascending">Ascendente</option>
-                <option value="descending">Descendente</option>
-            </select>
+
             <br>
             <input id="prevPage" type="hidden" value="{{result.prevPage}}">
             <input id="nextPage" type="hidden" value="{{result.nextPage}}">
@@ -67,4 +73,4 @@
     </div>
 </div>
 
-
+<script src="/js/home.js"></script>
