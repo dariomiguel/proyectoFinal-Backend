@@ -14,7 +14,7 @@ a{
     --gris-borde:#bfbfbf;
     --gris-bordeOscuro:#6e6e6e;
     --gris-bordeClaro:#e6e6e6
-  }
+}
 
 
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
@@ -183,8 +183,55 @@ a{
 }
 
 .container__menus a {
-    margin-left: 25px;
     color:#000;
     font-size: 14px;
+    border-left: #86c2c064 solid 2px;
+    padding: 0 1rem;
+}
 
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* =-                   M A I N                   -= */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+/* =-               P R O D U C T S               -= */
+/* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+.generalContainer__products{
+    background-color:#ededed;
+}
+
+.container__productsAndFilter{
+    display: grid;
+    grid-template-columns: minmax(210px, 294px) 1fr;
+}
+
+.container__filter{
+    padding: 0 1.5rem;
+}
+
+.container__card{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    padding: 2rem;
+}
+
+.cardProduct{
+    background-color: #fff;
+    width: 100%;
+    height: 36rem;
+    padding: 1.5rem;
+    border-radius: 0.5rem;
+
+}
+
+.contenedor__pasarPaginas{
+    display: flex;
+    justify-content: center;
+    padding: 2rem 0;
+}
+
+.contenedor__pasarPaginas *{
+    padding: 0 2rem;
 }

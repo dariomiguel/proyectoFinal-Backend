@@ -105,7 +105,6 @@ router.get("/", async (req, res) => {
 router.get("/:cid", auth, async (req, res) => {
     try {
         const cartPorId = await cartManagerMongo.getCartById(req.params.cid);
-        console.log("Q es cart por id 🤔", cartPorId);
         if (cartPorId === null) {
             res
                 .status(404)
