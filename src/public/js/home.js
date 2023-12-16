@@ -1,11 +1,11 @@
 // Función para obtener los valores de los elementos
-const getFormValues = () => {
+const getFormValues = (ordenDePrecios) => {
     return {
         limit: document.querySelector("#limit").value,
         query: document.querySelector("#query").value,
         category: document.querySelector("#category").value,
         stockAvailability: document.querySelector("#stockAvailability").value,
-        priceOrder: document.querySelector("#priceOrder").value,
+        priceOrder: ordenDePrecios || document.querySelector("#priceOrder").value,
     };
 };
 
@@ -39,3 +39,12 @@ document.querySelector("#btnSearch").onclick = () => {
     const values = getFormValues();
     redirectToPage(nextPage, values);
 };
+
+
+function orderPriceSelected() {
+    let orderLista = document.getElementById("priceOrder");
+    let opcionSeleccionada = orderLista.options[orderLista.selectedIndex].value;
+
+    const values = getFormValues(opcionSeleccionada);
+    redirectToPage(1, values);
+}
