@@ -1,65 +1,76 @@
-
-<h1>Lista de productos</h1>
-<h3>Bienvenido {{user.first_name}} {{user.last_name}}!!</h3>
-<h4><b>{{user.role}}</b></h4>
-<p>{{user.email}}</p>
-
-Total productos :
-{{result.totalDocs}}
-<br />
-Pages:
-{{result.page}}
-/
-{{result.totalPages}}<br />
-Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" min="1" max="{{result.totalDocs}}"/>
-Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric"  min="1" max="{{result.totalPages}}"/>
-<br>
-Busquedad por título: <input id="query" type="text" value="{{result.query}}">
-<label for="category">Seleccionar Categoría:</label>
-<select id="category" name="category">
-    <option value="">---</option>
-    <option value="cuadros">Cuadros</option>
-    <option value="artesanias">Artesanías</option>
-    <option value="bordados">Bordados</option>
-    <option value="esculturas">Esculturas</option>
-</select>
-<button id="btnSearch">Search</button>
-<br>
-<label for="stockAvailability">Disponibilidad de Stock:</label>
-<select id="stockAvailability" name="stockAvailability">
-    <option value="all">Todos</option>
-    <option value="inStock">En Stock</option>
-    <option value="outOfStock">Agotado</option>
-</select>
-
-<label for="priceOrder">Ordenar por Precio:</label>
-<select id="priceOrder" name="priceOrder">
-    <option value="ascending">Ascendente</option>
-    <option value="descending">Descendente</option>
-</select>
-<br>
-<input id="prevPage" type="hidden" value="{{result.prevPage}}">
-<input id="nextPage" type="hidden" value="{{result.nextPage}}">
-
-<a id="btnPrev" href="#" {{#unless result.hasPrevPage}}style="display:none" {{/unless}}>Previous</a>
-<a id="btnNext" href="#" {{#unless result.hasNextPage}}style="display:none" {{/unless}}>Next</a>
-
-{{#each result.payload}}
-    <div>
-        <p>{{this.title}}</p>
-        <p>$ {{this.price}}</p>
-        <p>N° Id: {{this.id}}</p>
-        <p>{{this.description}}</p>
-        <p>Código de producto: {{this.code}}</p>
-        <p>Cant. Stock:{{this.stock}}</p>
-        <p>Categoría: {{this.category}}</p>
-        <p>{{this.thumbnail}}</p>
-        <button class="btnAddCart" data-product-id="{{this._id}}">Agregar al carrito</button>
-        <hr />
+<div class="generalContainer__products">
+    
+    <div class="container__topSection">
+        <div class="userWelcome">
+            <h1>Bienvenido a CapyArt {{user.first_name}} {{user.last_name}}!!</h1>
+            <p>{{user.email}}</p>
+            <h4><b>{{user.role}}</b></h4>
+        </div>
+        <div class="container__priceOrder">
+            <label for="priceOrder">Ordenar por Precio:</label>
+            <select id="priceOrder" name="priceOrder">
+                <option value="ascending">Ascendente</option>
+                <option value="descending">Descendente</option>
+            </select>
+        </div>
     </div>
-{{/each}}
+    <div class="container__productsAndFilter">
+        <div class="container__filter">
+        
+            <h3>Lista de productos</h3>
+        
+            <h5>{{result.totalDocs}} resultados</h5>
+            <br />
+        
+            Limit:<input id="limit" type="number" value="{{result.limit}}" inputmode="numeric" min="1" max="{{result.totalDocs}}"/>
+            Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric"  min="1" max="{{result.totalPages}}"/>
+            <br>
+            <label for="category">Seleccionar Categoría:</label><br />
+            <select id="category" name="category">
+                <option value="">---</option>
+                <option value="cuadros">Cuadros</option>
+                <option value="artesanias">Artesanías</option>
+                <option value="bordados">Bordados</option>
+                <option value="esculturas">Esculturas</option>
+            </select>
+            <br>
+            <label for="stockAvailability">Disponibilidad de Stock:</label>
+            <select id="stockAvailability" name="stockAvailability">
+                <option value="all">Todos</option>
+                <option value="inStock">En Stock</option>
+                <option value="outOfStock">Agotado</option>
+            </select><br />
+        
 
+            <br>
+            <input id="prevPage" type="hidden" value="{{result.prevPage}}">
+            <input id="nextPage" type="hidden" value="{{result.nextPage}}">
+        
+        
+        </div>
+        <div class="container__card">
+            {{#each result.payload}}
+                <div class="cardProduct">
+                    <p class="container__card--title">{{this.title}}</p>
+                    <p>$ {{this.price}}</p>
+                    <p>N° Id: {{this.id}}</p>
+                    <p>{{this.description}}</p>
+                    <p>Código de producto: {{this.code}}</p>
+                    <p>Cant. Stock:{{this.stock}}</p>
+                    <p>Categoría: {{this.category}}</p>
+                    <p>{{this.thumbnail}}</p>
+                    <button class="btnAddCart" data-product-id="{{this._id}}">Agregar al carrito</button>
+                    <hr />
+                </div>
+            {{/each}}
+        </div>
+    </div>
+    
+    <div class="contenedor__pasarPaginas">
+        <a id="btnPrev" href="#" {{#unless result.hasPrevPage}}style="display:none" {{/unless}}>< Anterior</a>
+        {{result.page}} de {{result.totalPages}}
+        <a id="btnNext" href="#" {{#unless result.hasNextPage}}style="display:none" {{/unless}}>Siguiente ></a>
+    </div>
+</div>
 
-<script src="/socket.io/socket.io.js"></script>
 <script src="/js/home.js"></script>
-<script src="/js/products.js"></script>

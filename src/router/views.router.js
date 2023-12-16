@@ -60,7 +60,8 @@ router.get("/", justPublicWithoutSession, (req, res) => {
 
 router.get("/login", justPublicWithoutSession, (req, res) => {
     return res.render("login", {
-        style: "login.css"
+        style: "style.css",
+        showHeaderLite: true
     })
 })
 
@@ -124,7 +125,8 @@ router.get("/products", auth, async (req, res) => {
 
         res
             .render("products", {
-                style: "products.css",
+                style: "style.css",
+                showHeaderLogueado: true,
                 result: response,
                 user: user
             })
