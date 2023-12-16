@@ -38,7 +38,6 @@ a{
 
 .container__generalLogin{
     display: flex;
-    flex-grow: 1; /*Importante para que el elemento ocupe el espacio sobrante */
     align-items: flex-start;
     justify-content: space-evenly;
     margin: 5rem 0 2rem 0;
@@ -112,6 +111,10 @@ a{
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
 /* =-        H E A D E R   L O G U E A D O        -= */
 /* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-= */
+
+main{
+    flex-grow: 1;/* Importante para que el elemento ocupe el espacio sobrante */
+}
 
 .headerLogueado{
     height: 100px;
