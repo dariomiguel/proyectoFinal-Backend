@@ -8,7 +8,8 @@
         </div>
         <div class="container__priceOrder">
             <label for="priceOrder">Ordenar por Precio:</label>
-            <select id="priceOrder" name="priceOrder">
+            <select id="priceOrder" name="priceOrder" onchange="orderPriceSelected()">
+                <option value="">---</option>
                 <option value="ascending">Ascendente</option>
                 <option value="descending">Descendente</option>
             </select>
