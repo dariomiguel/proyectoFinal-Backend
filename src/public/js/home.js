@@ -42,9 +42,9 @@ document.querySelector("#btnSearch").onclick = () => {
 
 
 function orderPriceSelected() {
-    let orderLista = document.getElementById("priceOrder");
-    let opcionSeleccionada = orderLista.options[orderLista.selectedIndex].value;
+    let listOrder = document.getElementById("priceOrder");
+    let selectedOption = listOrder.options[listOrder.selectedIndex].value;
 
-    const values = getFormValues(opcionSeleccionada);
+    const values = getFormValues(selectedOption);
     redirectToPage(1, values);
 }
