@@ -52,16 +52,24 @@
         <div class="container__card">
             {{#each result.payload}}
                 <div class="cardProduct">
-                    <p class="container__card--title">{{this.title}}</p>
-                    <p>$ {{this.price}}</p>
-                    <p>N° Id: {{this.id}}</p>
-                    <p>{{this.description}}</p>
-                    <p>Código de producto: {{this.code}}</p>
-                    <p>Cant. Stock:{{this.stock}}</p>
-                    <p>Categoría: {{this.category}}</p>
-                    <p>{{this.thumbnail}}</p>
-                    <button class="btnAddCart" data-product-id="{{this._id}}">Agregar al carrito</button>
-                    <hr />
+                    <div class="container__card--image">
+                        {{#if this.imageValidationResult}}
+                            <img src={{this.thumbnail}} alt="{{this.description}}">
+                        {{else}}
+                            <img src="https://imgur.com/K4pX2cp.png" alt="{{this.description}}">
+                        {{/if}}
+                    </div>
+                    <div class="container__card--body">
+                        <p class="container__card--title">{{this.title}}</p>
+                        <p>$ {{this.price}}</p>
+                        <p>N° Id: {{this.id}}</p>
+                        <p>{{this.description}}</p>
+                        <p>Código de producto: {{this.code}}</p>
+                        <p>Cant. Stock:{{this.stock}}</p>
+                        <p>Categoría: {{this.category}}</p>
+                        <button class="btnAddCart" data-product-id="{{this._id}}">Agregar al carrito</button>
+                        <hr />
+                    </div>
                 </div>
             {{/each}}
         </div>

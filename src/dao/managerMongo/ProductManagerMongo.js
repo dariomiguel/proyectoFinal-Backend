@@ -1,5 +1,7 @@
 import ProductModel from "../models/products.model.js"
 import __dirname from "../../utils.js"
+//Import para validar imagenes
+import axios from "axios";
 
 class ProductManagerMongo {
 
@@ -32,9 +34,15 @@ class ProductManagerMongo {
 
             if (page > result.totalPages || page < 1 || (isNaN(page)) || result.docs.length === 0) status = "404"
 
+            //Iteramos en cada objeto y verificamos que la url es valida para usar
+            const resultWithImageResult = await Promise.all(result.docs.map(async (doc) => {
+                const validUrl = await this.validateImage(doc.thumbnail);
+                return { ...doc, imageValidationResult: validUrl };
+            }));
+
             const response = {
                 status: status,
-                payload: result.docs,
+                payload: resultWithImageResult,
                 totalPages: result.totalPages,
                 prevPage: result.prevPage,
                 nextPage: result.nextPage,
@@ -186,6 +194,21 @@ class ProductManagerMongo {
             // Manejar errores
             console.error("Error al obtener el último ID:", error);
             throw error;
+        }
+    }
+
+    validateImage = async (url) => {
+        try {
+            await axios({
+                method: 'get',
+                url: url,
+                responseType: 'arraybuffer',
+            });
+
+            return url
+        } catch (error) {
+            console.error("No se encontró : ", url, error.message);
+            return false
         }
     }
 }
