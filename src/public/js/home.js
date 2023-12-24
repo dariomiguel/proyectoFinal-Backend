@@ -1,11 +1,16 @@
 // Función para obtener los valores de los elementos
 const getFormValues = (ordenDePrecios) => {
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const categoryElement = document.querySelector("#category");
+    const selectedCategory = categoryElement ? categoryElement.value : null;
+
     return {
         limit: document.querySelector("#limit").value,
         query: document.querySelector("#query").value,
-        category: document.querySelector("#category").value,
+        category: selectedCategory || urlParams.get("category") || "",
         stockAvailability: document.querySelector("#stockAvailability").value,
-        priceOrder: ordenDePrecios || document.querySelector("#priceOrder").value,
+        priceOrder: ordenDePrecios || document.querySelector("#priceOrder").value || urlParams.get("priceOrder"),
     };
 };
 
@@ -35,9 +40,8 @@ document.querySelector("#btnNext").onclick = () => {
 
 // Evento para el botón "Search"
 document.querySelector("#btnSearch").onclick = () => {
-    const nextPage = document.querySelector("#page").value;
     const values = getFormValues();
-    redirectToPage(nextPage, values);
+    redirectToPage(1, values);
 };
 
 
@@ -48,3 +52,11 @@ function orderPriceSelected() {
     const values = getFormValues(selectedOption);
     redirectToPage(1, values);
 }
+
+// Al cargar la página, establecer los valores iniciales
+window.onload = () => {
+    const categoryFromUrl = getCategoryFromUrl();
+    if (categoryFromUrl) {
+        document.querySelector("#category").value = categoryFromUrl;
+    }
+};
