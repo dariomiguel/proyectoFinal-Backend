@@ -25,6 +25,7 @@ const initializePassport = () => {
                     age: 0,
                     password: "adminCod3r123",
                     role: "admin",
+                    carts: [],
                     _id: 0
                 }
 

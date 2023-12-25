@@ -6,9 +6,7 @@ class CartManagerMongo {
 
     createCart = async () => {
         try {
-            const newId = await this.createID();
             const cartToAdd = {
-                id: newId,
                 products: []
             }
 
@@ -17,25 +15,6 @@ class CartManagerMongo {
 
         } catch (error) {
             throw error
-        }
-    }
-
-    createID = async () => {
-        try {
-            //*Buscamos el resultado que sea mas grande en la base de datos.
-            const valorMaximo = await CartModel.findOne().sort("-id").exec();
-            if (!valorMaximo) return 0;
-
-            //*Obtenemos todos los "products" para saber cuantos hay y verificar que coincida con el valor máximo (.lean se usa para convertilo en un objeto javascript)
-            const todosLosCarritos = await CartModel.find({}, "id").lean();
-            if (valorMaximo.id === todosLosCarritos.length - 1) return valorMaximo.id + 1
-
-            //*Buscamos cual id falta en la sucesión de números ID.
-            return await this.findID();
-
-        } catch (error) {
-            console.error("Hubo un error en la creación del ID❗❗❗\n", error);
-            throw error;
         }
     }
 
@@ -74,7 +53,7 @@ class CartManagerMongo {
     getCartById = async (cId) => {
         try {
             //* Buscamos elementos por Id en base de datos
-            const carritoBuscado = await CartModel.findOne({ id: cId }).populate("products.product")
+            const carritoBuscado = await CartModel.findOne({ _id: cId }).populate("products.product")
             return carritoBuscado;
         } catch (error) {
             console.error("No se encontró el carrito solicitado\n", error);
@@ -84,7 +63,7 @@ class CartManagerMongo {
 
     addProductInCart = async (cId, pId) => {
         try {
-            const cart = await CartModel.findOne({ id: cId });
+            const cart = await CartModel.findOne({ _id: cId });
             if (!cart) {
                 console.log("Carrito no encontrado");
                 return;
@@ -121,7 +100,7 @@ class CartManagerMongo {
 
     deleteCart = async (cid) => {
         try {
-            await CartModel.deleteOne({ id: cid })
+            await CartModel.deleteOne({ _id: cid })
             console.log(`Carrito con id:${cid} se eliminó correctamente!`);
         } catch (error) {
             throw error;
@@ -130,7 +109,7 @@ class CartManagerMongo {
 
     deleteProductFromCart = async (cid, pid) => {
         try {
-            const cart = await CartModel.findOne({ id: cid });
+            const cart = await CartModel.findOne({ _id: cid });
 
             if (!cart) {
                 console.log(`No se encontró el carrito con id:${cid}`);
@@ -145,7 +124,7 @@ class CartManagerMongo {
                 cart.products.splice(index, 1);
 
                 // Actualiza el carrito en la base de datos
-                await CartModel.updateOne({ id: cid }, { $set: { products: cart.products } });
+                await CartModel.updateOne({ _id: cid }, { $set: { products: cart.products } });
 
                 console.log(`Producto con id:${pid} eliminado del carrito con id:${cid} correctamente`);
             } else {
@@ -158,7 +137,7 @@ class CartManagerMongo {
 
     updateCart = async (cId, updatedCart) => {
         try {
-            await CartModel.updateOne({ id: cId }, updatedCart);
+            await CartModel.updateOne({ _id: cId }, updatedCart);
             console.log(`Carrito con id:${cId} actualizado correctamente!`);
         } catch (error) {
             throw error;
@@ -167,7 +146,7 @@ class CartManagerMongo {
 
     updateProductQuantity = async (cId, updatedCart, quantity, producttoUpdate) => {
         try {
-            await CartModel.updateOne({ id: cId }, { $set: updatedCart });
+            await CartModel.updateOne({ _id: cId }, { $set: updatedCart });
             console.log(`Se actualizó con una cantidad de ${quantity} el producto ${producttoUpdate} del carrito con id:${cId}!`);
         } catch (error) {
             throw error;
@@ -176,7 +155,7 @@ class CartManagerMongo {
 
     deleteAllProductsFromCart = async (cId) => {
         try {
-            await CartModel.updateOne({ id: cId }, { $set: { products: [] } });
+            await CartModel.updateOne({ _id: cId }, { $set: { products: [] } });
             console.log(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
         } catch (error) {
             throw error;

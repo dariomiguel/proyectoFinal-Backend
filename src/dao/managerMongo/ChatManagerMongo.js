@@ -13,7 +13,7 @@ class ChatManagerMongo {
             return lectura || []
 
         } catch (error) {
-            console.log("Hubo un error en la lectura de la base de datos.", error);
+            console.log("Hubo un error en la lectura de la base de datos.", error.message);
             throw error;
         }
     }

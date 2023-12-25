@@ -127,7 +127,7 @@ router.get("/:cid", auth, async (req, res) => {
 
 router.post("/:cid/product/:pid", async (req, res) => {
     try {
-        const cId = parseInt(req.params.cid);
+        const cId = req.params.cid;
         const pId = req.params.pid;
         const quantity = req.body.quantity || 1;
 
@@ -177,7 +177,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
 router.delete("/:cid", async (req, res) => {
     try {
-        const cId = parseInt(req.params.cid);
+        const cId = req.params.cid;
 
         await cartManagerMongo.deleteAllProductsFromCart(cId);
 
@@ -191,8 +191,8 @@ router.delete("/:cid", async (req, res) => {
 router.delete("/:cid/products/:pid", async (req, res) => {
 
     try {
-        const cId = parseInt(req.params.cid);
-        const pId = parseInt(req.params.pid);
+        const cId = req.params.cid;
+        const pId = req.params.pid;
 
         await cartManagerMongo.deleteProductFromCart(cId, pId);
 
@@ -205,7 +205,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
 
 router.put("/:cid", async (req, res) => {
     try {
-        const cId = parseInt(req.params.cid);
+        const cId = req.params.cid;
         const updatedProducts = req.body.products;
 
         // Validar si el carrito existe
@@ -230,8 +230,8 @@ router.put("/:cid", async (req, res) => {
 
 router.put("/:cid/products/:pid", async (req, res) => {
     try {
-        const cId = parseInt(req.params.cid);
-        const pId = parseInt(req.params.pid);
+        const cId = req.params.cid;
+        const pId = req.params.pid;
         const newQuantity = req.body.quantity;
 
         console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);

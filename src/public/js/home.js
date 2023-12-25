@@ -52,11 +52,3 @@ function orderPriceSelected() {
     const values = getFormValues(selectedOption);
     redirectToPage(1, values);
 }
-
-// Al cargar la página, establecer los valores iniciales
-window.onload = () => {
-    const categoryFromUrl = getCategoryFromUrl();
-    if (categoryFromUrl) {
-        document.querySelector("#category").value = categoryFromUrl;
-    }
-};
