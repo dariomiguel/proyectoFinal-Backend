@@ -1,6 +1,5 @@
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
-import mongoose from "mongoose";
 
 class CartManagerMongo {
 

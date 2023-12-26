@@ -82,7 +82,7 @@ router.post("/", async (req, res) => {
     try {
         const cart = await cartManagerMongo.createCart();
 
-        console.log("Carrito creado con éxito!");
+        console.log("Carrito creado con id: 🛒 ", cart._id.toString());
         res.status(201).json({ status: "success", payload: cart });
     }
     catch (error) {
@@ -139,7 +139,6 @@ router.post("/:cid/product/:pid", async (req, res) => {
             return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
         }
         const existingProduct = await productManagerMongo.getProductById(pId);
-        console.log("Existing product es :", existingProduct);
         if (!existingProduct) {
             console.error(`No se encontró el producto con id: ${pId}`);
             return res.status(404).json({ error: `No se encontró el carrito con id: ${pId}` });

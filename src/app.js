@@ -9,6 +9,7 @@ import lastProductRouter from "./router/lastProduct.router.js";
 import productsRouter from "./router/products.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import viewsRouter from "./router/views.router.js";
+import userRouter from "./router/users.router.js";
 
 import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
@@ -64,6 +65,8 @@ app.use("/api/products", productsRouter);
 app.use("/api/lastProduct", lastProductRouter);
 //Ruta de carrito
 app.use("/api/carts", cartsRouter);
+//Ruta de Usuario
+app.use("/api/users", userRouter);
 
 //PASSPORT
 initializePassport()
