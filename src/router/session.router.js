@@ -28,12 +28,15 @@ router.post("/register", passport.authenticate("register", { failureRedirect: "/
 router.get("/logout", (req, res) => {
     try {
         req.session.destroy(err => {
-            if (err) return res.send("logout error")
+            if (err) {
+                // console.error("Error al destruir la sesión:", err);
+                return res.status(500).send("Error al destruir la sesión");
+            }
 
-            return res.redirect("/")
-        })
+            return res.redirect("/");
+        });
     } catch (error) {
-        console.error("Error en el controlador /logout:", error);
+        // console.error("Error en el controlador /logout:", error); 
         return res.status(500).send("Error en el servidor");
     }
 });

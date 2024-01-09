@@ -3,6 +3,21 @@ import local from "passport-local";
 import UserModel from "../dao/models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
+import dotenv from "dotenv"
+import mongoose from "mongoose";
+
+//? Generar un _id único para admin
+const { ObjectId } = mongoose.Types;
+const adminId = new ObjectId();
+
+//? Variables de entorno
+
+dotenv.config()
+const adminEmail = process.env.ADMIN_EMAIL;
+const adminPass = process.env.ADMIN_PASSWORD;
+const githubId = process.env.CLIENT_ID;
+const githubSecret = process.env.CLIENT_SECRET;
+const githubUrl = process.env.CALLBACK_URL;
 
 const LocalStrategy = local.Strategy;
 
@@ -12,21 +27,23 @@ const initializePassport = () => {
         usernameField: "email",
     }, async (username, password, done) => {
         try {
+
+
             if (!username || !password) {
                 console.error("Nombre de usuario o contraseña no proporcionados");
                 return done(null, false, { message: "Nombre de usuario o contraseña no proporcionados" });
             }
 
-            if (username === "adminCoder@coder.com" && password === "adminCod3r123") {
+            if (username === adminEmail && password === adminPass) {
                 const user = {
                     first_name: "admin",
                     last_name: "admin",
-                    email: "adminCoder@coder.com",
+                    email: adminEmail,
                     age: 0,
-                    password: "adminCod3r123",
+                    password: adminPass,
                     role: "admin",
                     carts: [],
-                    _id: 0
+                    _id: adminId
                 }
 
                 return done(null, user)
@@ -64,7 +81,7 @@ const initializePassport = () => {
         try {
             const user = await UserModel.findOne({ email: username })
 
-            if (user || username === "adminCoder@coder.com") {
+            if (user || username === adminEmail) {
                 console.log("El usuario ya existe");
 
                 return done(null, false)
@@ -88,9 +105,9 @@ const initializePassport = () => {
 
     passport.use("github", new GitHubStrategy({
 
-        clientID: "Iv1.4763c46764a986a4",
-        clientSecret: "1bf47184d80ecf091248828135bcffbe7e1075cf",
-        callbackURL: "http://127.0.0.1:8080/api/session/githubcallback",
+        clientID: githubId,
+        clientSecret: githubSecret,
+        callbackURL: githubUrl,
 
     }, async (accessToken, refreshToken, profile, done) => {
         try {

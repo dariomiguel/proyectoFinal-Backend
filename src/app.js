@@ -2,6 +2,11 @@ import express from "express";
 import handlebars from "express-handlebars";
 import { configureSocket } from "./socketConfig.js";
 import __dirname from "./utils.js";
+import dotenv from "dotenv";
+
+//? Variables de entorno
+dotenv.config()
+const urlMongo = process.env.MONGO_URL;
 
 import cartsRouter from "./router/carts.router.js";
 import chatRouter from "./router/chat.router.js";
@@ -18,8 +23,6 @@ import sessionRouter from "./router/session.router.js"
 
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
-
-const urlMongo = "mongodb+srv://darioemiguel:GcY3pZnnUc67DfFj@cluster0.7tlrgmb.mongodb.net/";
 
 const app = express();
 app.use(express.json());
@@ -87,4 +90,5 @@ mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .catch((error) => {
         console.error("Error conecting to DB", error);
     })
+
 
