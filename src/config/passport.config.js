@@ -3,7 +3,8 @@ import local from "passport-local";
 import UserModel from "../dao/models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
-import dotenv from "dotenv"
+import config from "./config.js"
+
 import mongoose from "mongoose";
 
 //? Generar un _id único para admin
@@ -11,13 +12,11 @@ const { ObjectId } = mongoose.Types;
 const adminId = new ObjectId();
 
 //? Variables de entorno
-
-dotenv.config()
-const adminEmail = process.env.ADMIN_EMAIL;
-const adminPass = process.env.ADMIN_PASSWORD;
-const githubId = process.env.CLIENT_ID;
-const githubSecret = process.env.CLIENT_SECRET;
-const githubUrl = process.env.CALLBACK_URL;
+const adminEmail = config.adminEmail;
+const adminPass = config.adminPass;
+const githubId = config.githubId;
+const githubSecret = config.githubSecret;
+const githubUrl = config.githubUrl;
 
 const LocalStrategy = local.Strategy;
 

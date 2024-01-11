@@ -1,13 +1,16 @@
-//!! NO TERMINADO!!!
-//TODO agregar a la clase las variables que se van a usar, y pasar socketConfig a la carpeta config
 import dotenv from 'dotenv';
 
-dotenv.config(); // Carga las variables de entorno desde el archivo .env
+dotenv.config();
 
 const config = {
-    apiKey: process.env.API_KEY,
-    databaseURL: process.env.DATABASE_URL,
-    // Agrega otras configuraciones según sea necesario
+    adminEmail: process.env.ADMIN_EMAIL,
+    adminPass: process.env.ADMIN_PASSWORD,
+
+    githubId: process.env.CLIENT_ID,
+    githubSecret: process.env.CLIENT_SECRET,
+    githubUrl: process.env.CALLBACK_URL,
+
+    urlMongo: process.env.MONGO_URL,
 };
 
 export default config;

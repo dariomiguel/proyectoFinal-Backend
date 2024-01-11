@@ -1,12 +1,11 @@
 import express from "express";
 import handlebars from "express-handlebars";
-import { configureSocket } from "./socketConfig.js";
+import { configureSocket } from "./config/socketConfig.js";
 import __dirname from "./utils.js";
-import dotenv from "dotenv";
+import config from "./config/config.js";
 
 //? Variables de entorno
-dotenv.config()
-const urlMongo = process.env.MONGO_URL;
+const urlMongo = config.urlMongo;
 
 import cartsRouter from "./router/carts.router.js";
 import chatRouter from "./router/chat.router.js";
