@@ -124,9 +124,9 @@ class ProductManagerMongo {
         }
     };
 
-    isNotValidCode = async (title, description, code, price, stock, category, thumbnail) => {
+    isNotValidCode = async (productToAdd) => {
         //Verificamos que esten todos los productos en la carga de datos no estan vacíos.
-        const someValid = !title || !description || !price || !thumbnail || !code || !stock || !category;
+        const someValid = !productToAdd.title || !productToAdd.description || !productToAdd.price || !productToAdd.thumbnail || !productToAdd.code || !productToAdd.stock || !productToAdd.category;
         //Si envía true significa que uno de los elementos está vacío.
         return someValid;
     }

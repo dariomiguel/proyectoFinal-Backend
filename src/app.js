@@ -15,7 +15,6 @@ import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import viewsRouter from "./router/views.router.js";
 import userRouter from "./router/users.router.js";
 
-import mongoose from "mongoose";
 import MongoStore from "connect-mongo";
 import session from "express-session";
 import sessionRouter from "./router/session.router.js"
@@ -70,17 +69,7 @@ initializePassport()
 app.use(passport.initialize());
 app.use(passport.session())
 
-mongoose.connect(urlMongo, { dbName: "ecommerce" })
-    .then(() => {
-        console.log("DB connected.");
-        //Creamos una variable para el servidor  
-        const httpServer = app.listen(8080, () => console.log("En linea..."));
-        //Creamos una variable que contenga el servidor socket basado en http
-        const io = configureSocket(httpServer);
-
-    })
-    .catch((error) => {
-        console.error("Error conecting to DB", error);
-    })
-
-
+//Creamos una variable para el servidor  
+const httpServer = app.listen(8080, () => console.log("En linea..."));
+//Creamos una variable que contenga el servidor socket basado en http
+const io = configureSocket(httpServer);

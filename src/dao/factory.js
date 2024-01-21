@@ -1,4 +1,7 @@
 import config from "../config/config.js"
+import mongoose from "mongoose";
+//? Variables de entorno
+const urlMongo = config.urlMongo;
 
 export let CartManager
 export let ProductManager
@@ -22,6 +25,14 @@ switch (config.persistence) {
         break;
 
     case "MONGO":
+        mongoose.connect(urlMongo, { dbName: "ecommerce" })
+            .then(() => {
+                console.log("DB connected.");
+            })
+            .catch((error) => {
+                console.error("Error conecting to DB", error);
+            })
+
         const { default: CartManagerMongo } = await import("./mongo/CartManager.mongo.js")
         const { default: ProductManagerMongo } = await import("./mongo/ProductManager.mongo.js")
         const { default: ChatManagerMongo } = await import("./mongo/ChatManager.mongo.js")

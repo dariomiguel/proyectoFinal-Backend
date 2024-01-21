@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { ProductManager } from "../DAO/factory.js";
+import productInsertDTO from "../DTO/products.dto.js";
 import __dirname from "../utils.js";
 
 const router = Router();
@@ -152,18 +153,23 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
+        const productToInsert = new productInsertDTO({ title, description, code, price, stock, category, thumbnail })
+
+        console.log("El valor del precio es: ", productToInsert.price);
 
         //Manejo de excepciones para no permitir valores incorrectos
-        const algunaPropiedadVacia = await productManager.isNotValidCode(title, description, code, price, stock, category, thumbnail);
-        if (isNaN(price)) {
+        const algunaPropiedadVacia = await productManager.isNotValidCode(productToInsert);
+
+
+        if (isNaN(productToInsert.price)) {
             console.log("\nEl precio debe ser un valor numérico.\n");
             return res.status(400).json({ error: "El precio debe ser un valor numérico" });
         }
-        if (isNaN(stock)) {
+        if (isNaN(productToInsert.stock)) {
             console.log("\nEl stock debe ser un valor numérico.\n");
             return res.status(400).json({ error: "El stock debe ser un valor numérico" });
         }
-        if (category !== "cuadros" && category !== "artesanias" && category !== "bordados" && category !== "esculturas") {
+        if (productToInsert.category !== "cuadros" && productToInsert.category !== "artesanias" && productToInsert.category !== "bordados" && productToInsert.category !== "esculturas") {
             console.log("La categoría no es válida");
             return res.status(400).json({ error: "Debes seleccionar una de estas categorías: cuadros-artesanias-bordados-esculturas" });
         }
