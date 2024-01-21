@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { Product } from "../DAO/factory.js";
+import { ProductManager } from "../DAO/factory.js";
 import __dirname from "../utils.js";
 
 const router = Router();
-const productManager = new Product();
+const productManager = new ProductManager();
 
 // ** Métodos  con file system
 // =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=

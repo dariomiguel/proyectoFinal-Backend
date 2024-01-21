@@ -1,9 +1,9 @@
 import { Router } from "express";
-import { Cart, Product } from "../DAO/factory.js";
+import { CartManager, ProductManager } from "../DAO/factory.js";
 
 const router = Router();
-const cartManager = new Cart();
-const product = new Product();
+const cartManager = new CartManager();
+const productManager = new ProductManager();
 
 function auth(req, res, next) {
     if (req.session?.user) return next()
@@ -76,7 +76,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
             console.error(`No se encontró el carrito con id: ${cId}`);
             return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
         }
-        const existingProduct = await product.getProductById(pId);
+        const existingProduct = await productManager.getProductById(pId);
         if (!existingProduct) {
             console.error(`No se encontró el producto con id: ${pId}`);
             return res.status(404).json({ error: `No se encontró el carrito con id: ${pId}` });

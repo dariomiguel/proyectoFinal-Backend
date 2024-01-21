@@ -1,10 +1,9 @@
 import { Router } from "express";
-import { Cart } from "../DAO/factory.js";
-import UserManagerMongo from "../DAO/mongo/UserManager.mongo.js";
+import { CartManager, UserManager } from "../DAO/factory.js";
 
 const router = Router();
-const cartManagerMongo = new Cart();
-const userManagerMongo = new UserManagerMongo();
+const cartManager = new CartManager();
+const userManager = new UserManager();
 
 
 router.get("/", async (req, res) => {
@@ -12,7 +11,7 @@ router.get("/", async (req, res) => {
         const user = req.session.user
         const uId = user._id;
 
-        const response = await userManagerMongo.cartExist(uId);
+        const response = await userManager.cartExist(uId);
         res.status(200).json({ payload: response });
 
     } catch (error) {
@@ -34,7 +33,7 @@ router.post("/cart/:cid", async (req, res) => {
             return res.status(404).json({ Error: `No se encontró el usuario con id:"${uId}"` });
         }
 
-        const addingCart = await userManagerMongo.addCartInUser(uId, cId)
+        const addingCart = await userManager.addCartInUser(uId, cId)
         res.status(200).json({ userId: uId, cartId: cId });
 
     } catch (error) {

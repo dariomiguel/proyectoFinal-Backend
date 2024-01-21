@@ -1,7 +1,7 @@
 import express from "express";
-import { Product } from "../DAO/factory.js";
+import { ProductManager } from "../DAO/factory.js";
 
-const productManager = new Product();
+const productManager = new ProductManager();
 const router = express.Router();
 
 function auth(req, res, next) {

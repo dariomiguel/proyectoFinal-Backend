@@ -1,10 +1,9 @@
 import express from "express";
-import { Product } from "../DAO/factory.js";
 import __dirname from "../utils.js";
+import { ProductManager } from "../DAO/factory.js";
 
 const router = express.Router();
-// const productManager = new ProductManager();
-const productManagerMongo = new Product();
+const productManager = new ProductManager();
 
 
 
@@ -90,7 +89,7 @@ router.get("/home", justPublicWithoutSession, async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
 
         if (response.status === "404") res.render("error404", {})
 
@@ -117,7 +116,7 @@ router.get("/products", auth, async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const response = await productManagerMongo.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
         const user = req.session.user
 
         if (response.status === "404") return res.redirect("/error404")

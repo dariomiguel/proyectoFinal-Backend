@@ -1,8 +1,8 @@
 import express from "express";
-import ChatManagerMongo from "../DAO/mongo/ChatManager.mongo.js";
+import { ChatManager } from "../DAO/factory.js";
 
 const router = express.Router();
-const chatManagerMongo = new ChatManagerMongo();
+const chatManager = new ChatManager();
 
 function auth(req, res, next) {
     if (req.session?.user) return next()
@@ -13,7 +13,7 @@ function auth(req, res, next) {
 router.get("/", auth, async (req, res) => {
     try {
         const limit = req.query.limit;
-        let chats = await chatManagerMongo.getChats();
+        let chats = await chatManager.getChats();
         chats = JSON.parse(JSON.stringify(chats));
 
         if (chats.length === 0) {
@@ -46,7 +46,7 @@ router.post("/", async (req, res) => {
     try {
         const { user, message } = req.body;
 
-        const algunaPropiedadVacia = await chatManagerMongo.isNotValidCode(user, message);
+        const algunaPropiedadVacia = await chatManager.isNotValidCode(user, message);
 
         if (algunaPropiedadVacia) {
             res
@@ -54,7 +54,7 @@ router.post("/", async (req, res) => {
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
             console.log("\nVerifique que las propiedades no esten vacías😶.\n");
         } else {
-            const chatAgregado = await chatManagerMongo.addChat(user, message);
+            const chatAgregado = await chatManager.addChat(user, message);
             res
                 //*201 para creaciones exitosas
                 .status(201)

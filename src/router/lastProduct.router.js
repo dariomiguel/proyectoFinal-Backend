@@ -1,15 +1,15 @@
 import { Router } from "express";
-import { Product } from "../DAO/factory.js";
+import { ProductManager } from "../DAO/factory.js";
 import __dirname from "../utils.js";
 
 const router = Router();
-const productManagerMongo = new Product();
+const productManager = new ProductManager();
 
 router.get("/", async (req, res) => {
     try {
         // Listamos con límites
         const limit = req.query.limit;
-        let products = await productManagerMongo.findLastId();
+        let products = await productManager.findLastId();
         if (products.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
