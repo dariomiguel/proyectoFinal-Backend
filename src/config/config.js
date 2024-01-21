@@ -3,6 +3,8 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 const config = {
+    persistence: process.env.PERSISTENCE,
+
     adminEmail: process.env.ADMIN_EMAIL,
     adminPass: process.env.ADMIN_PASSWORD,
 

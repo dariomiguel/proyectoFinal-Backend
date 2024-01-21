@@ -1,5 +1,5 @@
 import express from "express";
-import ChatManagerMongo from "../dao/managerMongo/ChatManagerMongo.js";
+import ChatManagerMongo from "../DAO/mongo/ChatManager.mongo.js";
 
 const router = express.Router();
 const chatManagerMongo = new ChatManagerMongo();

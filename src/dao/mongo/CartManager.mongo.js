@@ -1,7 +1,7 @@
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
 
-class CartManagerMongo {
+class CartManager {
 
     createCart = async () => {
         try {
@@ -163,4 +163,4 @@ class CartManagerMongo {
 
 }
 
-export default CartManagerMongo
+export default CartManager

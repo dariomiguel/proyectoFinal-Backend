@@ -55,27 +55,20 @@ app.set("view engine", "handlebars");
 //Agregamos la propiedad de Express para poder seleccionar la carpeta public
 app.use(express.static(__dirname + "/public"))
 
-//Ruta de vistas
+//Rutas
 app.use("/", viewsRouter)
-//Ruta de realtimeProducts
 app.use("/realtimeproducts", realtimeproductsRouter);
-//Ruta de chat
 app.use("/chat", chatRouter);
-//Ruta de producto
 app.use("/api/products", productsRouter);
-//Ruta de último producto
 app.use("/api/lastProduct", lastProductRouter);
-//Ruta de carrito
 app.use("/api/carts", cartsRouter);
-//Ruta de Usuario
 app.use("/api/users", userRouter);
+app.use("/api/session", sessionRouter)
 
 //PASSPORT
 initializePassport()
 app.use(passport.initialize());
 app.use(passport.session())
-//Ruta de los logins
-app.use("/api/session", sessionRouter)
 
 mongoose.connect(urlMongo, { dbName: "ecommerce" })
     .then(() => {

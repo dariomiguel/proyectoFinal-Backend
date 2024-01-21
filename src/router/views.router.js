@@ -1,11 +1,10 @@
 import express from "express";
-// import ProductManager from "../dao/managerFS/ProductManager.js";
-import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js"
+import { Product } from "../DAO/factory.js";
 import __dirname from "../utils.js";
 
 const router = express.Router();
 // const productManager = new ProductManager();
-const productManagerMongo = new ProductManagerMongo();
+const productManagerMongo = new Product();
 
 
 

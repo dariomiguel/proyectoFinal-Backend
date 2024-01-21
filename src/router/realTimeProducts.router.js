@@ -1,7 +1,7 @@
 import express from "express";
-import ProductManagerMongo from "../dao/managerMongo/ProductManagerMongo.js";
+import { Product } from "../DAO/factory.js";
 
-const productManager = new ProductManagerMongo();
+const productManager = new Product();
 const router = express.Router();
 
 function auth(req, res, next) {

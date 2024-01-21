@@ -1,6 +1,6 @@
 import passport from "passport";
 import local from "passport-local";
-import UserModel from "../dao/models/user.model.js"
+import UserModel from "../DAO/models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 import config from "./config.js"
@@ -131,13 +131,29 @@ const initializePassport = () => {
     }))
 
     passport.serializeUser((user, done) => {
-        done(null, user._id)
-    })
+        try {
+            console.log("El user es: " + user);
+            console.log("El id es: ", user._id);
+
+            if (user && user._id) {
+                done(null, user._id);
+            } else {
+                throw new Error("El objeto de usuario no tiene un _id válido");
+            }
+        } catch (error) {
+            done(error, null);
+        }
+    });
 
     passport.deserializeUser(async (id, done) => {
-        const user = await UserModel.findById(id)
-        done(null, user)
-    })
+        try {
+            const user = await UserModel.findById(id);
+            done(null, user);
+        } catch (error) {
+            done(error, null);
+        }
+    });
+
 }
 
 export default initializePassport
