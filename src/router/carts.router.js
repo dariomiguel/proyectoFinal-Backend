@@ -2,7 +2,7 @@ import { Router } from "express";
 import { Cart, Product } from "../DAO/factory.js";
 
 const router = Router();
-const cart = new Cart();
+const cartManager = new Cart();
 const product = new Product();
 
 function auth(req, res, next) {
@@ -17,12 +17,13 @@ function auth(req, res, next) {
 
 router.post("/", async (req, res) => {
     try {
-        const cart = await cart.createCart();
+        const cart = await cartManager.createCart();
 
         console.log("Carrito creado con id: 🛒 ", cart._id.toString());
         res.status(201).json({ status: "success", payload: cart });
     }
     catch (error) {
+
         console.error("Error al crear el carrito:", error);
         res.status(500).send("Error al crea el carrito" + error)
     }
@@ -30,7 +31,7 @@ router.post("/", async (req, res) => {
 
 router.get("/", async (req, res) => {
     try {
-        const carts = await cart.getCarts();
+        const carts = await cartManager.getCarts();
 
         res.status(200).json({ status: "success", payload: carts });
     } catch (error) {
@@ -41,7 +42,7 @@ router.get("/", async (req, res) => {
 
 router.get("/:cid", auth, async (req, res) => {
     try {
-        const cartPorId = await cart.getCartById(req.params.cid);
+        const cartPorId = await cartManager.getCartById(req.params.cid);
         if (cartPorId === null) {
             res
                 .status(404)
@@ -70,7 +71,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
 
         console.log("La cantidad de productos que se va a agregar al carrito es: ", quantity);
 
-        const existingCart = await cart.getCartById(cId);
+        const existingCart = await cartManager.getCartById(cId);
         if (!existingCart) {
             console.error(`No se encontró el carrito con id: ${cId}`);
             return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
@@ -102,7 +103,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
         }
 
         // Actualizar el carrito en la base de datos
-        await cart.updateCart(cId, existingCart);
+        await cartManager.updateCart(cId, existingCart);
 
         res.status(200).json({ message: `Producto con id: ${pId} agregado al carrito con id: ${cId} correctamente!` });
     } catch (error) {
@@ -115,7 +116,7 @@ router.delete("/:cid", async (req, res) => {
     try {
         const cId = req.params.cid;
 
-        await cart.deleteAllProductsFromCart(cId);
+        await cartManager.deleteAllProductsFromCart(cId);
 
         res.status(200).json({ message: `Todos los productos del carrito con id:${cId} se eliminaron correctamente` });
     } catch (error) {
@@ -130,7 +131,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
         const cId = req.params.cid;
         const pId = req.params.pid;
 
-        await cart.deleteProductFromCart(cId, pId);
+        await cartManager.deleteProductFromCart(cId, pId);
 
         res.status(200).json({ message: `Producto con id:${pId} eliminado del carrito con id:${cId} correctamente` });
     } catch (error) {
@@ -145,7 +146,7 @@ router.put("/:cid", async (req, res) => {
         const updatedProducts = req.body.products;
 
         // Validar si el carrito existe
-        const existingCart = await cart.getCartById(cId);
+        const existingCart = await cartManager.getCartById(cId);
         if (!existingCart) {
             console.error(`No se encontró el carrito con id:"${cId}"`);
             return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
@@ -155,7 +156,7 @@ router.put("/:cid", async (req, res) => {
         existingCart.products = updatedProducts;
 
         // Actualizar el carrito en la base de datos
-        await cart.updateCart(cId, existingCart);
+        await cartManager.updateCart(cId, existingCart);
 
         res.status(200).json({ message: `Carrito con id:${cId} actualizado correctamente` });
     } catch (error) {
@@ -171,7 +172,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
         const newQuantity = req.body.quantity;
 
         console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
-        const existingCart = await cart.getCartById(cId);
+        const existingCart = await cartManager.getCartById(cId);
         if (!existingCart) {
             console.error(`No se encontró el carrito con id:"${cId}"`);
             return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
@@ -184,7 +185,7 @@ router.put("/:cid/products/:pid", async (req, res) => {
             existingCart.products[productIndex].quantity = newQuantity;
 
             // Actualiza el carrito en la base de datos
-            await cart.updateProductQuantity(cId, existingCart, newQuantity, pId);
+            await cartManager.updateProductQuantity(cId, existingCart, newQuantity, pId);
 
             res.status(200).json({ message: `Nueva cantidad del producto (${newQuantity}) con id:${pId} en el carrito con id:${cId}, se actualizó correctamente!` });
         } else {

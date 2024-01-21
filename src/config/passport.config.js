@@ -132,14 +132,12 @@ const initializePassport = () => {
 
     passport.serializeUser((user, done) => {
         try {
-            console.log("El user es: " + user);
-            console.log("El id es: ", user._id);
-
             if (user && user._id) {
                 done(null, user._id);
             } else {
                 throw new Error("El objeto de usuario no tiene un _id válido");
             }
+
         } catch (error) {
             done(error, null);
         }

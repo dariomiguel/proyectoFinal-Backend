@@ -8,7 +8,9 @@ console.log(`Persistence with ${config.persistence}`)
 switch (config.persistence) {
     case "FILE":
         const { default: CartManagerFile } = await import("./file/CartManager.file.js")
+        const { default: ProductManagerFile } = await import("./file/ProductManager.file.js")
         Cart = CartManagerFile;
+        Product = ProductManagerFile;
         break;
 
     case "MONGO":
