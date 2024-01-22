@@ -207,7 +207,7 @@ class ProductManagerMongo {
 
             return url
         } catch (error) {
-            console.error("No se encontró : ", url, error.message);
+            console.error("No se encontró imagén : ", url, error.message);
             return false
         }
     }

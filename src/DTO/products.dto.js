@@ -1,4 +1,4 @@
-export default class productInsertDTO {
+export default class ProductInsertDTO {
 
     constructor(product) {
 
