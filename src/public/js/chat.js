@@ -54,10 +54,10 @@ async function createMessage() {
             if (response.ok) {
                 console.log("Se agregó correctamente el mensaje desde el formulario cliente!");
             } else {
-                console.error("Error agregando el producto desde formulario cliente:", response);
+                console.error("Error agregando el mensaje al chat del cliente:", response);
             }
         } catch (error) {
-            console.error("Error al agregar el producto:", error);
+            console.error("Error al agregar el chat:", error);
         }
     }
 }
