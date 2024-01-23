@@ -1,5 +1,6 @@
 import config from "../config/config.js"
 import mongoose from "mongoose";
+import { options } from "../config/commander.js";
 //? Variables de entorno
 const urlMongo = config.urlMongo;
 
@@ -8,9 +9,9 @@ export let ProductManager
 export let ChatManager
 export let UserManager
 
-console.log(`Persistence with ${config.persistence}`)
+console.log(`Persistence with ${options.p}`)
 
-switch (config.persistence) {
+switch (options.p) {
     case "FILE":
         const { default: CartManagerFile } = await import("./file/CartManager.file.js")
         const { default: ProductManagerFile } = await import("./file/ProductManager.file.js")
