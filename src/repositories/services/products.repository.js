@@ -40,6 +40,7 @@ export default class ProductRepository {
 
         } else {
             const productoAgregado = await this.dao.addProduct(title, description, code, price, stock, category, thumbnail);
+            return productoAgregado
         }
     }
 
@@ -76,7 +77,7 @@ export default class ProductRepository {
     }
 
     lastId = async () => {
-        const result = this.dao.findLastId()
+        const result = await this.dao.findLastId()
         return result
     }
 }

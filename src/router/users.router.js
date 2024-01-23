@@ -8,7 +8,8 @@ router.get("/", async (req, res) => {
         const user = req.session.user
         const uId = user._id;
 
-        const response = await userService.get(uId);
+        const response = await userService.getCart(uId);
+        console.log("El response es :", response);
         res.status(200).json({ payload: response });
 
     } catch (error) {

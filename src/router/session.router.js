@@ -1,12 +1,15 @@
 import { Router } from "express";
 import passport from "passport";
+import { userService } from "../repositories/index.js";
 
 const router = Router();
 
 router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
     try {
         if (!req.user) return res.status(400).send({ status: "error", error: "Credenciales no validas!" })
-        req.session.user = req.user
+
+        const result = await userService.get(req.user._id)
+        req.session.user = result
 
         return res.status(200).redirect("/products")
     } catch {

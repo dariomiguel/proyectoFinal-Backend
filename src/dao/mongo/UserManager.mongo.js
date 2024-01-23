@@ -3,6 +3,20 @@ import __dirname from "../../utils.js"
 
 class UserManagerMongo {
 
+    getUser = async (uId) => {
+        try {
+            const user = await UserModel.findOne({ _id: uId });
+            if (!user) {
+                const error = new Error("User no encontrado");
+                error.statusCode = 404; // Asigna un código de estado 404 al error
+                throw error;
+            }
+            return user
+        } catch (error) {
+            throw error;
+        }
+    }
+
     cartExist = async (uId) => {
         try {
             const user = await UserModel.findOne({ _id: uId });

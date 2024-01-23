@@ -1,3 +1,5 @@
+import userInsertDTO from "../../DTO/user.dto.js"
+
 export default class UserRepository {
 
     constructor(dao) {
@@ -5,12 +7,18 @@ export default class UserRepository {
     }
 
     get = async (uId) => {
-        const result = this.dao.cartExist(uId)
+        const result = await this.dao.getUser(uId)
+        const user = new userInsertDTO(result)
+        return user
+    }
+
+    getCart = async (uId) => {
+        const result = await this.dao.cartExist(uId)
         return result
     }
 
     post = async (uId, cId) => {
-        const result = this.dao.addCartInUser(uId, cId)
+        const result = await this.dao.addCartInUser(uId, cId)
         return result
     }
 }
