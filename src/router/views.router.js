@@ -1,44 +1,8 @@
 import express from "express";
 import __dirname from "../utils.js";
-import { ProductManager } from "../DAO/factory.js";
+import { productService } from "../repositories/index.js";
 
 const router = express.Router();
-const productManager = new ProductManager();
-
-
-
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// =-            F I L E   S Y S T E M            -=
-// =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=`
-
-//? router.get("/", async (req, res) => {
-//     try {
-//         const limit = req.query.limit;
-//         let products = await productManager.getProducts();
-
-//         if (products.length === 0) {
-//             res.status(404).json({ Error: "No se encontraron productos" });
-//             return;
-//         }
-
-//         if (limit) {
-//             const limitNumber = parseInt(limit, 10);
-//             if (!isNaN(limitNumber) && limitNumber >= 0) {
-//                 products = products.slice(0, limitNumber);
-//             }
-//         }
-//         res.render("home", {
-//             products
-//         });
-//     } catch (error) {
-//         console.error("Views router Error, al obtener la lista de productos:", error);
-//         res.status(500).json({ Error: "Hubo un error al obtener la lista de productos" });
-//     }
-// });
-
-//* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-//* =-               M O N G O   D B               -=
-//* =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
 
 function justPublicWithoutSession(req, res, next) {
     if (req.session?.user) return res.redirect("/products")
@@ -89,7 +53,7 @@ router.get("/home", justPublicWithoutSession, async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
 
         if (response.status === "404") res.render("error404", {})
 
@@ -116,7 +80,7 @@ router.get("/products", auth, async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
         const user = req.session.user
 
         if (response.status === "404") return res.redirect("/error404")

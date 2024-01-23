@@ -1,7 +1,6 @@
 import express from "express";
-import { ProductManager } from "../DAO/factory.js";
+import { productService } from "../repositories/index.js";
 
-const productManager = new ProductManager();
 const router = express.Router();
 
 function auth(req, res, next) {
@@ -19,7 +18,7 @@ router.get("/", auth, async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        const response = await productManager.getProducts(limit, page, query, category, stockAvailability, priceOrder);
+        const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
 
         if (response.payload.length === 0) {
             res.status(404).json({ Error: "No se encontraron productos" });
