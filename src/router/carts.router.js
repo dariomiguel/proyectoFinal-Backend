@@ -68,8 +68,18 @@ router.post("/:cid/product/:pid", async (req, res) => {
         res.status(200).json({ message: `Producto con id: ${pId} (cantidad: ${quantity}) agregado al carrito con id: ${cId} correctamente!` });
 
     } catch (error) {
-        console.error("Error al agregar producto al carrito:", error);
-        res.status(500).json({ error: "Hubo un error al agregar producto al carrito" });
+        if (error.statusCode = 4001) {
+            console.error(`No se encontró el carrito con id: ${cId}`);
+            return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
+
+        } else if (error.statusCode = 4002) {
+            console.error(`No se encontró el producto con id: ${pId}`);
+            return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
+
+        } else {
+            console.error("Error al agregar producto al carrito:", error);
+            res.status(500).json({ error: "Hubo un error al agregar producto al carrito" });
+        }
     }
 })
 
@@ -107,8 +117,16 @@ router.put("/:cid", async (req, res) => {
 
         res.status(200).json({ message: `Carrito con id:${cId} actualizado correctamente` });
     } catch (error) {
-        console.error("Error al actualizar el carrito:", error);
-        res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
+        if (error.statusCode === 4003) {
+            console.error(`No se encontró el carrito con id solicitado`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id solicitado` });
+        } else if (error.statusCode === 4004) {
+            console.log(`No se encontró el producto en el carrito con id solicitado`);
+            res.status(404).json({ Error: `No se encontró el producto en el carrito con id solicitado` });
+        } else {
+            console.error("Error al actualizar el carrito:", error);
+            res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
+        }
     }
 });
 
@@ -119,9 +137,19 @@ router.put("/:cid/products/:pid", async (req, res) => {
         const newQuantity = req.body.quantity;
         await cartService.updateQuantity(cId, pId, newQuantity)
 
+        res.status(200).json({ message: `Nueva cantidad del producto (${newQuantity}) con id:${pId} en el carrito con id:${cId}, se actualizó correctamente!` });
+
     } catch (error) {
-        console.error("Error al actualizar la cantidad del producto en el carrito:", error);
-        res.status(500).json({ error: "Hubo un error al actualizar la cantidad del producto en el carrito" });
+        if (error.statusCode === 4003) {
+            console.error(`No se encontró el carrito con id solicitado`);
+            return res.status(404).json({ Error: `No se encontró el carrito con id solicitado` });
+        } else if (error.statusCode === 4004) {
+            console.log(`No se encontró el producto en el carrito con id solicitado`);
+            res.status(404).json({ Error: `No se encontró el producto en el carrito con id solicitado` });
+        } else {
+            console.error("Error al actualizar el carrito:", error);
+            res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
+        }
     }
 });
 

@@ -19,75 +19,64 @@ export default class ProductRepository {
         const algunaPropiedadVacia = await this.dao.isNotValidCode(productToInsert);
 
         if (isNaN(productToInsert.price)) {
-            console.log("\nEl precio debe ser un valor numérico.\n");
-            return res.status(400).json({ error: "El precio debe ser un valor numérico" });
+            const error = new Error("El precio debe ser un valor numérico.");
+            error.statusCode = 4001; // Asigna un código de estado 404 al error
+            throw error;
         }
         if (isNaN(productToInsert.stock)) {
-            console.log("\nEl stock debe ser un valor numérico.\n");
-            return res.status(400).json({ error: "El stock debe ser un valor numérico" });
+            const error = new Error("El stock debe ser un valor numérico.");
+            error.statusCode = 4002; // Asigna un código de estado 404 al error
+            throw error;
         }
         if (productToInsert.category !== "cuadros" && productToInsert.category !== "artesanias" && productToInsert.category !== "bordados" && productToInsert.category !== "esculturas") {
-            console.log("La categoría no es válida");
-            return res.status(400).json({ error: "Debes seleccionar una de estas categorías: cuadros-artesanias-bordados-esculturas" });
+            const error = new Error("La categoría no es válida");
+            error.statusCode = 4003; // Asigna un código de estado 404 al error
+            throw error;
         }
         if (algunaPropiedadVacia) {
-            res
-                .status(400)
-                .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
-            console.log("\nVerifique que las propiedades no esten vacías😶.\n");
+            const error = new Error("Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶");
+            error.statusCode = 4004; // Asigna un código de estado 404 al error
+            throw error;
 
         } else {
             const productoAgregado = await this.dao.addProduct(title, description, code, price, stock, category, thumbnail);
-            res
-                //*201 para creaciones exitosas
-                .status(201)
-                .json({ message: "Producto agregado correctamente.😄", payload: productoAgregado });
         }
     }
 
     getProduct = async (pId) => {
         const result = await this.dao.getProductById(pId)
 
-        if (result === null) {
-            res
-                .status(404)
-                .json({ Error: "No se encontro el producto solicitado" });
-        } else {
-            res.status(200).json({ status: "success", payload: result })
-        }
+        return result
     }
 
     update = async (productId, key, value) => {
         const productPorId = await this.dao.getProductById(productId);
+
         if (productPorId === null) {
-            console.error(`No se encontro el producto con id: ${productId}.`)
-            return res
-                .status(404)
-                .json({ Error: `No se encontro el producto con id: ${productId}.` });
+            const error = new Error(`No se encontro el producto con id: ${productId}.`);
+            error.statusCode = 404; // Asigna un código de estado 404 al error
+            throw error;
         }
 
         const resultOfValid = await this.dao.validateProperty(productId, key);
 
         if (resultOfValid === undefined) {
-            console.error(`No se encontró la propiedad "${[key]}".`);
-            return res
-                .status(404)
-                .json({ Error: `No se encontró la propiedad "${[key]}".` });
+            const error = new Error(`No se encontró la propiedad "${[key]}".`);
+            error.statusCode = 400; // Asigna un código de estado 404 al error
+            throw error;
         }
 
-        const resultOfUpdate = await this.dao.updateProductById(productId, key, value);
-        if (resultOfUpdate !== null) res.status(201).json({ message: `Se actualizó la propiedad "${key}" del producto con id:"${productId}" correctamente!` });
+        await this.dao.updateProductById(productId, key, value)
     }
 
     delete = async (productId) => {
-        const productPorId = await this.dao.getProductById(productId);
+        const result = await this.dao.getProductById(productId);
+        return result
 
-        if (productPorId === null) {
-            console.error(`No se encontró el producto con id:"${productId}"`);
-            res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
-        } else {
-            await this.dao.deleteProduct(productId);
-            res.status(201).json({ message: "Producto eliminado correctamente" });
-        }
+    }
+
+    lastId = async () => {
+        const result = this.dao.findLastId()
+        return result
     }
 }

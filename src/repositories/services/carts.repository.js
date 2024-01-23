@@ -30,13 +30,15 @@ export default class CartRepository {
 
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
-            console.error(`No se encontró el carrito con id: ${cId}`);
-            return res.status(404).json({ error: `No se encontró el carrito con id: ${cId}` });
+            const error = new Error(`No se encontró el carrito con id: ${cId}`);
+            error.statusCode = 4001; // Asigna un código de estado 404 al error
+            throw error;
         }
         const existingProduct = await productManager.getProductById(pId);
         if (!existingProduct) {
-            console.error(`No se encontró el producto con id: ${pId}`);
-            return res.status(404).json({ error: `No se encontró el carrito con id: ${pId}` });
+            const error = new Error(`No se encontró el producto con id: ${pId}`);
+            error.statusCode = 4002; // Asigna un código de estado 404 al error
+            throw error;
         }
 
         const productsIds = existingCart.products.map(product => {
@@ -76,8 +78,9 @@ export default class CartRepository {
         // Validar si el carrito existe
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
-            console.error(`No se encontró el carrito con id:"${cId}"`);
-            return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
+            const error = new Error(`No se encontró el carrito con id: ${cId}`);
+            error.statusCode = 4003; // Asigna un código de estado 404 al error
+            throw error;
         }
 
         // Actualizar los productos en el carrito
@@ -92,23 +95,23 @@ export default class CartRepository {
         console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
-            console.error(`No se encontró el carrito con id:"${cId}"`);
-            return res.status(404).json({ Error: `No se encontró el carrito con id:"${cId}"` });
+            const error = new Error(`No se encontró el carrito con id: ${cId}`);
+            error.statusCode = 4003; // Asigna un código de estado 404 al error
+            throw error;
         }
 
         const productIndex = existingCart.products.findIndex(product => product.product === pId);
 
-        if (productIndex !== -1) {
-            // Actualiza solo la cantidad del producto en el carrito
-            existingCart.products[productIndex].quantity = newQuantity;
-
-            // Actualiza el carrito en la base de datos
-            await this.dao.updateProductQuantity(cId, existingCart, newQuantity, pId);
-
-            return res.status(200).json({ message: `Nueva cantidad del producto (${newQuantity}) con id:${pId} en el carrito con id:${cId}, se actualizó correctamente!` });
-        } else {
-            console.log(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);
-            res.status(404).json({ Error: `No se encontró el producto con id:${pId} en el carrito con id:${cId}` });
+        if (!(productIndex !== -1)) {
+            const error = new Error(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);
+            error.statusCode = 4004; // Asigna un código de estado 404 al error
+            throw error;
         }
+        // Actualiza solo la cantidad del producto en el carrito
+        existingCart.products[productIndex].quantity = newQuantity;
+
+        // Actualiza el carrito en la base de datos
+        const result = await this.dao.updateProductQuantity(cId, existingCart, newQuantity, pId);
+        return result
     }
 }
