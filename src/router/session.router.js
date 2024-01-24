@@ -39,7 +39,7 @@ router.get("/logout", (req, res) => {
             return res.redirect("/");
         });
     } catch (error) {
-        // console.error("Error en el controlador /logout:", error); 
+        console.error("Error en el controlador /logout:", error);
         return res.status(500).send("Error en el servidor");
     }
 });

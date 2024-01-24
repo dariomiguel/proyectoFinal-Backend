@@ -1,4 +1,4 @@
-import dotenv from 'dotenv';
+import dotenv from "dotenv";
 
 dotenv.config();
 
@@ -7,6 +7,8 @@ const config = {
 
     adminEmail: process.env.ADMIN_EMAIL,
     adminPass: process.env.ADMIN_PASSWORD,
+
+    privateKey: process.env.PRIVATE_KEY,
 
     githubId: process.env.CLIENT_ID,
     githubSecret: process.env.CLIENT_SECRET,
