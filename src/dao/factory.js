@@ -26,7 +26,11 @@ switch (options.p) {
         break;
 
     case "MONGO":
-        mongoose.connect(urlMongo, { dbName: "ecommerce" })
+        mongoose.connect(urlMongo, {
+            serverSelectionTimeoutMS: 50000, // tiempo de espera para la selección del servidor
+            socketTimeoutMS: 45000,
+            dbName: "ecommerce"
+        })
             .then(() => {
                 console.log("DB connected.");
             })

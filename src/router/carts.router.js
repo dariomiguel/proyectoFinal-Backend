@@ -61,31 +61,24 @@ router.post("/:cid/purchase", auth, async (req, res) => {
     try {
         const cId = req.params.cid;
         console.log("el cid en el backend es", cId);
+
         const cartPorId = await cartService.get(cId);
 
-
-        // const cartPlain = cartPorId.toObject({ getters: true, virtuals: true });
-
-        // // Iterar sobre los productos para mostrar sus propiedades
-        // cartPlain.products.forEach(product => {
-        //     console.log("Product ID:", product.product._id);
-        //     let cantDB = await productService.getProduct(product.product._id);
-        //     console.log("La cantidad en la base de datos es ", cantDB);
-        //     console.log("Product Title:", product.product.title); // Reemplaza 'title' con la propiedad real del producto
-        //     console.log("Product Quantity:", product.quantity);
-        //     // Agrega más propiedades según sea necesario
-        // });
-
+        let total = 0;
+        console.log("El total de la compra es de ", total);
         async function processProducts(cartPlain) {
             for (const product of cartPlain.products) {
                 try {
-                    const cantDB = await productService.getProduct(product.product._id);
+                    const productDB = await productService.getProduct(product.product._id);
                     console.log("---------------------------------------");
-                    console.log("La cantidad en stock es ", cantDB.stock);
+                    console.log("La cantidad en stock es ", productDB.stock);
                     console.log("---------------------------------------");
-                    console.log("Cantidad a comprar:", product.quantity,);
-                    if (cantDB.stock >= product.quantity) {
+                    console.log("Cantidad a comprar:", product.quantity);
+                    console.log("El precio es: ", productDB.price);
+
+                    if (productDB.stock >= product.quantity) {
                         console.log(`Se puede comprar ${product._id} , entonces restarlo del stock del producto y continuar.`);
+                        total += (productDB.price * product.quantity);
                     } else {
                         console.log(`El producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, no se agregará al carrito.`);
                     }
@@ -93,9 +86,10 @@ router.post("/:cid/purchase", auth, async (req, res) => {
                     console.error("Error al procesar el producto:", error);
                 }
             }
+            console.log("El total de la compra es de ", total);
+            console.log("000000000000000 FIN DE TICKET 00000000000000000");
         }
 
-        // Luego, puedes llamar a esta función con tu objeto cartPlain
         const cartPlain = cartPorId.toObject({ getters: true, virtuals: true })
         processProducts(cartPlain);
 
