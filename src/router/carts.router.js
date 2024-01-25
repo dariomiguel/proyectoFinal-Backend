@@ -1,5 +1,6 @@
 import { Router } from "express";
 import { cartService } from "../repositories/index.js";
+import authorize from "../middleware/authorizationMiddleware.js";
 
 const router = Router();
 
@@ -22,9 +23,7 @@ router.get("/", async (req, res) => {
 
 router.post("/", async (req, res) => {
     try {
-        const cart = await cartService.create();
-
-        console.log("Carrito creado con id: 🛒 ", cart._id.toString());
+        const cart = await cartService.create(req.user.role);
         res.status(201).json({ status: "success", payload: cart });
     }
     catch (error) {
@@ -37,6 +36,7 @@ router.post("/", async (req, res) => {
 router.get("/:cid", auth, async (req, res) => {
     try {
         const cId = req.params.cid;
+        console.log("En cart router cid ", cId);
         const cartPorId = await cartService.get(cId);
         if (cartPorId === null) {
             res

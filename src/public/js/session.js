@@ -21,8 +21,6 @@ loginForm.addEventListener("submit", async (event) => {
             }),
         });
 
-        console.log("El status es:", response.status);
-
         if (response.status === 400) {
             Swal.fire({
                 icon: 'error',

@@ -11,6 +11,7 @@ class UserManagerMongo {
                 error.statusCode = 404; // Asigna un código de estado 404 al error
                 throw error;
             }
+            console.log("User es: ", user);
             return user
         } catch (error) {
             throw error;
@@ -21,7 +22,6 @@ class UserManagerMongo {
         try {
             const user = await UserModel.findOne({ _id: uId });
             if (!user) return console.log("User no encontrado");
-
             //Si el usuario no posee carrito devuelve un false 
             const contenidoUserCart = user.carts;
             if (contenidoUserCart == "") return false

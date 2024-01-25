@@ -1,6 +1,7 @@
 import { Router } from "express";
 import __dirname from "../utils.js";
 import { productService } from "../repositories/index.js";
+import authorize from "../middleware/authorizationMiddleware.js";
 
 const router = Router();
 
@@ -29,10 +30,10 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authorize("admin"), async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
-        await productService.create(title, description, code, price, stock, category, thumbnail)
+        const productoAgregado = await productService.create(title, description, code, price, stock, category, thumbnail)
 
         res
             //*201 para creaciones exitosas
@@ -98,7 +99,7 @@ router.get("/:pid", async (req, res) => {
 
 });
 
-router.put("/:pid", async (req, res) => {
+router.put("/:pid", authorize("admin"), async (req, res) => {
     try {
         const productId = req.params.pid;
         const { key, value } = req.body;
@@ -122,21 +123,20 @@ router.put("/:pid", async (req, res) => {
     }
 });
 
-router.delete("/:pid", async (req, res) => {
+router.delete("/:pid", authorize("admin"), async (req, res) => {
     try {
-        const productId = parseInt(req.params.pid);
-        const productPorId = await productService.delete(productId)
+        const productId = req.params.pid;
 
-        if (productPorId === null) {
+        if (productId === null) {
             console.error(`No se encontró el producto con id:"${productId}"`);
             res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
         } else {
-            await this.dao.deleteProduct(productId);
+            await productService.delete(productId)
             res.status(201).json({ message: "Producto eliminado correctamente" });
         }
 
     } catch (error) {
-        console.error("Error al eliminar el producto:", error);
+        console.error("Error al eliminar el producto usando botón:", error);
         res.status(500).json({ error: "Hubo un error al eliminar el producto" });
     }
 });

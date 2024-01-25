@@ -6,8 +6,11 @@ export default class CartRepository {
         this.dao = dao
     }
 
-    create = async () => {
-        const result = await this.dao.createCart()
+    create = async (role) => {
+        console.log("el rol es ,", role);
+        let result = await this.dao.createCart()
+        console.log("el result desde carts respository es ", result);
+        // console.log("Carrito creado con id: 🛒 ", cart._id.toString());
 
         return result
     }
@@ -19,6 +22,7 @@ export default class CartRepository {
     }
 
     get = async (cId) => {
+        console.log("El cId es valido? ", cId);
         const result = await this.dao.getCartById(cId)
 
         return result

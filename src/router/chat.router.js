@@ -1,5 +1,6 @@
 import express from "express";
 import { chatService } from "../repositories/index.js";
+import authorize from "../middleware/authorizationMiddleware.js";
 
 const router = express.Router();
 
@@ -20,7 +21,7 @@ function handleError(error, res) {
     }
 }
 
-router.get("/", auth, async (req, res) => {
+router.get("/", authorize("user"), auth, async (req, res) => {
     try {
 
         const limit = req.query.limit;
@@ -36,7 +37,7 @@ router.get("/", auth, async (req, res) => {
     }
 });
 
-router.post("/", async (req, res) => {
+router.post("/", authorize("user"), async (req, res) => {
     try {
         const { user, message } = req.body;
         //Agregar Chat a la conversación

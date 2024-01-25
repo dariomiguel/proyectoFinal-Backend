@@ -27,7 +27,6 @@ const initializePassport = () => {
     }, async (username, password, done) => {
         try {
 
-
             if (!username || !password) {
                 console.error("Nombre de usuario o contraseña no proporcionados");
                 return done(null, false, { message: "Nombre de usuario o contraseña no proporcionados" });
@@ -80,6 +79,7 @@ const initializePassport = () => {
         try {
             const user = await UserModel.findOne({ email: username })
 
+            console.log("Log para mostrar algo y no volverme loco", username);
             if (user || username === adminEmail) {
                 console.log("El usuario ya existe");
 

@@ -30,7 +30,7 @@ socket.on("mostrandoProductos", (datos) => {
             <h3>${datos.producto.title}</h3>
             <ul>
                 <li>$ ${datos.producto.price}</li>
-                <li>N° Id: ${datos.producto.id}</li>
+                <li>N° Id: ${datos.producto._id}</li>
                 <li>${datos.producto.description}</li>
                 <li>Código de producto: ${datos.producto.code}</li>
                 <li>Stock: ${datos.producto.stock}</li>

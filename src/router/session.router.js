@@ -1,20 +1,20 @@
 import { Router } from "express";
 import passport from "passport";
 import { userService } from "../repositories/index.js";
+import authorize from "../middleware/authorizationMiddleware.js";
 
 const router = Router();
 
 router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
     try {
         if (!req.user) return res.status(400).send({ status: "error", error: "Credenciales no validas!" })
+        const result = await userService.get(req.user)
 
-        const result = await userService.get(req.user._id)
         req.session.user = result
 
         return res.status(200).redirect("/products")
     } catch {
         console.error("Error en el controlador /login:", error);
-
         return res.status(500)
     }
 })
@@ -41,6 +41,16 @@ router.get("/logout", (req, res) => {
     } catch (error) {
         console.error("Error en el controlador /logout:", error);
         return res.status(500).send("Error en el servidor");
+    }
+});
+
+router.get("/current", authorize("user"), (req, res) => {
+    try {
+        if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
+        return res.status(200).json(req.session.user);
+    } catch (error) {
+        console.error("Error en la ruta /current:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
     }
 });
 

@@ -6,8 +6,8 @@ export default class UserRepository {
         this.dao = dao
     }
 
-    get = async (uId) => {
-        const result = await this.dao.getUser(uId)
+    get = async (userAdmin) => {
+        const result = userAdmin
         const user = new userInsertDTO(result)
         return user
     }

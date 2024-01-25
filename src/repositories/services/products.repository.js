@@ -13,7 +13,6 @@ export default class ProductRepository {
 
     create = async (title, description, code, price, stock, category, thumbnail) => {
         const productToInsert = new productInsertDTO({ title, description, code, price, stock, category, thumbnail })
-        console.log("El valor del precio es: ", productToInsert.price);
 
         //Manejo de excepciones para no permitir valores incorrectos
         const algunaPropiedadVacia = await this.dao.isNotValidCode(productToInsert);
