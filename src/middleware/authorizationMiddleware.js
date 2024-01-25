@@ -12,6 +12,7 @@ const authorize = (requiredRole) => {
             } else if (userRole === "user" && requiredRole === "user") {
                 next();
             } else {
+                console.log("Acceso no autorizado");
                 return res.status(403).json({ error: "Acceso no autorizado" });
             }
         } catch (error) {

@@ -51,7 +51,6 @@ class CartManager {
 
     getCartById = async (cId) => {
         try {
-            console.log("cid en manager ", cId);
             //* Buscamos elementos por Id en base de datos
             const carritoBuscado = await CartModel.findOne({ _id: cId }).populate("products.product")
             return carritoBuscado;

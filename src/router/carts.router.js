@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.post("/", async (req, res) => {
+router.post("/", authorize("user"), async (req, res) => {
     try {
         const cart = await cartService.create(req.user.role);
         res.status(201).json({ status: "success", payload: cart });
@@ -36,7 +36,6 @@ router.post("/", async (req, res) => {
 router.get("/:cid", auth, async (req, res) => {
     try {
         const cId = req.params.cid;
-        console.log("En cart router cid ", cId);
         const cartPorId = await cartService.get(cId);
         if (cartPorId === null) {
             res

@@ -8,11 +8,12 @@ router.get("/", authorize("user"), async (req, res) => {
     try {
         const user = req.session.user
         const uId = user._id;
-        console.log("El user en router es ", user);
 
         let response = await userService.getCart(uId);
-        if (!response) { response = await cartService.create(user.role) }
-        console.log("El response es :", response);
+        if (!response) {
+            const responseCreate = await cartService.create(user.role)
+            response = responseCreate._id
+        }
         res.status(200).json({ payload: response });
 
     } catch (error) {
