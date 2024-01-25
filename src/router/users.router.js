@@ -28,8 +28,6 @@ router.post("/cart/:cid", async (req, res) => {
         const user = req.session.user
         const uId = user._id;
 
-        console.log("EL user id es : 🧑‍💻", uId);
-
         if (!uId) {
             console.error(`No se encontró el usuario con id:"${uId}"`);
             return res.status(404).json({ Error: `No se encontró el usuario con id:"${uId}"` });

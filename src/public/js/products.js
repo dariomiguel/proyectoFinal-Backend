@@ -43,7 +43,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         'Content-Type': 'application/json',
                     },
                 });
-
             } catch (error) {
                 console.error('Hubo un error al realizar la solicitud POST:', error);
             }
