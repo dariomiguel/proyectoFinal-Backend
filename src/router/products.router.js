@@ -131,6 +131,7 @@ router.delete("/:pid", authorize("admin"), async (req, res) => {
             console.error(`No se encontró el producto con id:"${productId}"`);
             res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
         } else {
+            console.log("El req session role es: ", req.session.user.role);
             await productService.delete(productId)
             res.status(201).json({ message: "Producto eliminado correctamente" });
         }

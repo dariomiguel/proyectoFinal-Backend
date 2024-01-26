@@ -1,3 +1,4 @@
+import { generateToken } from "../../utils.js"
 import userInsertDTO from "../../DTO/user.dto.js"
 
 export default class UserRepository {

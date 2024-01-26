@@ -9,19 +9,16 @@ router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), 
     try {
         const usuario = req.user;
 
-
         if (!usuario) return res.status(401).send({ status: "error", error: "Credenciales no validas!" })
 
-        console.log("El usuario es: ", usuario)
-
-        const token = generateToken(usuario)
-        res.cookie("coderCookie", token, {
-            maxAge: 60 * 60 * 1000,
-            httpOnly: true
-        })
+        //!Para implementar JWT más adelante
+        // const token = generateToken(usuario)
+        // res.cookie("coderCookie", token, {
+        //     maxAge: 60 * 60 * 1000,
+        //     httpOnly: true
+        // })
 
         const result = await userService.get(usuario)
-
         req.session.user = result
 
         return res.status(200).redirect("/products")
@@ -80,4 +77,17 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
 
 router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
 
+//! PREGUNTAR PORQUE NO FUNCIONA CON JWT
+// router.get("/current", passport.authenticate("jwt", { session: false }), authorize("user"), (req, res) => {
+//     try {
+//         if (!req.user) return res.status(401).json({ error: "No hay usuario autenticado" });
+//         (req, res) => {
+//             res.send({ status: "success", payload: req.user })
+//         }
+//         // return res.status(200).json(req.session.user);
+//     } catch (error) {
+//         console.error("Error en la ruta /current:", error);
+//         return res.status(500).json({ error: "Error en el servidor" });
+//     }
+// });
 export default router

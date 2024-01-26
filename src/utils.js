@@ -34,19 +34,16 @@ export const authToken = (req, res, next) => {
     })
 }
 
-export const authorize = (requiredRole) => {
+export const authorize = requiredRole => {
     return async (req, res, next) => {
         try {
             // Verificar si hay un usuario autenticado en la sesión
-            if (!req.session.user) {
-                return res.status(401).json({ error: "No hay usuario autenticado" });
-            }
+            if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
 
-            const user = req.user
-            console.log("El user es: ", user)
+            const user = req.session.user
 
             if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
-            if (user.user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
+            if (user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
 
             return next()
         } catch (error) {
@@ -55,3 +52,29 @@ export const authorize = (requiredRole) => {
         }
     };
 };
+
+//! PREGUNTAR PORQUE NO FUNCIONA CON JWT
+// export const authorize = requiredRole => {
+//     return async (req, res, next) => {
+//         try {
+//             // Verificar si hay un usuario autenticado en la sesión
+//             if (!req.user) {
+//                 return res.status(401).json({ error: "No hay usuario autenticado" });
+//             }
+
+//             const user = req.user
+//             // console.log("El rol del user es: ", user.user.role)
+//             console.log("El rol requerido requiredRole es ", requiredRole);
+//             console.log("El req session user es :", req.user);
+//             console.log("El user es: ", user)
+
+//             if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
+//             if (user.user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
+
+//             return next()
+//         } catch (error) {
+//             console.error("Error en el middleware de autorización:", error);
+//             return res.status(500).json({ error: "Error en el servidor" });
+//         }
+//     };
+// };

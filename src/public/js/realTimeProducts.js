@@ -61,6 +61,7 @@ const sendDelete = async (id) => {
                 confirmButtonColor: "#3085d6",
                 confirmButtonText: "Aceptar"
             });
+            document.getElementById(id).innerHTML = "";
 
         } else {
             console.error("Error elimando el producto desde formulario cliente:", response);
@@ -72,7 +73,6 @@ const sendDelete = async (id) => {
                 confirmButtonText: "Cerrar"
             });
         }
-        document.getElementById(id).innerHTML = "";
     } catch (error) {
         console.error("Error al eliminar el producto:", error);
     }
@@ -110,7 +110,6 @@ productsAddForm.addEventListener("submit", async (event) => {
             }),
         });
 
-        console.log("Que se agrega?", title, price, description, code, stock, category, thumbnail);
         if (response.ok) {
             let lastAddedProduct;
             const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
@@ -121,7 +120,6 @@ productsAddForm.addEventListener("submit", async (event) => {
             if (obtainID.ok) {
                 const responseData = await obtainID.json();
                 lastAddedProduct = responseData.payload;
-                console.log("Esto es con obtainId:", lastAddedProduct);
             } else {
                 console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
             }
@@ -169,7 +167,6 @@ document.querySelector("#btnDelete").addEventListener("click", (event) => {
 });
 
 function sendProduct(producto) {
-    console.log("Este es el útimo producto agregado desde la función donde esta el emit", producto);
     socket.emit("ClienteEnvioProducto", { producto })
 }
 

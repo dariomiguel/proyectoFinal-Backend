@@ -1,15 +1,5 @@
 document.querySelector("#current").onclick = (e) => {
-    fetch("/jwt/current", {
-        headers: { "Content-Type": "application/json" }
-    })
-        .then(r => r.json())
-        .then(data => {
-            document.querySelector("#result").innerHTML = JSON.stringify(data)
-        })
-}
-
-document.querySelector("#everyone").onclick = (e) => {
-    fetch("/jwt/everyone", {
+    fetch("/api/session/current", {
         headers: { "Content-Type": "application/json" }
     })
         .then(r => r.json())
