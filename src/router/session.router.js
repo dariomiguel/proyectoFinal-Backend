@@ -1,21 +1,33 @@
 import { Router } from "express";
 import passport from "passport";
 import { userService } from "../repositories/index.js";
-import authorize from "../middleware/authorizationMiddleware.js";
+import { authorize, generateToken } from "../utils.js";
 
 const router = Router();
 
 router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
     try {
-        if (!req.user) return res.status(400).send({ status: "error", error: "Credenciales no validas!" })
-        const result = await userService.get(req.user)
+        const usuario = req.user;
+
+
+        if (!usuario) return res.status(401).send({ status: "error", error: "Credenciales no validas!" })
+
+        console.log("El usuario es: ", usuario)
+
+        const token = generateToken(usuario)
+        res.cookie("coderCookie", token, {
+            maxAge: 60 * 60 * 1000,
+            httpOnly: true
+        })
+
+        const result = await userService.get(usuario)
 
         req.session.user = result
 
         return res.status(200).redirect("/products")
-    } catch {
+    } catch (error) {
         console.error("Error en el controlador /login:", error);
-        return res.status(500)
+        return res.status(500).send("Error en el servidor")
     }
 })
 

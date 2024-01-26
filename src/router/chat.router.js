@@ -1,6 +1,6 @@
 import express from "express";
 import { chatService } from "../repositories/index.js";
-import authorize from "../middleware/authorizationMiddleware.js";
+import { authorize } from "../utils.js";
 
 const router = express.Router();
 

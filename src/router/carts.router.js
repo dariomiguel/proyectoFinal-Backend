@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { cartService, productService } from "../repositories/index.js";
-import authorize from "../middleware/authorizationMiddleware.js";
+import { authorize } from "../utils.js"
 
 const router = Router();
 

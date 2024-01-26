@@ -4,13 +4,18 @@ loginForm.addEventListener("submit", async (event) => {
 
     event.preventDefault();
 
-    const emailInput = document.getElementById("emailLogin");
-    const passInput = document.getElementById("passLogin");
-
-    const email = emailInput.value;
-    const password = passInput.value;
+    const email = document.querySelector("#emailLogin").value;
+    const password = document.querySelector("#passLogin").value;
 
     try {
+        fetch("/api/session/login", {
+            method: "POST",
+            body: JSON.stringify({ email, password }),
+            headers: { "Content-Type": "application/json" }
+        })
+            .then(r => r.json())
+            .then(data => console.log(data))
+
         const response = await fetch("/api/session/login", {
             method: "POST",
             headers: {

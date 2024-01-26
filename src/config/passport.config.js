@@ -4,6 +4,7 @@ import UserModel from "../DAO/models/user.model.js"
 import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 import config from "./config.js"
+import passportJWT from "passport-jwt"
 
 import mongoose from "mongoose";
 
@@ -17,10 +18,25 @@ const adminPass = config.adminPass;
 const githubId = config.githubId;
 const githubSecret = config.githubSecret;
 const githubUrl = config.githubUrl;
+const PRIVATE_KEY = config.privateKey;
 
 const LocalStrategy = local.Strategy;
+const JWTStrategy = passportJWT.Strategy
+
+const cookieExtractor = req => {
+    const token = (req?.cookies) ? req.cookies["coderCookie"] : null
+
+    console.log("COOKIE EXTRACTOR: ", token)
+}
 
 const initializePassport = () => {
+
+    passport.use("jwt", new JWTStrategy({
+        secretOrKey: PRIVATE_KEY,
+        jwtFromRequest: passportJWT.ExtractJwt.fromExtractors([cookieExtractor])
+    }, (jwt_payload, done) => {
+        return done(null, jwt_payload)
+    }))
 
     passport.use("login", new LocalStrategy({
         usernameField: "email",

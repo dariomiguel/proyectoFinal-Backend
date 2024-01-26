@@ -3,6 +3,7 @@ import handlebars from "express-handlebars";
 import { configureSocket } from "./config/socketConfig.js";
 import __dirname from "./utils.js";
 import config from "./config/config.js";
+import cookieParser from "cookie-parser";
 
 //? Variables de entorno
 const urlMongo = config.urlMongo;
@@ -26,6 +27,7 @@ import initializePassport from "./config/passport.config.js";
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
 
 app.use(session({
     store: MongoStore.create({

@@ -1,7 +1,7 @@
 import { Router } from "express";
 import __dirname from "../utils.js";
 import { productService } from "../repositories/index.js";
-import authorize from "../middleware/authorizationMiddleware.js";
+import { authorize } from "../utils.js";
 
 const router = Router();
 

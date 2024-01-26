@@ -22,7 +22,7 @@ export const generateToken = user => {
 }
 
 export const authToken = (req, res, next) => {
-    const token = req.headers.auth
+    const token = req.cookies["coderCookie"]
 
     if (!token) return res.status(401).send({ error: "no auth" })
 
@@ -33,3 +33,25 @@ export const authToken = (req, res, next) => {
         next()
     })
 }
+
+export const authorize = (requiredRole) => {
+    return async (req, res, next) => {
+        try {
+            // Verificar si hay un usuario autenticado en la sesión
+            if (!req.session.user) {
+                return res.status(401).json({ error: "No hay usuario autenticado" });
+            }
+
+            const user = req.user
+            console.log("El user es: ", user)
+
+            if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
+            if (user.user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
+
+            return next()
+        } catch (error) {
+            console.error("Error en el middleware de autorización:", error);
+            return res.status(500).json({ error: "Error en el servidor" });
+        }
+    };
+};
