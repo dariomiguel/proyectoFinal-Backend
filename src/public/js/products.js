@@ -57,13 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
         try {
             const existCartInUserResponse = await fetch("/api/users", {
                 headers: { "Content-Type": "application/json" }
-            })
-                .then(r => r.json())
-                .then(data => {
-                    document.querySelector("#result").innerHTML = JSON.stringify(data)
-                })
+            });
 
-            console.log("existCartInUserResponse es; ", existCartInUserResponse);
             const existCartInUserData = await existCartInUserResponse.json();
             console.log("existCartInUserData es: ", existCartInUserData);
 
