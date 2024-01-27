@@ -38,6 +38,7 @@ export const authorize = requiredRole => {
     return async (req, res, next) => {
         try {
             // Verificar si hay un usuario autenticado en la sesión
+            console.log("El user de este momento es: ", req.session.user);
             if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
 
             const user = req.session.user

@@ -55,9 +55,17 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnSeeCart.addEventListener('click', async () => {
         try {
+            const existCartInUserResponse = await fetch("/api/users", {
+                headers: { "Content-Type": "application/json" }
+            })
+                .then(r => r.json())
+                .then(data => {
+                    document.querySelector("#result").innerHTML = JSON.stringify(data)
+                })
 
-            const existCartInUserResponse = await fetch('http://localhost:8080/api/users/');
+            console.log("existCartInUserResponse es; ", existCartInUserResponse);
             const existCartInUserData = await existCartInUserResponse.json();
+            console.log("existCartInUserData es: ", existCartInUserData);
 
             let cartId;
 

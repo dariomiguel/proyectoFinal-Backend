@@ -10,9 +10,8 @@ class TicketManager {
             purchaser: "Nombre del comprador", // Cambia esto por el nombre del comprador
         }
 
-        // const result = await TicketModel.create(ticketToAdd);
-
-        // return result;
+        const result = await TicketModel.create(ticketToAdd);
+        return result;
     }
 }
 

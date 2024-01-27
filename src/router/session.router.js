@@ -62,7 +62,8 @@ router.get("/logout", (req, res) => {
 router.get("/current", authorize("user"), (req, res) => {
     try {
         if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
-        return res.status(200).json(req.session.user);
+        const userDTO = new userInsertDTO(req.session.user)
+        return res.status(200).json(userDTO);
     } catch (error) {
         console.error("Error en la ruta /current:", error);
         return res.status(500).json({ error: "Error en el servidor" });
@@ -73,8 +74,8 @@ router.get("/github", passport.authenticate("github", { scope: ["user:email"] })
 
 router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/error" }),
     (req, res) => {
-        const userDTO = new userInsertDTO(req.user)
-        req.session.user = userDTO;
+
+        req.session.user = req.user;
 
         console.log("Session iniciada correctamante", req.session.user);
 
