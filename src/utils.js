@@ -53,6 +53,8 @@ export const authorize = requiredRole => {
     };
 };
 
+
+
 //! PREGUNTAR PORQUE NO FUNCIONA CON JWT
 // export const authorize = requiredRole => {
 //     return async (req, res, next) => {
@@ -78,3 +80,20 @@ export const authorize = requiredRole => {
 //         }
 //     };
 // };
+
+
+export const logUser = () => {
+    return function logUser(req, res, next) {
+        if (req.session?.user) return next()
+
+        res.redirect("/login")
+    }
+};
+
+export const justPublicWithoutSession = () => {
+    return function justPublicWithoutSession(req, res, next) {
+        if (req.session?.user) return res.redirect("/products")
+
+        return next()
+    }
+}

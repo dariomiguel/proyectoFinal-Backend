@@ -10,15 +10,20 @@ document.querySelector("#current").onclick = (e) => {
 
 document.getElementById("comprarButton").addEventListener("click", async (event) => {
     event.preventDefault();
-    const cidValue = getCIDFromURL();
-    console.log("El valor del CID en el front es:", cidValue);
+    try {
+        const cidValue = getCIDFromURL();
+        console.log("El valor del CID en el front es:", cidValue);
 
-    await fetch(`http://localhost:8080/api/carts/${cidValue}/purchase`, {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    });
+        await fetch(`http://localhost:8080/api/carts/${cidValue}/purchase`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    } catch (error) {
+        console.error("Error en la compra:", error);
+    }
+
 
 });
 

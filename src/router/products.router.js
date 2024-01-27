@@ -1,7 +1,7 @@
 import { Router } from "express";
 import __dirname from "../utils.js";
 import { productService } from "../repositories/index.js";
-import { authorize } from "../utils.js";
+import { authorize, logUser } from "../utils.js";
 
 const router = Router();
 
@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", authorize("admin"), async (req, res) => {
+router.post("/", logUser(), authorize("admin"), async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
         const productoAgregado = await productService.create(title, description, code, price, stock, category, thumbnail)
@@ -79,7 +79,7 @@ router.post("/", authorize("admin"), async (req, res) => {
     }
 });
 
-router.get("/:pid", async (req, res) => {
+router.get("/:pid", logUser(), async (req, res) => {
     try {
         const result = await productService.getProduct(req.params.pid);
 
@@ -99,7 +99,7 @@ router.get("/:pid", async (req, res) => {
 
 });
 
-router.put("/:pid", authorize("admin"), async (req, res) => {
+router.put("/:pid", logUser(), authorize("admin"), async (req, res) => {
     try {
         const productId = req.params.pid;
         const { key, value } = req.body;
@@ -123,7 +123,7 @@ router.put("/:pid", authorize("admin"), async (req, res) => {
     }
 });
 
-router.delete("/:pid", authorize("admin"), async (req, res) => {
+router.delete("/:pid", logUser(), authorize("admin"), async (req, res) => {
     try {
         const productId = req.params.pid;
 

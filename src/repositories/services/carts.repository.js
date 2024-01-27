@@ -1,4 +1,4 @@
-import ProductManager from "../../DAO/file/ProductManager.file.js"
+import ProductManager from "../../DAO/mongo/ProductManager.mongo.js"
 const productManager = new ProductManager();
 
 export default class CartRepository {
@@ -32,13 +32,13 @@ export default class CartRepository {
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
             const error = new Error(`No se encontró el carrito con id: ${cId}`);
-            error.statusCode = 4001; // Asigna un código de estado 404 al error
+            error.statusCode = 4001;
             throw error;
         }
         const existingProduct = await productManager.getProductById(pId);
         if (!existingProduct) {
             const error = new Error(`No se encontró el producto con id: ${pId}`);
-            error.statusCode = 4002; // Asigna un código de estado 404 al error
+            error.statusCode = 4002;
             throw error;
         }
 
@@ -80,7 +80,7 @@ export default class CartRepository {
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
             const error = new Error(`No se encontró el carrito con id: ${cId}`);
-            error.statusCode = 4003; // Asigna un código de estado 404 al error
+            error.statusCode = 4003;
             throw error;
         }
 
@@ -97,7 +97,7 @@ export default class CartRepository {
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
             const error = new Error(`No se encontró el carrito con id: ${cId}`);
-            error.statusCode = 4003; // Asigna un código de estado 404 al error
+            error.statusCode = 4003;
             throw error;
         }
 
@@ -105,7 +105,7 @@ export default class CartRepository {
 
         if (!(productIndex !== -1)) {
             const error = new Error(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);
-            error.statusCode = 4004; // Asigna un código de estado 404 al error
+            error.statusCode = 4004;
             throw error;
         }
         // Actualiza solo la cantidad del producto en el carrito

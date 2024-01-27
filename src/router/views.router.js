@@ -1,39 +1,27 @@
 import express from "express";
-import __dirname from "../utils.js";
+import __dirname, { logUser, justPublicWithoutSession } from "../utils.js";
 import { productService } from "../repositories/index.js";
 
 const router = express.Router();
 
-function justPublicWithoutSession(req, res, next) {
-    if (req.session?.user) return res.redirect("/products")
-
-    return next()
-}
-
-function auth(req, res, next) {
-    if (req.session?.user) return next()
-
-    res.redirect("/login")
-}
-
-router.get("/", justPublicWithoutSession, (req, res) => {
+router.get("/", justPublicWithoutSession(), (req, res) => {
     return res.redirect("/products")
 })
 
-router.get("/login", justPublicWithoutSession, (req, res) => {
+router.get("/login", justPublicWithoutSession(), (req, res) => {
     return res.render("login", {
         style: "style.css",
         showHeaderLite: true
     })
 })
 
-router.get("/register", justPublicWithoutSession, (req, res) => {
+router.get("/register", justPublicWithoutSession(), (req, res) => {
     return res.render("register", {
         style: "login.css"
     })
 })
 
-router.get("/profile", auth, (req, res) => {
+router.get("/profile", logUser(), (req, res) => {
     const user = req.session.user
 
     res.render("profile", {
@@ -43,7 +31,7 @@ router.get("/profile", auth, (req, res) => {
 })
 
 
-router.get("/home", justPublicWithoutSession, async (req, res) => {
+router.get("/home", justPublicWithoutSession(), async (req, res) => {
     try {
 
         const limit = parseInt(req.query?.limit || 10);
@@ -71,7 +59,7 @@ router.get("/home", justPublicWithoutSession, async (req, res) => {
     }
 })
 
-router.get("/products", auth, async (req, res) => {
+router.get("/products", logUser(), async (req, res) => {
     try {
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);
@@ -101,7 +89,7 @@ router.get("/products", auth, async (req, res) => {
     }
 });
 
-router.get("/error404", auth, async (req, res) => {
+router.get("/error404", logUser(), async (req, res) => {
     try {
         res
             .render("error404", {

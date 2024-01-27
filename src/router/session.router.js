@@ -2,6 +2,12 @@ import { Router } from "express";
 import passport from "passport";
 import { userService } from "../repositories/index.js";
 import { authorize, generateToken } from "../utils.js";
+import config from "../config/config.js"
+import userInsertDTO from "../DTO/user.dto.js";
+
+const githubId = config.githubId;
+const githubSecret = config.githubSecret;
+const githubUrl = config.githubUrl;
 
 const router = Router();
 
@@ -67,9 +73,9 @@ router.get("/github", passport.authenticate("github", { scope: ["user:email"] })
 
 router.get("/githubcallback", passport.authenticate("github", { failureRedirect: "/error" }),
     (req, res) => {
-        console.log("Callback: ", req.user);
+        const userDTO = new userInsertDTO(req.user)
+        req.session.user = userDTO;
 
-        req.session.user = req.user;
         console.log("Session iniciada correctamante", req.session.user);
 
         res.redirect("/")

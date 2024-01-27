@@ -1,14 +1,8 @@
 import express from "express";
 import { chatService } from "../repositories/index.js";
-import { authorize } from "../utils.js";
+import { authorize, logUser } from "../utils.js";
 
 const router = express.Router();
-
-function auth(req, res, next) {
-    if (req.session?.user) return next()
-
-    res.redirect("/login")
-}
 
 function handleError(error, res) {
     if (error.statusCode === 404) {
@@ -21,7 +15,7 @@ function handleError(error, res) {
     }
 }
 
-router.get("/", authorize("user"), auth, async (req, res) => {
+router.get("/", logUser(), authorize("user"), async (req, res) => {
     try {
 
         const limit = req.query.limit;

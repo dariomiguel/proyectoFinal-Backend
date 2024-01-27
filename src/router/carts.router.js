@@ -1,16 +1,10 @@
 import { Router } from "express";
-import { cartService, productService } from "../repositories/index.js";
-import { authorize } from "../utils.js"
+import { cartService, productService, ticketService } from "../repositories/index.js";
+import { authorize, logUser } from "../utils.js"
 
 const router = Router();
 
-function auth(req, res, next) {
-    if (req.session?.user) return next()
-
-    res.redirect("/login")
-}
-
-router.get("/", async (req, res) => {
+router.get("/", logUser(), async (req, res) => {
     try {
         const carts = await cartService.getCarts();
 
@@ -21,7 +15,7 @@ router.get("/", async (req, res) => {
     }
 })
 
-router.post("/", authorize("user"), async (req, res) => {
+router.post("/", logUser(), authorize("user"), async (req, res) => {
     try {
         const cart = await cartService.create(req.user.role);
         res.status(201).json({ status: "success", payload: cart });
@@ -33,7 +27,7 @@ router.post("/", authorize("user"), async (req, res) => {
     }
 })
 
-router.get("/:cid", auth, async (req, res) => {
+router.get("/:cid", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         const cartPorId = await cartService.get(cId);
@@ -57,62 +51,7 @@ router.get("/:cid", auth, async (req, res) => {
     }
 });
 
-router.post("/:cid/purchase", auth, async (req, res) => {
-    try {
-        const cId = req.params.cid;
-        console.log("el cid en el backend es", cId);
-
-        const cartPorId = await cartService.get(cId);
-
-        let total = 0;
-        console.log("El total de la compra es de ", total);
-        async function processProducts(cartPlain) {
-            for (const product of cartPlain.products) {
-                try {
-                    const productDB = await productService.getProduct(product.product._id);
-                    console.log("---------------------------------------");
-                    console.log("La cantidad en stock es ", productDB.stock);
-                    console.log("---------------------------------------");
-                    console.log("Cantidad a comprar:", product.quantity);
-                    console.log("El precio es: ", productDB.price);
-
-                    if (productDB.stock >= product.quantity) {
-                        console.log(`Se puede comprar ${product._id} , entonces restarlo del stock del producto y continuar.`);
-                        total += (productDB.price * product.quantity);
-                    } else {
-                        console.log(`El producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, no se agregará al carrito.`);
-                    }
-                } catch (error) {
-                    console.error("Error al procesar el producto:", error);
-                }
-            }
-            console.log("El total de la compra es de ", total);
-            console.log("000000000000000 FIN DE TICKET 00000000000000000");
-        }
-
-        const cartPlain = cartPorId.toObject({ getters: true, virtuals: true })
-        processProducts(cartPlain);
-
-
-
-
-        if (cartPorId === null) {
-            res
-                .status(404)
-                .json({ Error: "No se encontró el carrito solicitado" });
-        } else {
-            if (req.headers['user-agent'].includes('Postman')) {
-                return res.status(200).json({ status: "success", payload: cartPorId });
-            }
-            res.status(200).json({ status: "success", payload: cartPorId })
-        }
-
-    } catch (error) {
-        res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
-    }
-});
-
-router.post("/:cid/product/:pid", async (req, res) => {
+router.post("/:cid/product/:pid", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         const pId = req.params.pid;
@@ -137,7 +76,7 @@ router.post("/:cid/product/:pid", async (req, res) => {
     }
 })
 
-router.delete("/:cid", async (req, res) => {
+router.delete("/:cid", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         await cartService.delete(cId);
@@ -149,7 +88,7 @@ router.delete("/:cid", async (req, res) => {
     }
 });
 
-router.delete("/:cid/products/:pid", async (req, res) => {
+router.delete("/:cid/products/:pid", logUser(), async (req, res) => {
 
     try {
         const cId = req.params.cid;
@@ -163,7 +102,7 @@ router.delete("/:cid/products/:pid", async (req, res) => {
     }
 });
 
-router.put("/:cid", async (req, res) => {
+router.put("/:cid", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         const updatedProducts = req.body.products;
@@ -184,7 +123,7 @@ router.put("/:cid", async (req, res) => {
     }
 });
 
-router.put("/:cid/products/:pid", async (req, res) => {
+router.put("/:cid/products/:pid", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         const pId = req.params.pid;
@@ -206,5 +145,66 @@ router.put("/:cid/products/:pid", async (req, res) => {
         }
     }
 });
+
+
+router.post("/:cid/purchase", logUser(), async (req, res) => {
+    try {
+        const cId = req.params.cid;
+        console.log("El CID de carts es:", cId);
+        const result = await ticketService.post(cId)
+
+        console.log("El result de carts es:", result);
+        // console.log("el cid en el backend es", cId);
+
+        // const cartPorId = await cartService.get(cId);
+
+        // let total = 0;
+        // console.log("El total de la compra es de ", total);
+        // async function processProducts(cartPlain) {
+        //     for (const product of cartPlain.products) {
+        //         try {
+        //             const productDB = await productService.getProduct(product.product._id);
+        //             console.log("---------------------------------------");
+        //             console.log("La cantidad en stock es ", productDB.stock);
+        //             console.log("---------------------------------------");
+        //             console.log("Cantidad a comprar:", product.quantity);
+        //             console.log("El precio es: ", productDB.price);
+
+        //             if (productDB.stock >= product.quantity) {
+        //                 console.log(`Se puede comprar ${product._id} , entonces restarlo del stock del producto y continuar.`);
+        //                 total += (productDB.price * product.quantity);
+        //             } else {
+        //                 console.log(`El producto no tiene suficiente stock para la cantidad indicada en el producto del carrito, no se agregará al carrito.`);
+        //             }
+        //         } catch (error) {
+        //             console.error("Error al procesar el producto:", error);
+        //         }
+        //     }
+        //     console.log("El total de la compra es de ", total);
+        //     console.log("000000000000000 FIN DE TICKET 00000000000000000");
+        // }
+
+        // const cartPlain = cartPorId.toObject({ getters: true, virtuals: true })
+        // processProducts(cartPlain);
+
+
+
+
+        // if (cartPorId === null) {
+        //     res
+        //         .status(404)
+        //         .json({ Error: "No se encontró el carrito solicitado" });
+        // } else {
+        //     if (req.headers['user-agent'].includes('Postman')) {
+        //         return res.status(200).json({ status: "success", payload: cartPorId });
+        //     }
+        //     res.status(200).json({ status: "success", payload: cartPorId })
+        // }
+
+    } catch (error) {
+        res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
+    }
+});
+
 
 export default router
