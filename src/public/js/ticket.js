@@ -14,7 +14,7 @@ document.getElementById("comprarButton").addEventListener("click", async (event)
         const cidValue = getCIDFromURL();
         console.log("El valor del CID en el front es:", cidValue);
 
-        await fetch(`http://localhost:8080/api/carts/${cidValue}/purchase`, {
+        await fetch(`/api/carts/${cidValue}/purchase`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

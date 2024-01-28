@@ -8,7 +8,7 @@ export default class CartRepository {
 
     create = async (role) => {
         let result = await this.dao.createCart()
-        console.log("Carrito creado con id: 🛒 ", result._id)//.toString());
+        console.log("Carrito creado con id: 🛒 ", result._id.toString());
 
         return result
     }

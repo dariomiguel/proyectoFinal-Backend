@@ -100,7 +100,7 @@ productsAddForm.addEventListener("submit", async (event) => {
     const thumbnail = thumbnailInput.value;
 
     try {
-        const response = await fetch("http://localhost:8080/api/products", {
+        const response = await fetch("/api/products", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -112,7 +112,7 @@ productsAddForm.addEventListener("submit", async (event) => {
 
         if (response.ok) {
             let lastAddedProduct;
-            const obtainID = await fetch("http://localhost:8080/api/lastProduct", {
+            const obtainID = await fetch("/api/lastProduct", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             });

@@ -20,7 +20,6 @@ router.get("/", authorize("user"), async (req, res) => {
         }
         res.status(200).json({ payload: response });
 
-
     } catch (error) {
         console.error("Error al buscar usuario: ", error);
         res.status(500).json({ error: "Hubo un error al buscar usuario" });

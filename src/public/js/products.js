@@ -12,13 +12,16 @@ document.addEventListener('DOMContentLoaded', () => {
             let productId = event.target.getAttribute('data-product-id');
             console.log("el product id es :", productId);
             try {
-                const existCartInUserResponse = await fetch(`http://localhost:8080/api/users/`, {
+                const existCartInUserResponse = await fetch(`/api/users/`, {
                     method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 });
                 const existCartInUserData = await existCartInUserResponse.json();
 
                 if (!existCartInUserData.payload) {
-                    let responseCreateCart = await fetch(`http://localhost:8080/api/carts/`, {
+                    let responseCreateCart = await fetch(`/api/carts/`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
@@ -30,14 +33,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 } else cartId = existCartInUserData.payload
 
-                await fetch(`http://localhost:8080/api/users/cart/${cartId}`, {
+                await fetch(`/api/users/cart/${cartId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
 
-                await fetch(`http://localhost:8080/api/carts/${cartId}/product/${productId}`, {
+                await fetch(`/api/carts/${cartId}/product/${productId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -59,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 headers: { "Content-Type": "application/json" }
             });
 
+
             const existCartInUserData = await existCartInUserResponse.json();
             console.log("existCartInUserData es: ", existCartInUserData);
 
@@ -66,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (!existCartInUserData.payload) {
                 // Si no tiene un carrito existente, crea uno nuevo
-                const responseCreateCart = await fetch('http://localhost:8080/api/carts/', {
+                const responseCreateCart = await fetch('/api/carts/', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -79,7 +83,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 cartId = existCartInUserData.payload;
             }
 
-            window.location.href = `http://localhost:8080/api/carts/${cartId}`;
+            window.location.href = `/api/carts/${cartId}`;
         } catch (error) {
             console.error('Hubo un error al realizar la solicitud:', error);
         }

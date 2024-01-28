@@ -60,6 +60,7 @@ const initializePassport = () => {
                     _id: adminId
                 }
 
+                console.log("El user desde passport login es", user);
                 return done(null, user)
             }
             const user = await UserModel.findOne({ email: username }).lean().exec()
@@ -129,6 +130,7 @@ const initializePassport = () => {
             const user = await UserModel.findOne({ email: profile._json.email })
             if (user) {
                 console.log("Ya se encuentra registrado");
+                console.log("El user desde passport github es", user);
                 return done(null, user)
             }
 
@@ -137,7 +139,7 @@ const initializePassport = () => {
                 last_name: "",
                 age: 0,
                 email: profile._json.email,
-                password: createHash(toString(Math.random()))
+                password: createHash(Math.random().toString())
             }
             console.log("el new user es;", newUser);
             const result = await UserModel.create(newUser);

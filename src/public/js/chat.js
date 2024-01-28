@@ -41,7 +41,7 @@ async function createMessage() {
     const message = input.value;
     if (message !== "") {
         try {
-            const response = await fetch("http://localhost:8080/chat", {
+            const response = await fetch("/chat", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

@@ -34,16 +34,15 @@ export const authToken = (req, res, next) => {
     })
 }
 
-export const authorize = requiredRole => {
+export const authorize = (requiredRole) => {
     return async (req, res, next) => {
         try {
             // Verificar si hay un usuario autenticado en la sesión
-            console.log("El user de este momento es: ", req.session.user);
             if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
 
             const user = req.session.user
 
-            if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
+            if (!user) return res.status(401).send({ error: "Sin autortizacion para acceder al contenido solicitado!" })
             if (user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
 
             return next()
@@ -85,6 +84,7 @@ export const authorize = requiredRole => {
 
 export const logUser = () => {
     return function logUser(req, res, next) {
+
         if (req.session?.user) return next()
 
         res.redirect("/login")
