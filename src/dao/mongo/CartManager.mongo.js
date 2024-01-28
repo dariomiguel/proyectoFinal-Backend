@@ -80,7 +80,7 @@ class CartManager {
             );
 
             //Analizamos si existe el producto
-            if (existingProductIndex !== -1) {
+            if (existingProduct !== -1) {
                 // Si el producto ya existe, sumar al quantity
                 existingProduct.quantity += 1
             } else {

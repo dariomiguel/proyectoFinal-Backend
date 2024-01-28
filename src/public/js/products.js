@@ -8,9 +8,9 @@ document.addEventListener('DOMContentLoaded', () => {
     btnsAddCart.forEach(btnAddCart => {
         btnAddCart.addEventListener('click', async (event) => {
             event.preventDefault();
-
             let productId = event.target.getAttribute('data-product-id');
             console.log("el product id es :", productId);
+
             try {
                 const existCartInUserResponse = await fetch(`/api/users/`, {
                     method: 'GET',
@@ -56,17 +56,17 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const btnSeeCart = document.getElementById('btnSeeCart');
 
-    btnSeeCart.addEventListener('click', async () => {
+    btnSeeCart.addEventListener('click', async (event) => {
+        event.preventDefault();
+
         try {
-            const existCartInUserResponse = await fetch("/api/users", {
-                headers: { "Content-Type": "application/json" }
+            const existCartInUserResponse = await fetch(`/api/users/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
             });
-
-
             const existCartInUserData = await existCartInUserResponse.json();
-            console.log("existCartInUserData es: ", existCartInUserData);
-
-            let cartId;
 
             if (!existCartInUserData.payload) {
                 // Si no tiene un carrito existente, crea uno nuevo
@@ -79,9 +79,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const responseData = await responseCreateCart.json();
                 cartId = responseData.payload._id;
-            } else {
-                cartId = existCartInUserData.payload;
-            }
+            } else cartId = existCartInUserData.payload;
+
+            await fetch(`/api/users/cart/${cartId}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
 
             window.location.href = `/api/carts/${cartId}`;
         } catch (error) {

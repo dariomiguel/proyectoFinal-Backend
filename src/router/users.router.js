@@ -9,12 +9,9 @@ router.get("/", authorize("user"), async (req, res) => {
         const user = req.session.user
         const uId = user._id;
 
-        console.log("el uid es :", uId);
-
         let response = await userService.getCart(uId);
 
         if (!response) {
-            console.log("Se procede a crear un carrito : ", response);
             const responseCreate = await cartService.create(user.role)
             response = responseCreate._id
         }

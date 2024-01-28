@@ -27,14 +27,14 @@ export default class CartRepository {
 
     productToCart = async (cId, pId, quantity) => {
 
-        console.log("La cantidad de productos que se va a agregar al carrito es: ", quantity);
-
         const existingCart = await this.dao.getCartById(cId);
+
         if (!existingCart) {
             const error = new Error(`No se encontró el carrito con id: ${cId}`);
             error.statusCode = 4001;
             throw error;
         }
+
         const existingProduct = await productManager.getProductById(pId);
         if (!existingProduct) {
             const error = new Error(`No se encontró el producto con id: ${pId}`);
@@ -52,8 +52,6 @@ export default class CartRepository {
 
         // Busca el índice del _id en la lista de _id
         const productIndex = productsIds.indexOf(pId);
-
-
         if (productIndex !== -1) {
             // Si el producto ya existe, incrementar la cantidad
             existingCart.products[productIndex].quantity += quantity;
@@ -102,6 +100,7 @@ export default class CartRepository {
         }
 
         const productIndex = existingCart.products.findIndex(product => product.product === pId);
+        console.log("el product index ", productIndex);
 
         if (!(productIndex !== -1)) {
             const error = new Error(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);

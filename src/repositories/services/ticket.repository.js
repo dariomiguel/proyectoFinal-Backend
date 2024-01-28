@@ -3,10 +3,8 @@ export default class TicketRepository {
         this.dao = dao
     }
 
-    post = async (cId) => {
-        console.log("El CID en el ticket repository, es:", cId);
-        const result = await this.dao.createTicket(cId)
-        console.log("el ticket es, ", result);
+    post = async (cId, user) => {
+        const result = await this.dao.createTicket(cId, user)
 
         return result
     }
