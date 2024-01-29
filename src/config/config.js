@@ -15,6 +15,9 @@ const config = {
     githubUrl: process.env.CALLBACK_URL,
 
     urlMongo: process.env.MONGO_URL,
+
+    emailUser: process.env.EMAIL_USER,
+    emailPass: process.env.EMAIL_PASS,
 };
 
 export default config;

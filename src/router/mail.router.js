@@ -2,6 +2,11 @@
 import nodemailer from "nodemailer"
 import express from "express";
 import __dir from "../utils.js";
+import config from "../config/config.js";
+
+
+const EMAIL = config.emailUser;
+const PASS = config.emailPass;
 
 const router = express.Router();
 
@@ -9,8 +14,8 @@ const transport = nodemailer.createTransport({
     service: "gmail",
     port: 587,
     auth: {
-        user: "dario.e.miguel@gmail.com",
-        pass: "poikyfvjoijapikk",
+        user: EMAIL,
+        pass: PASS,
     }
 })
 

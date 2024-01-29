@@ -7,7 +7,6 @@ import bcrypt from "bcrypt"
 const PRIVATE_KEY = config.privateKey;
 
 export const createHash = password => bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-
 export const isValidPassword = (user, password) => bcrypt.compareSync(password, user.password);
 
 const __filename = fileURLToPath(import.meta.url);
