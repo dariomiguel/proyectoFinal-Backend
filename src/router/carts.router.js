@@ -28,6 +28,7 @@ router.post("/", logUser(), authorize("user"), async (req, res) => {
 })
 
 router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
+
     try {
         const cId = req.params.cid;
         const cartPorId = await cartService.get(cId);
@@ -52,6 +53,7 @@ router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
 });
 
 router.post("/:cid/product/:pid", logUser(), async (req, res) => {
+
     try {
         const cId = req.params.cid;
         const pId = req.params.pid;
@@ -78,6 +80,7 @@ router.post("/:cid/product/:pid", logUser(), async (req, res) => {
 })
 
 router.delete("/:cid", logUser(), async (req, res) => {
+
     try {
         const cId = req.params.cid;
         await cartService.delete(cId);
@@ -153,7 +156,6 @@ router.post("/:cid/purchase", logUser(), async (req, res) => {
         const user = req.session.user
 
         const ticket = await ticketService.post(cId, user);
-        console.log("Ticket creado con los valores: ", ticket);
 
         res.status(201).json({ status: "success", payload: ticket });
 
@@ -161,6 +163,22 @@ router.post("/:cid/purchase", logUser(), async (req, res) => {
         res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
     }
 });
+
+router.get("/:cid/purchase", logUser(), async (req, res) => {
+    try {
+        const userName = req.session.user.first_name
+        const ticket = await ticketService.get(userName);
+
+        res.render("ticket", {
+            style: "ticket.css",
+            ticket
+        })
+
+    } catch (error) {
+        res.status(500).json({ Error: "Hubo un error al generar un ticket" });
+    }
+});
+
 
 
 export default router

@@ -1,6 +1,7 @@
 import TicketModel from "../models/ticket.model.js";
 import CartModel from "../models/carts.model.js";
 import ProductsModel from "../models/products.model.js";
+import UserModel from "../models/user.model.js";
 
 class TicketManager {
 
@@ -64,7 +65,14 @@ class TicketManager {
         );
     }
 
+    lastTicket = async (email) => {
 
+        const cantDocument = await TicketModel.countDocuments();
+        const ultimoTicket = await TicketModel.findOne().sort({ $natural: -1 });
+
+        return ultimoTicket
+
+    }
 }
 
 

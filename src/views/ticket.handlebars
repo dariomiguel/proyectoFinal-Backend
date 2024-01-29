@@ -1,9 +1,10 @@
-{{!-- <div class="ticket">
-    <h1>Ticket</h1>
-    <h2>Comprador: {{ticket.email}}</h2>
+<div class="ticket">
+    <h1>Ticket {{ticket.code}}</h1>
+    <h2>Comprador: {{ticket.purchaser}}</h2>
     <h2>Total: ${{ticket.amount}}</h2>
 
-    <p><i>Fecha: {{ticket.purchase_datetime}} </i></p>
-    <p>{{ticket.code}}</p>
-
-</div> --}}
+    <p>{{ticket.purchase_datetime}} </p>
+    <button
+        onclick="window.location.href = 'http://localhost:8080/products';"
+    >Volver al Inicio</button>
+</div>

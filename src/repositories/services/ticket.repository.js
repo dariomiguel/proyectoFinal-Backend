@@ -8,4 +8,10 @@ export default class TicketRepository {
 
         return result
     }
+
+    get = async (email) => {
+        const result = await this.dao.lastTicket(email)
+
+        return result
+    }
 }

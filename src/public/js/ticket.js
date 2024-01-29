@@ -34,24 +34,25 @@ document.getElementById("comprarButton").addEventListener("click", async (event)
                 <p>Código: ${ticket.code}</p>
                 <p>Total: $${ticket.amount}</p>
             `,
-            icon: "success",
-            buttons: {
-                confirm: {
-                    text: "Cerrar",
-                    value: true,
-                    visible: true,
-                    className: "btn btn-success"
-                }
-            }
+            icon: "success"
         }).then(() => {
-            window.location.reload();
+            window.location.href = `/api/carts/${cidValue}/purchase`;
         });
+
+        const responseGet = await fetch(`/api/carts/${cidValue}/purchase`, {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+        const responseGetData = await responseGet.json();
+        const ticketGet = responseGetData.payload;
+        console.log("El ticketGet creado es: ", ticketGet);
+
 
     } catch (error) {
         console.error("Error en la compra:", error);
     }
-
-
 });
 
 function getCIDFromURL() {
