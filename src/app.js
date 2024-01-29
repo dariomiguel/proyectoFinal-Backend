@@ -15,6 +15,7 @@ import productsRouter from "./router/products.router.js";
 import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import viewsRouter from "./router/views.router.js";
 import userRouter from "./router/users.router.js";
+import mailRouter from "./router/mail.router.js"
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -73,6 +74,7 @@ app.use("/api/lastProduct", lastProductRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter)
+app.use("/mail", mailRouter)
 
 //PASSPORT
 initializePassport()
