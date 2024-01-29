@@ -7,6 +7,20 @@ loginForm.addEventListener("submit", async (event) => {
     const email = document.querySelector("#emailLogin").value;
     const password = document.querySelector("#passLogin").value;
 
+    Swal.fire({
+        title: "Login",
+        html: "Iniciando sesión",
+        timer: 8000,
+        timerProgressBar: true,
+        didOpen: () => {
+            Swal.showLoading();
+            const timer = Swal.getPopup().querySelector("b");
+        },
+        willClose: () => {
+            clearInterval(timerInterval);
+        }
+    })
+
     try {
         fetch("/api/session/login", {
             method: "POST",
@@ -48,7 +62,18 @@ loginForm.addEventListener("submit", async (event) => {
             })
         }
         else if (response.status === 200) {
+            // Swal.fire({
+            //     icon: "success",
+            //     title: "Producto Eliminado!",
+            //     text: "🗑️",
+            //     confirmButtonColor: "#3085d6",
+            //     confirmButtonText: "Aceptar"
+            // });
+
+            //.then(() => {
+
             window.location.href = "/products";
+            // });
         }
 
     } catch (error) {
