@@ -17,7 +17,6 @@ class TicketManager {
 
     }
 
-
     totalTicket = async (cId) => {
 
         const carrito = await CartModel.findOne({ "_id": cId }).lean();

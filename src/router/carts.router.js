@@ -147,14 +147,15 @@ router.put("/:cid/products/:pid", logUser(), async (req, res) => {
     }
 });
 
-
 router.post("/:cid/purchase", logUser(), async (req, res) => {
     try {
         const cId = req.params.cid;
         const user = req.session.user
 
-        const result = await ticketService.post(cId, user);
-        console.log("Ticket creado con los valores: ", result);
+        const ticket = await ticketService.post(cId, user);
+        console.log("Ticket creado con los valores: ", ticket);
+
+        res.status(201).json({ status: "success", payload: ticket });
 
     } catch (error) {
         res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
