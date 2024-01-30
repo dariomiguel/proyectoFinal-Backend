@@ -9,8 +9,25 @@ document.addEventListener('DOMContentLoaded', () => {
         btnAddCart.addEventListener('click', async (event) => {
             event.preventDefault();
             let productId = event.target.getAttribute('data-product-id');
-            console.log("el product id es :", productId);
 
+            const responseGet = await fetch(`/api/products/${productId}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            const responseGetData = await responseGet.json();
+            const productoGet = responseGetData.payload;
+
+            if (productoGet.stock === 0) {
+                return Swal.fire({
+                    icon: "error",
+                    title: "Producto no agregado!",
+                    text: "El producto no posee stock.",
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Cerrar"
+                });
+            }
             try {
                 const existCartInUserResponse = await fetch(`/api/users/`, {
                     method: 'GET',
@@ -40,12 +57,21 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                 });
 
+                Swal.fire({
+                    icon: "success",
+                    title: "Producto Agregado",
+                    text: "El producto se ha agregado correctamente al carrito.",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                })
+
                 await fetch(`/api/carts/${cartId}/product/${productId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
+
             } catch (error) {
                 console.error('Hubo un error al realizar la solicitud POST:', error);
             }

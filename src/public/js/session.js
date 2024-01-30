@@ -40,7 +40,9 @@ loginForm.addEventListener("submit", async (event) => {
             }),
         });
 
-        if (response.status === 400) {
+        if (response.status === 200) {
+            window.location.href = "/products";
+        } else if (response.status === 400) {
             Swal.fire({
                 icon: 'error',
                 title: 'Error de inicio de sesión',
@@ -61,20 +63,7 @@ loginForm.addEventListener("submit", async (event) => {
                 text: 'ha ocurrido un error en el sistema!!',
             })
         }
-        else if (response.status === 200) {
-            // Swal.fire({
-            //     icon: "success",
-            //     title: "Producto Eliminado!",
-            //     text: "🗑️",
-            //     confirmButtonColor: "#3085d6",
-            //     confirmButtonText: "Aceptar"
-            // });
 
-            //.then(() => {
-
-            window.location.href = "/products";
-            // });
-        }
 
     } catch (error) {
         console.error("Error en el login:", error);
