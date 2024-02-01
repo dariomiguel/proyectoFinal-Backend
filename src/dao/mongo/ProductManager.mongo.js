@@ -1,5 +1,6 @@
 import ProductModel from "../models/products.model.js"
 import __dirname from "../../utils.js"
+import CustomError from "../../errors/customErrors.js";
 //Import para validar imagenes
 import axios from "axios";
 
@@ -125,9 +126,13 @@ class ProductManagerMongo {
     };
 
     isNotValidCode = async (productToAdd) => {
+        if (!productToAdd?.title || !productToAdd?.price) {
+            CustomError.createProduct(productToAdd)
+        }
         //Verificamos que esten todos los productos en la carga de datos no estan vacíos.
         const someValid = !productToAdd.title || !productToAdd.description || !productToAdd.price || !productToAdd.thumbnail || !productToAdd.code || !productToAdd.stock || !productToAdd.category;
         //Si envía true significa que uno de los elementos está vacío.
+
         return someValid;
     }
 

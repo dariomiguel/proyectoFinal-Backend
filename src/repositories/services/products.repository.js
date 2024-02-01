@@ -1,4 +1,5 @@
 import productInsertDTO from "../../DTO/products.dto.js";
+import CustomError from "../../errors/customErrors.js";
 
 export default class ProductRepository {
     constructor(dao) {
@@ -12,6 +13,17 @@ export default class ProductRepository {
     }
 
     create = async (title, description, code, price, stock, category, thumbnail) => {
+
+        // const productoAInspeccionar = {
+        //     title,
+        //     price
+        // }
+        // if (!productoAInspeccionar?.title || !productoAInspeccionar?.price) {
+        //     CustomError.createProduct(productoAInspeccionar)
+        // }
+
+        // console.log("El producto a inspeccionar es: ", productoAInspeccionar.title);
+
         const productToInsert = new productInsertDTO({ title, description, code, price, stock, category, thumbnail })
 
         //Manejo de excepciones para no permitir valores incorrectos

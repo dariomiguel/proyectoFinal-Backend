@@ -60,7 +60,6 @@ const initializePassport = () => {
                     _id: adminId
                 }
 
-                console.log("El user desde passport login es", user);
                 return done(null, user)
             }
             const user = await UserModel.findOne({ email: username }).lean().exec()

@@ -2,6 +2,7 @@ import { Router } from "express";
 import __dirname from "../utils.js";
 import { productService } from "../repositories/index.js";
 import { authorize, logUser } from "../utils.js";
+import CustomError from "../errors/customErrors.js";
 
 const router = Router();
 
@@ -33,6 +34,16 @@ router.get("/", async (req, res) => {
 router.post("/", logUser(), authorize("admin"), async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
+
+        const productoAInspeccionar = {
+            title,
+            price
+        }
+        if (!productoAInspeccionar?.title || !productoAInspeccionar?.price) {
+            CustomError.createProduct(productoAInspeccionar)
+        }
+
+
         const productoAgregado = await productService.create(title, description, code, price, stock, category, thumbnail)
 
         res
