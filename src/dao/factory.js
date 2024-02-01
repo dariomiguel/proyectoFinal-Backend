@@ -9,6 +9,7 @@ export let ProductManager
 export let ChatManager
 export let UserManager
 export let TicketManager
+export let MockingProducts
 
 console.log(`Persistence with ${options.p}`)
 
@@ -19,6 +20,7 @@ switch (options.p) {
         const { default: ChatManagerFile } = await import("./file/ChatManager.file.js")
         const { default: UserManagerFile } = await import("./file/UserManager.file.js")
         const { default: TicketManagerFile } = await import("./mongo/TicketManager.file.js")
+        const { default: MockingProductsFile } = await import("./mongo/MockingProducts.file.js")
 
 
         CartManager = CartManagerFile;
@@ -26,6 +28,7 @@ switch (options.p) {
         ChatManager = ChatManagerFile;
         UserManager = UserManagerFile;
         TicketManager = TicketManagerFile;
+        MockingProducts = MockingProductsFile;
 
         break;
 
@@ -47,12 +50,14 @@ switch (options.p) {
         const { default: ChatManagerMongo } = await import("./mongo/ChatManager.mongo.js")
         const { default: UserManagerMongo } = await import("./mongo/UserManager.mongo.js")
         const { default: TicketManagerMongo } = await import("./mongo/TicketManager.mongo.js")
+        const { default: MockingProductsMongo } = await import("./mongo/MockingProducts.mongo.js")
 
         ProductManager = ProductManagerMongo;
         CartManager = CartManagerMongo;
         ChatManager = ChatManagerMongo;
         UserManager = UserManagerMongo;
         TicketManager = TicketManagerMongo;
+        MockingProducts = MockingProductsMongo;
 
         break;
 

@@ -16,6 +16,7 @@ import realtimeproductsRouter from "./router/realTimeProducts.router.js";
 import viewsRouter from "./router/views.router.js";
 import userRouter from "./router/users.router.js";
 import mailRouter from "./router/mail.router.js"
+import MockingProductsRouter from "./router/mockingProducts.router.js";
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -66,15 +67,16 @@ app.set("view engine", "handlebars");
 app.use(express.static(__dirname + "/public"))
 
 //Rutas
-app.use("/", viewsRouter)
+app.use("/", viewsRouter);
 app.use("/realtimeproducts", realtimeproductsRouter);
 app.use("/chat", chatRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/lastProduct", lastProductRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/users", userRouter);
-app.use("/api/session", sessionRouter)
-app.use("/mail", mailRouter)
+app.use("/api/session", sessionRouter);
+app.use("/mail", mailRouter);
+app.use("/mockingproducts", MockingProductsRouter);
 
 //PASSPORT
 initializePassport()

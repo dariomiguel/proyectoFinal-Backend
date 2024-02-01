@@ -12,6 +12,7 @@
     "author": "Dario Miguel",
     "license": "ISC",
     "dependencies": {
+        "@faker-js/faker": "^8.4.0",
         "axios": "^1.6.2",
         "bcrypt": "^5.1.1",
         "commander": "^11.1.0",

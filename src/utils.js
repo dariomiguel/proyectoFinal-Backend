@@ -3,6 +3,7 @@ import { dirname } from "path";
 import config from "./config/config.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import { faker } from "@faker-js/faker"
 
 const PRIVATE_KEY = config.privateKey;
 
@@ -95,5 +96,18 @@ export const justPublicWithoutSession = () => {
         if (req.session?.user) return res.redirect("/products")
 
         return next()
+    }
+}
+
+export const generateProduct = () => {
+    return {
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        code: faker.string.uuid(),
+        price: parseFloat(faker.commerce.price()),
+        status: faker.datatype.boolean(),
+        stock: faker.number.int(),
+        category: faker.helpers.arrayElement(["cuadros", "artesanias", "bordados", "esculturas"]),
+        thumbnail: faker.image.imageUrl()
     }
 }
