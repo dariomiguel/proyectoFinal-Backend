@@ -1,7 +1,10 @@
 const EErrors = {
     ROUTING_ERROR: 1,
     INVALID_TYPES_ERROR: 2,
-    DATABASE_ERROR: 3
-}
+    DATABASE_ERROR: 3,
+    NUMERIC_VALUE_ERROR: 4,
+    INVALID_CATEGORY_ERROR: 5,
+    MISSING_VALUES_ERROR: 6
+};
 
-export default EErrors
+export default EErrors;

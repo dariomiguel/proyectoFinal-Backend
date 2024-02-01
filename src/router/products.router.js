@@ -80,13 +80,13 @@ router.post("/", logUser(), authorize("admin"), async (req, res) => {
             return res
                 .status(400)
                 .json({ Error: "Error de validación en los datos del producto" });
-        } else {
-
-            console.error("Hubo un error general en la escritura de la base de datos:", error);
-            res
-                .status(500)
-                .json({ error: "Hubo un error general en la escritura de la base de datos" });
         }
+
+        console.error("Hubo un error general en la escritura de la base de datos:", error);
+        res
+            .status(500)
+            .json({ error: "Hubo un error general en la escritura de la base de datos" });
+
     }
 });
 

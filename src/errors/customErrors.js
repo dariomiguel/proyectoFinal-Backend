@@ -6,6 +6,8 @@ export default class CustomError {
         const error = new Error(message, { cause })
         error.name = name
         error.code = code
+
+        throw error
     }
 
     static createProduct(product) {
