@@ -18,6 +18,7 @@ import viewsRouter from "./router/views.router.js";
 import userRouter from "./router/users.router.js";
 import mailRouter from "./router/mail.router.js"
 import MockingProductsRouter from "./router/mockingProducts.router.js";
+import loggerTest from "./router/loggerTest.router.js"
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -79,6 +80,8 @@ app.use("/api/users", userRouter);
 app.use("/api/session", sessionRouter);
 app.use("/mail", mailRouter);
 app.use("/mockingproducts", MockingProductsRouter);
+app.use("/loggerTest", loggerTest);
+
 
 //PASSPORT
 initializePassport()
