@@ -3,8 +3,10 @@ import __dirname from "../utils.js";
 import { productService } from "../repositories/index.js";
 import { authorize, logUser } from "../utils.js";
 import CustomError from "../errors/customErrors.js";
+import { logger } from "../utils/logger.js";
 
 const router = Router();
+
 
 router.get("/", async (req, res) => {
     try {
@@ -18,13 +20,15 @@ router.get("/", async (req, res) => {
         const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
 
         if (response.payload.length === 0) {
+            logger.error("No se encontraron productos ")
             res.status(404).json({ Error: "No se encontraron productos" });
             return;
         }
 
+        logger.http("success ")
         res.status(200).json({ status: "success", payload: response.payload })
     } catch (error) {
-        console.error("Products, Error al obtener la lista de productos:", error);
+        logger.error("Products, Error al obtener la lista de productos:", error);
         res
             .status(500)
             .json({ Error: "Hubo un error en products.router al obtener la lista de productos" });
@@ -53,36 +57,37 @@ router.post("/", logUser(), authorize("admin"), async (req, res) => {
 
     } catch (error) {
         if (error.statusCode === 4001) {
-            console.log("\nEl precio debe ser un valor numérico.\n");
+            logger.error("\nEl precio debe ser un valor numérico.\n");
             return res.status(400).json({ error: "El precio debe ser un valor numérico" });
 
         } else if (error.statusCode === 4002) {
-            console.log("\nEl stock debe ser un valor numérico.\n");
+            logger.error("\nEl stock debe ser un valor numérico.\n");
             return res.status(400).json({ error: "El stock debe ser un valor numérico" });
 
         } else if (error.statusCode === 4003) {
-            console.log("La categoría no es válida");
+            logger.error("La categoría no es válida");
             return res.status(400).json({ error: "Debes seleccionar una de estas categorías: cuadros-artesanias-bordados-esculturas" });
 
         } else if (error.statusCode === 4004) {
-            console.log("\nVerifique que las propiedades no esten vacías😶.\n");
+            logger.error("\nVerifique que las propiedades no esten vacías😶.\n");
             res
                 .status(400)
                 .json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
         }
         else if (error.code === 11000) {
-            console.error(`Ya existe un producto con el código "${error.keyValue.code}".`);
+            logger.error(`Ya existe un producto con el código "${error.keyValue.code}".`);
             return res
                 .status(400)
                 .json({ Error: `Ya existe un producto con el código "${error.keyValue.code}" ` });
 
         } else if (error.name === "ValidationError") {
+            logger.error("Error ")
             return res
                 .status(400)
                 .json({ Error: "Error de validación en los datos del producto" });
         }
 
-        console.error("Hubo un error general en la escritura de la base de datos:", error);
+        logger.error("Hubo un error general en la escritura de la base de datos:", error);
         res
             .status(500)
             .json({ error: "Hubo un error general en la escritura de la base de datos" });
@@ -99,10 +104,12 @@ router.get("/:pid", logUser(), async (req, res) => {
                 .json({ Error: "No se encontro el producto solicitado" });
         }
 
+        logger.http("Success ")
         res.status(200).json({ status: "success", payload: result })
 
     } catch (error) {
 
+        logger.error("Error ")
         res
             .status(500)
             .json({ Error: "Hubo un error al buscar el producto por ID" });
@@ -119,16 +126,17 @@ router.put("/:pid", logUser(), authorize("admin"), async (req, res) => {
 
     } catch (error) {
         if (error.statusCode === 400) {
-            console.error(`No se encontró la propiedad solicitada.`);
+            logger.error(`No se encontró la propiedad solicitada.`);
             return res
                 .status(400)
                 .json({ Error: `No se encontró la propiedad solicitada.` });
         } else if (error.statusCode === 404) {
-            console.error(`No se encontro el producto con id solicitada.`)
+            logger.error(`No se encontro el producto con id solicitada.`)
             return res
                 .status(404)
                 .json({ Error: `No se encontro el producto con id solicitada.` });
         } else {
+            logger.error("Error")
             res.status(500).json({ error: "Hubo un error al actualizar el producto" });
         }
     }
@@ -139,16 +147,16 @@ router.delete("/:pid", logUser(), authorize("admin"), async (req, res) => {
         const productId = req.params.pid;
 
         if (productId === null) {
-            console.error(`No se encontró el producto con id:"${productId}"`);
+            logger.error(`No se encontró el producto con id:"${productId}"`);
             res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
         } else {
-            console.log("El req session role es: ", req.session.user.role);
+            logger.info("El req session role es: ", req.session.user.role);
             await productService.delete(productId)
             res.status(201).json({ message: "Producto eliminado correctamente" });
         }
 
     } catch (error) {
-        console.error("Error al eliminar el producto usando botón:", error);
+        logger.error("Error al eliminar el producto usando botón:", error);
         res.status(500).json({ error: "Hubo un error al eliminar el producto" });
     }
 });

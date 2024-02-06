@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { cartService, productService, ticketService } from "../repositories/index.js";
 import { authorize, logUser } from "../utils.js"
+import { logger } from "../utils/logger.js";
 
 const router = Router();
 
@@ -8,9 +9,10 @@ router.get("/", logUser(), async (req, res) => {
     try {
         const carts = await cartService.getCarts();
 
+        logger.http("success ")
         res.status(200).json({ status: "success", payload: carts });
     } catch (error) {
-        console.error("Error al obtener los carritos:", error);
+        logger.error("Error al obtener los carritos:", error);
         res.status(500).send("Error al obtener los carritos" + error)
     }
 })
@@ -18,11 +20,13 @@ router.get("/", logUser(), async (req, res) => {
 router.post("/", logUser(), authorize("user"), async (req, res) => {
     try {
         const cart = await cartService.create(req.user.role);
+
+        logger.http("success ")
         res.status(201).json({ status: "success", payload: cart });
     }
     catch (error) {
 
-        console.error("Error al crear el carrito:", error);
+        logger.error("Error al crear el carrito:", error);
         res.status(500).send("Error al crea el carrito" + error)
     }
 })
@@ -33,6 +37,7 @@ router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
         const cId = req.params.cid;
         const cartPorId = await cartService.get(cId);
         if (cartPorId === null) {
+            logger.error("Error ")
             res
                 .status(404)
                 .json({ Error: "No se encontró el carrito solicitado" });
@@ -41,6 +46,7 @@ router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
             if (req.headers['user-agent'].includes('Postman')) {
                 return res.status(200).json({ status: "success", payload: cartPorId });
             }
+            logger.info("Redireccionando a carrito... ")
             res.render("cartDetails", {
                 style: "cartDetails.css",
                 cartPorId
@@ -48,6 +54,7 @@ router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
         }
 
     } catch (error) {
+        logger.error("Hubo un error al buscar el carrito por ID")
         res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
     }
 });
@@ -64,16 +71,16 @@ router.post("/:cid/product/:pid", logUser(), async (req, res) => {
 
     } catch (error) {
         if (error.statusCode = 4001) {
-            console.error(`No se encontró el carrito con id: ${cId}`);
+            logger.error(`No se encontró el carrito con id: ${cId}`);
 
             return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
 
         } else if (error.statusCode = 4002) {
-            console.error(`No se encontró el producto con id: ${pId}`);
+            logger.error(`No se encontró el producto con id: ${pId}`);
             return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
 
         } else {
-            console.error("Error al agregar producto al carrito:", error);
+            logger.error("Error al agregar producto al carrito:", error);
             res.status(500).json({ error: "Hubo un error al agregar producto al carrito" });
         }
     }
@@ -87,7 +94,7 @@ router.delete("/:cid", logUser(), async (req, res) => {
 
         res.status(200).json({ message: `Todos los productos del carrito con id:${cId} se eliminaron correctamente` });
     } catch (error) {
-        console.error("Error al eliminar todos los productos del carrito:", error);
+        logger.error("Error al eliminar todos los productos del carrito:", error);
         res.status(500).json({ error: "Hubo un error al eliminar todos los productos del carrito" });
     }
 });
@@ -99,9 +106,10 @@ router.delete("/:cid/products/:pid", logUser(), async (req, res) => {
         const pId = req.params.pid;
         await cartService.deleteProduct(cId, pId);
 
+        logger.info(`Producto con id:${pId} eliminado del carrito con id:${cId} correctamente`)
         res.status(200).json({ message: `Producto con id:${pId} eliminado del carrito con id:${cId} correctamente` });
     } catch (error) {
-        console.error("Error al eliminar el producto del carrito:", error);
+        logger.error("Error al eliminar el producto del carrito:", error);
         res.status(500).json({ error: "Hubo un error al eliminar el producto del carrito" });
     }
 });
@@ -115,13 +123,13 @@ router.put("/:cid", logUser(), async (req, res) => {
         res.status(200).json({ message: `Carrito con id:${cId} actualizado correctamente` });
     } catch (error) {
         if (error.statusCode === 4003) {
-            console.error(`No se encontró el carrito con id solicitado`);
+            logger.error(`No se encontró el carrito con id solicitado`);
             return res.status(404).json({ Error: `No se encontró el carrito con id solicitado` });
         } else if (error.statusCode === 4004) {
-            console.log(`No se encontró el producto en el carrito con id solicitado`);
+            logger.error(`No se encontró el producto en el carrito con id solicitado`);
             res.status(404).json({ Error: `No se encontró el producto en el carrito con id solicitado` });
         } else {
-            console.error("Error al actualizar el carrito:", error);
+            logger.error("Error al actualizar el carrito:", error);
             res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
         }
     }
@@ -138,13 +146,13 @@ router.put("/:cid/products/:pid", logUser(), async (req, res) => {
 
     } catch (error) {
         if (error.statusCode === 4003) {
-            console.error(`No se encontró el carrito con id solicitado`);
+            logger.error(`No se encontró el carrito con id solicitado`);
             return res.status(404).json({ Error: `No se encontró el carrito con id solicitado` });
         } else if (error.statusCode === 4004) {
-            console.log(`No se encontró el producto en el carrito con id solicitado`);
+            logger.error(`No se encontró el producto en el carrito con id solicitado`);
             res.status(404).json({ Error: `No se encontró el producto en el carrito con id solicitado` });
         } else {
-            console.error("Error al actualizar el carrito:", error);
+            logger.error("Error al actualizar el carrito:", error);
             res.status(500).json({ error: "Hubo un error al actualizar el carrito" });
         }
     }
@@ -169,6 +177,7 @@ router.get("/:cid/purchase", logUser(), async (req, res) => {
         const userName = req.session.user.first_name
         const ticket = await ticketService.get(userName);
 
+        logger.info("Redireccionando a ticket... ")
         res.render("ticket", {
             style: "ticket.css",
             ticket

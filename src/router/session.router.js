@@ -4,6 +4,7 @@ import { userService } from "../repositories/index.js";
 import { authorize, generateToken } from "../utils.js";
 import config from "../config/config.js"
 import userInsertDTO from "../DTO/user.dto.js";
+import { logger } from "../utils/logger.js";
 
 const githubId = config.githubId;
 const githubSecret = config.githubSecret;
@@ -11,11 +12,15 @@ const githubUrl = config.githubUrl;
 
 const router = Router();
 
+
 router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
     try {
         const usuario = req.user;
 
-        if (!usuario) return res.status(401).send({ status: "error", error: "Credenciales no validas!" })
+        if (!usuario) {
+            logger.error("Credenciales no validas!")
+            return res.status(401).send({ status: "error", error: "Credenciales no validas!" })
+        }
 
         //!Para implementar JWT más adelante
         // const token = generateToken(usuario)
@@ -27,9 +32,10 @@ router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), 
         const result = await userService.get(usuario)
         req.session.user = result
 
+        logger.info("Iniciando sesión... ")
         return res.status(200).redirect("/products")
     } catch (error) {
-        console.error("Error en el controlador /login:", error);
+        logger.error("Error en el controlador /login:", error);
         return res.status(500).send("Error en el servidor")
     }
 })
@@ -38,7 +44,7 @@ router.post("/register", passport.authenticate("register", { failureRedirect: "/
     try {
         return res.status(200).redirect("/")
     } catch (error) {
-        console.error("Error en el controlador /register:", error);
+        logger.error("Error en el controlador /register:", error);
         return res.status(500).send("Error en el servidor");
     }
 })
@@ -47,14 +53,15 @@ router.get("/logout", (req, res) => {
     try {
         req.session.destroy(err => {
             if (err) {
-                console.error("Error al destruir la sesión:", err);
+                logger.error("Error al destruir la sesión:", err);
                 return res.status(500).send("Error al destruir la sesión");
             }
 
+            logger.info("Cerrando sesión...")
             return res.redirect("/");
         });
     } catch (error) {
-        console.error("Error en el controlador /logout:", error);
+        logger.error("Error en el controlador /logout:", error);
         return res.status(500).send("Error en el servidor");
     }
 });
@@ -65,7 +72,7 @@ router.get("/current", authorize("user"), (req, res) => {
         const userDTO = new userInsertDTO(req.session.user)
         return res.status(200).json(userDTO);
     } catch (error) {
-        console.error("Error en la ruta /current:", error);
+        logger.error("Error en la ruta /current:", error);
         return res.status(500).json({ error: "Error en el servidor" });
     }
 });
@@ -77,7 +84,7 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
 
         req.session.user = req.user;
 
-        console.log("Session iniciada correctamante", req.session.user);
+        logger.info("Session iniciada correctamante", req.session.user);
 
         res.redirect("/")
     })
@@ -93,7 +100,7 @@ router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
 //         }
 //         // return res.status(200).json(req.session.user);
 //     } catch (error) {
-//         console.error("Error en la ruta /current:", error);
+//         logger.error("Error en la ruta /current:", error);
 //         return res.status(500).json({ error: "Error en el servidor" });
 //     }
 // });

@@ -11,7 +11,7 @@ document.getElementById("generarProductos").addEventListener("click", async (eve
     const responseData = await responseDataCreator.json();
     const responseDataString = JSON.stringify(responseData);
 
-    console.log("el product name es: ", responseDataString);
+    logger.info("el product name es: ", responseDataString);
 
     const newProductBox = document.getElementById("newProductGenerated");
     newProductBox.textContent = "";

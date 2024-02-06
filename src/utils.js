@@ -4,6 +4,7 @@ import config from "./config/config.js";
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { faker } from "@faker-js/faker"
+import { logger } from "./utils/logger.js"
 
 const PRIVATE_KEY = config.privateKey;
 
@@ -24,9 +25,12 @@ export const generateToken = user => {
 export const authToken = (req, res, next) => {
     const token = req.cookies["coderCookie"]
 
-    if (!token) return res.status(401).send({ error: "no auth" })
-
+    if (!token) {
+        logger.error("no auth")
+        return res.status(401).send({ error: "no auth" })
+    }
     jwt.verify(token, PRIVATE_KEY, (error, credentials) => {
+        logger.error("Not authorized")
         if (error) return res.status(403).send({ error: "Not authorized" })
 
         req.user = credentials.user
@@ -38,16 +42,26 @@ export const authorize = (requiredRole) => {
     return async (req, res, next) => {
         try {
             // Verificar si hay un usuario autenticado en la sesión
-            if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
+            if (!req.session.user) {
+                logger.error("No hay usuario autenticado")
+                return res.status(401).json({ error: "No hay usuario autenticado" });
+            }
 
             const user = req.session.user
 
             if (!user) return res.status(401).send({ error: "Sin autortizacion para acceder al contenido solicitado!" })
-            if (user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
+            if (user.role != requiredRole) {
+                logger.error("NO PERMISIONS!")
+                return res.status(403).send({ error: "NO PERMISIONS!" })
+            }
+
+
+            logger.info("Acceso autorizado ")
+            logger.http("Acceso autorizado ")
 
             return next()
         } catch (error) {
-            console.error("Error en el middleware de autorización:", error);
+            logger.error("Error en el middleware de autorización:", error);
             return res.status(500).json({ error: "Error en el servidor" });
         }
     };
@@ -65,17 +79,17 @@ export const authorize = (requiredRole) => {
 //             }
 
 //             const user = req.user
-//             // console.log("El rol del user es: ", user.user.role)
-//             console.log("El rol requerido requiredRole es ", requiredRole);
-//             console.log("El req session user es :", req.user);
-//             console.log("El user es: ", user)
+//             // logger.info("El rol del user es: ", user.user.role)
+//             logger.info("El rol requerido requiredRole es ", requiredRole);
+//             logger.info("El req session user es :", req.user);
+//             logger.info("El user es: ", user)
 
 //             if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
 //             if (user.user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
 
 //             return next()
 //         } catch (error) {
-//             console.error("Error en el middleware de autorización:", error);
+//             logger.error("Error en el middleware de autorización:", error);
 //             return res.status(500).json({ error: "Error en el servidor" });
 //         }
 //     };
@@ -87,6 +101,7 @@ export const logUser = () => {
 
         if (req.session?.user) return next()
 
+        logger.info("Redirección a login... ")
         res.redirect("/login")
     }
 };
@@ -95,6 +110,7 @@ export const justPublicWithoutSession = () => {
     return function justPublicWithoutSession(req, res, next) {
         if (req.session?.user) return res.redirect("/products")
 
+        logger.info("Verificando estado de sesión...")
         return next()
     }
 }

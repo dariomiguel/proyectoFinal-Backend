@@ -1,6 +1,7 @@
 import ProductModel from "../models/products.model.js"
 import __dirname from "../../utils.js"
 import CustomError from "../../errors/customErrors.js";
+import { logger } from "../../utils/logger.js"
 //Import para validar imagenes
 import axios from "axios";
 
@@ -59,7 +60,7 @@ class ProductManagerMongo {
             return response;
 
         } catch (error) {
-            console.log("Hubo un error en la lectura de la base de datos.", error);
+            logger.error("Hubo un error en la lectura de la base de datos.", error);
             throw error;
         }
     }
@@ -100,7 +101,7 @@ class ProductManagerMongo {
             //*Buscamos cual id falta en la sucesión de números ID.
             return await this.findID();
         } catch (error) {
-            console.error("Hubo un error en la creación del ID❗❗❗\n", error);
+            logger.error("Hubo un error en la creación del ID❗❗❗\n", error);
             throw error;
         }
     }
@@ -121,7 +122,7 @@ class ProductManagerMongo {
             }
             return idFaltante
         } catch (error) {
-            console.error("Error al encontrar el ID que falta:\n", error);
+            logger.error("Error al encontrar el ID que falta:\n", error);
         }
     };
 
@@ -142,7 +143,7 @@ class ProductManagerMongo {
             const productoBuscado = await ProductModel.findOne({ _id: pId });
             return productoBuscado;
         } catch (error) {
-            console.error("\n🤔No se encontró el producto solicitado\n", error);
+            logger.error("\n🤔No se encontró el producto solicitado\n", error);
             return false;
         }
     }
@@ -153,10 +154,10 @@ class ProductManagerMongo {
 
         try {
             await ProductModel.updateOne({ id: idProducto }, { $set: nuevosDatos })
-            console.log(`Se actualizó la propiedad "${[keyUpdate]}" del producto con id:"${idProducto}" correctamente!`);
+            logger.info(`Se actualizó la propiedad "${[keyUpdate]}" del producto con id:"${idProducto}" correctamente!`);
 
         } catch (error) {
-            console.error("Error al actualizar el documento:\n", error);
+            logger.error("Error al actualizar el documento:\n", error);
             throw error;
         }
     }
@@ -170,7 +171,7 @@ class ProductManagerMongo {
             if (validador !== null) return validador;
 
         } catch (error) {
-            console.error("No se pudo validar el documento:\n", error);
+            logger.error("No se pudo validar el documento:\n", error);
             throw error;
         }
     }
@@ -178,7 +179,7 @@ class ProductManagerMongo {
     deleteProduct = async (pid) => {
         try {
             await ProductModel.deleteOne({ id: pid })
-            console.log(`Producto con id:${pid} se eliminó correctamente!`);
+            logger.info(`Producto con id:${pid} se eliminó correctamente!`);
         } catch (error) {
             throw error;
         }
@@ -190,14 +191,14 @@ class ProductManagerMongo {
             const ultimoProducto = await ProductModel.findOne().sort({ $natural: -1 });
             if (!ultimoProducto) {
                 // Manejar el caso en el que no se encuentre ningún producto
-                console.log("No se encontró ningún producto");
+                logger.info("No se encontró ningún producto");
                 return null;
             }
 
             return ultimoProducto
         } catch (error) {
             // Manejar errores
-            console.error("Error al obtener el último ID:", error);
+            logger.error("Error al obtener el último ID:", error);
             throw error;
         }
     }
@@ -212,7 +213,7 @@ class ProductManagerMongo {
 
             return url
         } catch (error) {
-            console.error("No se encontró imagén : ", url, error.message);
+            logger.error("No se encontró imagén : ", url, error.message);
             return false
         }
     }

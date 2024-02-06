@@ -1,6 +1,7 @@
 //Importamos el módulo para interactuar con archivos
 import fs from "fs";
 import __dirname from "../../utils.js"
+import { logger } from "../../utils/logger.js"
 
 //Creamos la clase ProductManager que contendra los productos y metodos que necesitemos para la actividad.
 class ProductManager {
@@ -26,7 +27,7 @@ class ProductManager {
             return this.products = JSON.parse(lectura) || [];
 
         } catch (error) {
-            console.log("Hubo un error en el READ", error);
+            logger.error("Hubo un error en el READ", error);
             throw error;
         }
     }
@@ -38,7 +39,7 @@ class ProductManager {
             if (!fs.existsSync(this.path)) await fs.promises.writeFile(this.path, JSON.stringify([]), "utf-8");
             //Antes de agregar verifica si es válido o no
             if (await this.isNotValidCode(title, description, code, price, stock, category, thumbnail)) {
-                return console.log("Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!");
+                return logger.info("Atención: Verifique que todos los datos se hayan cargado correctamente o que el código de producto no se repita!");
             }
 
             //Si es válido la agrega al array de lista de productos.
@@ -57,7 +58,7 @@ class ProductManager {
             await fs.promises.writeFile(this.path, data, "utf-8");
         }
         catch (error) {
-            console.log("Hubo un error en el proceso", error);
+            logger.error("Hubo un error en el proceso", error);
             throw error;
         }
     }
@@ -107,12 +108,12 @@ class ProductManager {
     updateProduct = async (id, key, newValue) => {
         try {
             const product = await this.getProductById(id);
-            if (typeof product === "string") return console.log(product);
+            if (typeof product === "string") return logger.info(product);
 
             this.products = await this.getProducts();
             //Buscamos en que indice el id coincide
             const indice = this.products.findIndex((objeto) => objeto.id === parseInt(id, 10));
-            if (indice == -1) return console.log("No se encontro id");
+            if (indice == -1) return logger.info("No se encontro id");
 
             // Registra lo que se va a actualizar
             product[key] = newValue;
@@ -122,7 +123,7 @@ class ProductManager {
             await fs.promises.writeFile(this.path, data, "utf-8");
 
         } catch (error) {
-            console.log("Hubo un error en el proceso de actualización:", error);
+            logger.info("Hubo un error en el proceso de actualización:", error);
         }
     }
 
@@ -158,7 +159,7 @@ class ProductManager {
             const data = JSON.stringify(this.products, null, "\t");
             await fs.promises.writeFile(this.path, data, "utf-8");
         } catch (error) {
-            console.log("Hubo un error al intentar eliminar el producto ", error);
+            logger.error("Hubo un error al intentar eliminar el producto ", error);
         }
     }
 

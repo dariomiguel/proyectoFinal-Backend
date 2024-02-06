@@ -7,13 +7,14 @@ const router = Router()
 router.get("/", async (req, res) => {
 
     try {
+        logger.http("succes ")
         res.render("mockingProducts", {
             style: "cartDetails.css",
             // mockingProducts
         })
 
     } catch (error) {
-        console.error("Error al generar lista de productos: ", error);
+        logger.error("Error al generar lista de productos: ", error);
         res
             .status(500)
             .json({ Error: "Error al generar lista de productos" });
@@ -23,10 +24,10 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
     try {
         const response = await mockingProductsService.post();
-        console.log(response);
+        logger.info(response);
         res.json(response);
     } catch (error) {
-        console.error("Error al generar lista de productos: ", error);
+        logger.error("Error al generar lista de productos: ", error);
         res
             .status(500)
             .json({ Error: "Error al generar lista de productos" });

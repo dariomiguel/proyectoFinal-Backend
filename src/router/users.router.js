@@ -1,8 +1,10 @@
 import { Router } from "express";
 import { userService, cartService } from "../repositories/index.js";
 import { authorize } from "../utils.js";
+import { logger } from "../utils/logger.js";
 
 const router = Router();
+
 
 router.get("/", authorize("user"), async (req, res) => {
     try {
@@ -15,10 +17,11 @@ router.get("/", authorize("user"), async (req, res) => {
             const responseCreate = await cartService.create(user.role)
             response = responseCreate._id
         }
+        logger.http("Success")
         res.status(200).json({ payload: response });
 
     } catch (error) {
-        console.error("Error al buscar usuario: ", error);
+        logger.error("Error al buscar usuario: ", error);
         res.status(500).json({ error: "Hubo un error al buscar usuario" });
     }
 })
@@ -30,15 +33,16 @@ router.post("/cart/:cid", async (req, res) => {
         const uId = user._id;
 
         if (!uId) {
-            console.error(`No se encontró el usuario con id:"${uId}"`);
+            logger.error(`No se encontró el usuario con id:"${uId}"`);
             return res.status(404).json({ Error: `No se encontró el usuario con id:"${uId}"` });
         }
 
         await userService.post(uId, cId)
+        logger.http("Success")
         res.status(200).json({ userId: uId, cartId: cId });
 
     } catch (error) {
-        console.error("Error al actualizar la cantidad del user en el carrito:", error);
+        logger.error("Error al actualizar la cantidad del user en el carrito:", error);
         res.status(500).json({ error: "Hubo un error al actualizar la cantidad del user en el carrito" });
     }
 });

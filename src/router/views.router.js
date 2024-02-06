@@ -1,8 +1,10 @@
 import express from "express";
 import __dirname, { logUser, justPublicWithoutSession } from "../utils.js";
 import { productService } from "../repositories/index.js";
+import { logger } from "../utils/logger.js";
 
 const router = express.Router();
+
 
 router.get("/", justPublicWithoutSession(), (req, res) => {
     return res.redirect("/products")
@@ -43,8 +45,12 @@ router.get("/home", justPublicWithoutSession(), async (req, res) => {
 
         const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
 
-        if (response.status === "404") res.render("error404", {})
+        if (response.status === "404") {
+            logger.error(response.status)
+            res.render("error404", {})
+        }
 
+        logger.http("Success")
         res
             .render("home", {
                 style: "home.css",
@@ -52,7 +58,7 @@ router.get("/home", justPublicWithoutSession(), async (req, res) => {
             })
 
     } catch (error) {
-        console.error("Products, Error al obtener la lista de productos:", error);
+        logger.error("Products, Error al obtener la lista de productos:", error);
         res
             .status(500)
             .json({ Error: "Hubo un error al obtener la lista de productos" });
@@ -71,8 +77,12 @@ router.get("/products", logUser(), async (req, res) => {
         const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
         const user = req.session.user
 
-        if (response.status === "404") return res.redirect("/error404")
+        if (response.status === "404") {
+            logger.error(response.status)
+            return res.redirect("/error404")
+        }
 
+        logger.http("Success")
         res
             .render("products", {
                 style: "style.css",
@@ -82,7 +92,7 @@ router.get("/products", logUser(), async (req, res) => {
             })
 
     } catch (error) {
-        console.error("Products, Error al obtener la lista de productos:", error);
+        logger.error("Products, Error al obtener la lista de productos:", error ? error.message : "Error desconocido");
         res
             .status(500)
             .json({ Error: "Hubo un error al obtener la lista de productos" });
@@ -97,7 +107,7 @@ router.get("/error404", logUser(), async (req, res) => {
             })
 
     } catch (error) {
-        console.error("Products, Error al obtener la vista:", error);
+        logger.error("Products, Error al obtener la vista:", error);
         res
             .status(500)
             .json({ Error: "Hubo un error al obtener la vista" });

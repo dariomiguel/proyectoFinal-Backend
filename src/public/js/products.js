@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
             } catch (error) {
-                console.error('Hubo un error al realizar la solicitud POST:', error);
+                logger.error('Hubo un error al realizar la solicitud POST:', error);
             }
         });
     });
@@ -116,7 +116,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             window.location.href = `/api/carts/${cartId}`;
         } catch (error) {
-            console.error('Hubo un error al realizar la solicitud:', error);
+            logger.error('Hubo un error al realizar la solicitud:', error);
         }
     });
 });

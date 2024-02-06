@@ -26,12 +26,14 @@ import sessionRouter from "./router/session.router.js"
 
 import passport from "passport";
 import initializePassport from "./config/passport.config.js";
+import { addLogger, logger } from "./utils/logger.js";
 
 const app = express();
 app.use(compression())
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cookieParser())
+app.use(cookieParser());
+app.use(addLogger)
 
 // Configuración de middleware para habilitar CORS
 app.use((req, res, next) => {
@@ -89,6 +91,7 @@ app.use(passport.initialize());
 app.use(passport.session())
 
 //Creamos una variable para el servidor  
-const httpServer = app.listen(8080, () => console.log("En linea..."));
+const httpServer = app.listen(8080, () => logger.info("En linea..."));
+
 //Creamos una variable que contenga el servidor socket basado en http
 const io = configureSocket(httpServer);

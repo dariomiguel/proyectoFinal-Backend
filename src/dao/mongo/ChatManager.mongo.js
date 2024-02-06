@@ -1,5 +1,6 @@
 import ChatModel from "../models/messages.model.js"
 import __dirname from "../../utils.js"
+import { logger } from "../../utils/logger.js"
 
 class ChatManagerMongo {
 
@@ -13,7 +14,7 @@ class ChatManagerMongo {
             return lectura || []
 
         } catch (error) {
-            console.log("Hubo un error en la lectura de la base de datos.", error.message);
+            logger.error(error)
             throw error;
         }
     }
@@ -29,6 +30,7 @@ class ChatManagerMongo {
             return result;
 
         } catch (error) {
+            logger.error(error)
             throw error
         }
     }

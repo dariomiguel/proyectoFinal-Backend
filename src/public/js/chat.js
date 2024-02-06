@@ -52,12 +52,12 @@ async function createMessage() {
                 }),
             });
             if (response.ok) {
-                console.log("Se agregó correctamente el mensaje desde el formulario cliente!");
+                logger.info("Se agregó correctamente el mensaje desde el formulario cliente!");
             } else {
-                console.error("Error agregando el mensaje al chat del cliente:", response);
+                logger.error("Error agregando el mensaje al chat del cliente:", response);
             }
         } catch (error) {
-            console.error("Error al agregar el chat:", error);
+            logger.error("Error al agregar el chat:", error);
         }
     }
 }

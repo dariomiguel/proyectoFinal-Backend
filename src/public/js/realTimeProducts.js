@@ -1,3 +1,4 @@
+import { logger } from "../../utils/logger.js"
 //Utilizamos una variable para manejar el formulario de adisión
 const productsAddForm = document.getElementById("productForm");
 const nuevoProducto = document.getElementById("nuevoProductoAgregado");
@@ -43,7 +44,7 @@ socket.on("mostrandoProductos", (datos) => {
         //Agregamos en la parte superior
         nuevoProducto.insertBefore(div, nuevoProducto.firstChild);
     } else {
-        console.error("No se recibió un producto válido:", datos);
+        logger.error("No se recibió un producto válido:", datos);
     }
 });
 
@@ -53,7 +54,7 @@ const sendDelete = async (id) => {
             method: "DELETE",
         });
         if (response.ok) {
-            console.log("Se eliminó corectamente el elemento con ID: ", id);
+            logger.info("Se eliminó corectamente el elemento con ID: ", id);
             Swal.fire({
                 icon: "success",
                 title: "Producto Eliminado!",
@@ -64,7 +65,7 @@ const sendDelete = async (id) => {
             document.getElementById(id).innerHTML = "";
 
         } else {
-            console.error("Error elimando el producto desde formulario cliente:", response);
+            logger.error("Error elimando el producto desde formulario cliente:", response);
             Swal.fire({
                 icon: "error",
                 title: "Id no encontrado",
@@ -74,7 +75,7 @@ const sendDelete = async (id) => {
             });
         }
     } catch (error) {
-        console.error("Error al eliminar el producto:", error);
+        logger.error("Error al eliminar el producto:", error);
     }
 };
 
@@ -121,9 +122,9 @@ productsAddForm.addEventListener("submit", async (event) => {
                 const responseData = await obtainID.json();
                 lastAddedProduct = responseData.payload;
             } else {
-                console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
+                logger.error("Error al obtener el último producto. Código de estado:", obtainID.status);
             }
-            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
+            logger.info("Se agregó correctacemte un producto desde el formulario cliente!");
             sendProduct(lastAddedProduct)
             Swal.fire({
                 icon: "success",
@@ -134,7 +135,7 @@ productsAddForm.addEventListener("submit", async (event) => {
             });
 
         } else {
-            console.error("Error agregando el producto desde formulario cliente:", response);
+            logger.error("Error agregando el producto desde formulario cliente:", response);
             Swal.fire({
                 icon: "error",
                 title: "Código incorrecto!",
@@ -154,7 +155,7 @@ productsAddForm.addEventListener("submit", async (event) => {
         // thumbnailInput.value = "";
 
     } catch (error) {
-        console.error("Error al agregar el producto:", error);
+        logger.error("Error al agregar el producto:", error);
     }
 });
 

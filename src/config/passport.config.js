@@ -5,6 +5,7 @@ import { createHash, isValidPassword } from "../utils.js";
 import GitHubStrategy from "passport-github2";
 import config from "./config.js"
 import passportJWT from "passport-jwt"
+import { logger } from "../utils/logger.js"
 
 import mongoose from "mongoose";
 
@@ -26,7 +27,8 @@ const JWTStrategy = passportJWT.Strategy
 const cookieExtractor = req => {
     const token = (req?.cookies) ? req.cookies["coderCookie"] : null
 
-    console.log("COOKIE EXTRACTOR: ", token)
+    logger.info("COOKIE EXTRACTOR: ", token)
+
 }
 
 const initializePassport = () => {
@@ -44,7 +46,8 @@ const initializePassport = () => {
         try {
 
             if (!username || !password) {
-                console.error("Nombre de usuario o contraseña no proporcionados");
+                const missingCredentialsError = new Error("Nombre de usuario o contraseña no proporcionados");
+                logger.error(missingCredentialsError);
                 return done(null, false, { message: "Nombre de usuario o contraseña no proporcionados" });
             }
 
@@ -64,13 +67,17 @@ const initializePassport = () => {
             }
             const user = await UserModel.findOne({ email: username }).lean().exec()
             if (!user) {
-                console.error("Usuario inexistente!");
+                const userNotFoundError = new Error("Usuario inexistente!");
+                logger.error(userNotFoundError);
 
                 return done({ status: 400 }, false, { message: "Usuario no encontrado" });
             }
             if (!isValidPassword(user, password)) {
                 const errorObject = { status: 403, message: "Contraseña incorrecta!" };
-                console.error("Error:", errorObject.status, errorObject.message);
+                const errorStatusMessage = new Error(`Error: ${errorObject.status} ${errorObject.message}`);
+
+                logger.error(errorStatusMessage);
+
 
                 return done(errorObject);
             }
@@ -88,7 +95,8 @@ const initializePassport = () => {
 
         const { first_name, last_name, email, age } = req.body;
         if (!first_name || !last_name || !age || !email || !password) {
-            console.log("Faltan completar los campos");
+            const errorConfig = new Error("Faltan completar los campos")
+            logger.error("ERROR ", errorConfig)
 
             return done(null, false)
         }
@@ -96,7 +104,8 @@ const initializePassport = () => {
             const user = await UserModel.findOne({ email: username })
 
             if (user || username === adminEmail) {
-                console.log("El usuario ya existe");
+                const errorConfig = new Error("El usuario ya existe")
+                logger.error("ERROR ", errorConfig)
 
                 return done(null, false)
             }
@@ -128,8 +137,13 @@ const initializePassport = () => {
 
             const user = await UserModel.findOne({ email: profile._json.email })
             if (user) {
-                console.log("Ya se encuentra registrado");
-                console.log("El user desde passport github es", user);
+
+
+                logger.info("COOKIE EXTRACTOR: ", token)
+
+                const errorMessage = new Error("Ya se encuentra registrado");
+                logger.error(errorMessage)
+                logger.info("El user desde passport github es", user);
                 return done(null, user)
             }
 
@@ -140,9 +154,9 @@ const initializePassport = () => {
                 email: profile._json.email,
                 password: createHash(Math.random().toString())
             }
-            console.log("el new user es;", newUser);
+            logger.info("el new user es;", newUser);
             const result = await UserModel.create(newUser);
-            console.log("El result es ;", result);
+            logger.info("El result es ;", result);
             return done(null, result)
 
         } catch (error) { return done("Error login con github", error) }

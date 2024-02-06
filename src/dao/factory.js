@@ -1,6 +1,7 @@
 import config from "../config/config.js"
 import mongoose from "mongoose";
 import { options } from "../config/commander.js";
+import { logger } from "../utils/logger.js"
 //? Variables de entorno
 const urlMongo = config.urlMongo;
 
@@ -11,7 +12,7 @@ export let UserManager
 export let TicketManager
 export let MockingProducts
 
-console.log(`Persistence with ${options.p}`)
+logger.info(`Persistence with ${options.p}`)
 
 switch (options.p) {
     case "FILE":
@@ -39,10 +40,10 @@ switch (options.p) {
             dbName: "ecommerce"
         })
             .then(() => {
-                console.log("DB connected.");
+                logger.info("DB connected.");
             })
             .catch((error) => {
-                console.error("Error conecting to DB", error);
+                logger.error("Error conecting to DB", error);
             })
 
         const { default: CartManagerMongo } = await import("./mongo/CartManager.mongo.js")

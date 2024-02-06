@@ -1,4 +1,5 @@
 import ProductManager from "../../DAO/mongo/ProductManager.mongo.js"
+import { logger } from "../../utils/logger.js"
 const productManager = new ProductManager();
 
 export default class CartRepository {
@@ -8,7 +9,7 @@ export default class CartRepository {
 
     create = async (role) => {
         let result = await this.dao.createCart()
-        console.log("Carrito creado con id: 🛒 ", result._id.toString());
+        logger.info("Carrito creado con id: 🛒 ", result._id.toString());
 
         return result
     }
@@ -91,7 +92,7 @@ export default class CartRepository {
     }
 
     updateQuantity = async (cId, pId, newQuantity) => {
-        console.log("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
+        logger.info("La nueva cantidad que se va a usar para actualizar es: ", newQuantity);
         const existingCart = await this.dao.getCartById(cId);
         if (!existingCart) {
             const error = new Error(`No se encontró el carrito con id: ${cId}`);
@@ -100,7 +101,7 @@ export default class CartRepository {
         }
 
         const productIndex = existingCart.products.findIndex(product => product.product === pId);
-        console.log("el product index ", productIndex);
+        logger.info("el product index ", productIndex);
 
         if (!(productIndex !== -1)) {
             const error = new Error(`No se encontró el producto con id:${pId} en el carrito con id:${cId}`);

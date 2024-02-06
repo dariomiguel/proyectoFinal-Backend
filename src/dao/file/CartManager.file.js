@@ -1,6 +1,7 @@
 import fs from "fs"
 import ProductManager from "./ProductManager.js"
 import __dirname from "../../utils.js";
+import { logger } from "../../utils/logger.js"
 
 const productManager = new ProductManager()
 
@@ -65,7 +66,7 @@ class CartManager {
             return this.carts = JSON.parse(lectura) || [];
 
         } catch (error) {
-            console.log("Hubo un error en el READ", error);
+            logger.info("Hubo un error en el READ", error);
             throw error;
         }
     }

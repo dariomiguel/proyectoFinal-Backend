@@ -15,7 +15,7 @@ const customLevelOptions = {
 let logger
 switch (options.env) {
     case "development":
-        console.log(`Entorno de desarrollo ${options.env}`)
+
         logger = winston.createLogger({
             levels: customLevelOptions.levels,
             transports: [
@@ -29,7 +29,6 @@ switch (options.env) {
         break;
 
     case "production":
-        console.log(`Entorno de desarrollo ${options.env}`)
         logger = winston.createLogger({
             levels: customLevelOptions.levels,
             transports: [
@@ -51,9 +50,11 @@ switch (options.env) {
 }
 export { logger }
 
+logger.info(`Entorno de desarrollo ${options.env}`)
+
 export const addLogger = (req, res, next) => {
     req.logger = logger
-    req.logger.http(`[${req.method}] ${req.url} - ${new Date().toLocaleDateString()}`)
+    logger.http(`[${req.method}] ${req.url} - ${new Date().toLocaleDateString()}`)
     next()
 }
 

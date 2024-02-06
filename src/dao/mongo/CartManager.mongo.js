@@ -1,5 +1,6 @@
 import CartModel from "../models/carts.model.js";
 import __dirname from "../../utils.js"
+import { logger } from "../../utils/logger.js"
 
 class CartManager {
 
@@ -13,6 +14,7 @@ class CartManager {
             return result;
 
         } catch (error) {
+            logger.error(error)
             throw error
         }
     }
@@ -34,7 +36,8 @@ class CartManager {
             return idFaltante;
 
         } catch (error) {
-            console.error("Error al encontrar el ID que falta:\n", error);
+            logger.error("Error al encontrar el ID que falta:\n", error);
+            throw error
         }
     };
 
@@ -44,7 +47,7 @@ class CartManager {
             return lectura || []
 
         } catch (error) {
-            console.log("Hubo un error en la lectura de la base de datos.", error);
+            logger.error("Hubo un error en la lectura de la base de datos.", error);
             throw error;
         }
     }
@@ -55,7 +58,7 @@ class CartManager {
             const carritoBuscado = await CartModel.findOne({ _id: cId }).populate("products.product")
             return carritoBuscado;
         } catch (error) {
-            console.error("No se encontró el carrito solicitado\n", error);
+            logger.error("No se encontró el carrito solicitado\n", error);
             throw error;
         }
     }
@@ -64,14 +67,14 @@ class CartManager {
         try {
             const cart = await CartModel.findOne({ _id: cId });
             if (!cart) {
-                console.log("Carrito no encontrado");
+                logger.info("Carrito no encontrado");
                 return;
             }
 
-            console.log("Se encontró el carrito", cart);
+            logger.info("Se encontró el carrito", cart);
 
             if (!cart.products) {
-                console.log("El carrito no tiene productos");
+                logger.info("El carrito no tiene productos");
                 return;
             }
 
@@ -93,6 +96,7 @@ class CartManager {
                 return cart;
             }
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
@@ -100,8 +104,9 @@ class CartManager {
     deleteCart = async (cid) => {
         try {
             await CartModel.deleteOne({ _id: cid })
-            console.log(`Carrito con id:${cid} se eliminó correctamente!`);
+            logger.info(`Carrito con id:${cid} se eliminó correctamente!`);
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
@@ -111,7 +116,7 @@ class CartManager {
             const cart = await CartModel.findOne({ _id: cid });
 
             if (!cart) {
-                console.log(`No se encontró el carrito con id:${cid}`);
+                logger.info(`No se encontró el carrito con id:${cid}`);
                 return;
             }
 
@@ -125,11 +130,12 @@ class CartManager {
                 // Actualiza el carrito en la base de datos
                 await CartModel.updateOne({ _id: cid }, { $set: { products: cart.products } });
 
-                console.log(`Producto con id:${pid} eliminado del carrito con id:${cid} correctamente`);
+                logger.info(`Producto con id:${pid} eliminado del carrito con id:${cid} correctamente`);
             } else {
-                console.log(`No se encontró el producto con id:${pid} en el carrito con id:${cid}`);
+                logger.info(`No se encontró el producto con id:${pid} en el carrito con id:${cid}`);
             }
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
@@ -137,8 +143,9 @@ class CartManager {
     updateCart = async (cId, updatedCart) => {
         try {
             await CartModel.updateOne({ _id: cId }, updatedCart);
-            console.log(`Carrito con id:${cId} actualizado correctamente!`);
+            logger.info(`Carrito con id:${cId} actualizado correctamente!`);
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
@@ -146,8 +153,9 @@ class CartManager {
     updateProductQuantity = async (cId, updatedCart, quantity, producttoUpdate) => {
         try {
             await CartModel.updateOne({ _id: cId }, { $set: updatedCart });
-            console.log(`Se actualizó con una cantidad de ${quantity} el producto ${producttoUpdate} del carrito con id:${cId}!`);
+            logger.info(`Se actualizó con una cantidad de ${quantity} el producto ${producttoUpdate} del carrito con id:${cId}!`);
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
@@ -155,8 +163,9 @@ class CartManager {
     deleteAllProductsFromCart = async (cId) => {
         try {
             await CartModel.updateOne({ _id: cId }, { $set: { products: [] } });
-            console.log(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
+            logger.info(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
         } catch (error) {
+            logger.error(error)
             throw error;
         }
     }
