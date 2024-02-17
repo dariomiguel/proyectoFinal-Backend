@@ -8,7 +8,7 @@
         </div>
         <div class="container__priceOrder">
             <label for="priceOrder">Ordenar por Precio:</label>
-            <select id="priceOrder" name="priceOrder" onchange="orderPriceSelected()">
+            <select id="priceOrder" name="priceOrder" onchange=orderPriceSelected()>
                 <option value="">---</option>
                 <option value="ascending">Ascendente</option>
                 <option value="descending">Descendente</option>
@@ -27,13 +27,6 @@
             Page: <input id="page" type="number" value="{{result.page}}" inputmode="numeric"  min="1" max="{{result.totalPages}}"/>
             <br>
             <label for="category">Seleccionar Categoría:</label><br />
-            <select id="category" name="category">
-                <option value="">---</option>
-                <option value="cuadros">Cuadros</option>
-                <option value="artesanias">Artesanías</option>
-                <option value="bordados">Bordados</option>
-                <option value="esculturas">Esculturas</option>
-            </select>
             <br>
             <label for="stockAvailability">Disponibilidad de Stock:</label>
             <select id="stockAvailability" name="stockAvailability">

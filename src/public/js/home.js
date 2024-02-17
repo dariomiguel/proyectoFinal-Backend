@@ -52,3 +52,9 @@ function orderPriceSelected() {
     const values = getFormValues(selectedOption);
     redirectToPage(1, values);
 }
+
+const categoryElement = document.querySelector("#category")
+categoryElement.addEventListener("change", () => {
+    const values = getFormValues();
+    redirectToPage(1, values)
+})

@@ -1,8 +1,14 @@
 <nav class="headerLogueado">
     <div class="container">
         <div class="container__logo">
-            <a href="/home"><img
+            <a href="/home">
+                <img
                     src="/img/iconoCapyart.png"
+                    alt="logo CapyArt"
+                    class="logo"
+                />
+                <img
+                    src="/img/iconoCapyartLetras.png"
                     alt="logo CapyArt"
                     class="logo"
                 />
@@ -27,5 +33,27 @@
 
             <button id="btnSeeCart">Carrito</button>
         </nav>
+        <div class="container__location">
+            <div class="container__location--card">
+                <img src="/img/icons/icons8-ubicación-ios-17-32.png" alt="" />
+                <div class="locationText">
+                    <p class="locationText__name">Enviar a "NOMBRE"</p>
+                    <p class="locationText__ubication">Ubicación</p>
+                </div>
+            </div>
+        </div>
+        <div class="container__center">
+            <select
+                id="category"
+                class="container__center-links"
+                name="category"
+            >
+                <option value="">Categorías</option>
+                <option value="cuadros">Cuadros</option>
+                <option value="artesanias">Artesanías</option>
+                <option value="bordados">Bordados</option>
+                <option value="esculturas">Esculturas</option>
+            </select>
+        </div>
     </div>
 </nav>
