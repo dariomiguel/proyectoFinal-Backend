@@ -82,41 +82,43 @@ document.addEventListener('DOMContentLoaded', () => {
 document.addEventListener('DOMContentLoaded', () => {
     const btnSeeCart = document.getElementById('btnSeeCart');
 
-    btnSeeCart.addEventListener('click', async (event) => {
-        event.preventDefault();
+    if (btnSeeCart) {
+        btnSeeCart.addEventListener('click', async (event) => {
+            event.preventDefault();
 
-        try {
-            const existCartInUserResponse = await fetch(`/api/users/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-            const existCartInUserData = await existCartInUserResponse.json();
+            try {
+                const existCartInUserResponse = await fetch(`/api/users/`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const existCartInUserData = await existCartInUserResponse.json();
 
-            if (!existCartInUserData.payload) {
-                // Si no tiene un carrito existente, crea uno nuevo
-                const responseCreateCart = await fetch('/api/carts/', {
+                if (!existCartInUserData.payload) {
+                    // Si no tiene un carrito existente, crea uno nuevo
+                    const responseCreateCart = await fetch('/api/carts/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                    });
+
+                    const responseData = await responseCreateCart.json();
+                    cartId = responseData.payload._id;
+                } else cartId = existCartInUserData.payload;
+
+                await fetch(`/api/users/cart/${cartId}`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
                 });
 
-                const responseData = await responseCreateCart.json();
-                cartId = responseData.payload._id;
-            } else cartId = existCartInUserData.payload;
-
-            await fetch(`/api/users/cart/${cartId}`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
-
-            window.location.href = `/api/carts/${cartId}`;
-        } catch (error) {
-            logger.error('Hubo un error al realizar la solicitud:', error);
-        }
-    });
+                window.location.href = `/api/carts/${cartId}`;
+            } catch (error) {
+                logger.error('Hubo un error al realizar la solicitud:', error);
+            }
+        });
+    }
 });
