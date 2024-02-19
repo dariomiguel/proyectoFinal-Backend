@@ -52,6 +52,16 @@ class UserManagerMongo {
         }
     }
 
+    searchUser = async (emailUser) => {
+        try {
+            const user = await UserModel.findOne({ email: emailUser });
+            if (!user) return false;
+
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserManagerMongo

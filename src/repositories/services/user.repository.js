@@ -21,4 +21,9 @@ export default class UserRepository {
         const result = await this.dao.addCartInUser(uId, cId)
         return result
     }
+
+    getUser = async (userEmail) => {
+        const result = await this.dao.searchUser(userEmail)
+        return result
+    }
 }

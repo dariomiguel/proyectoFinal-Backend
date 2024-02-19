@@ -1,5 +1,5 @@
 import express from "express"
-import { authorize, logUser } from "../utils.js"
+import { userService } from "../repositories/index.js";
 import { logger } from "../utils/logger.js";
 
 const router = express.Router()
@@ -10,8 +10,20 @@ router.get("/", async (req, res) => {
             style: "style.css"
         });
     } catch (error) {
-        logger.error("Error al obtener los carritos:", error);
-        res.status(500).send("Error al obtener los carritos" + error)
+        logger.error("Error al obtener la página:", error);
+        res.status(500).send("Error al obtener la página" + error)
+    }
+})
+
+router.post("/:userEmail", async (req, res) => {
+    try {
+        const emailSearch = req.params.userEmail
+        const response = await userService.getUser(emailSearch)
+
+        res.status(201).json({ status: "success", payload: response });
+    } catch (error) {
+        logger.error("Error al obtener la página:", error);
+        res.status(500).send("Error al obtener la página" + error)
     }
 })
 
@@ -21,8 +33,8 @@ router.get("/emailsent", async (req, res) => {
             style: "style.css"
         });
     } catch (error) {
-        logger.error("Error al obtener los carritos:", error);
-        res.status(500).send("Error al obtener los carritos" + error)
+        logger.error("Error al obtener la página:", error);
+        res.status(500).send("Error al obtener la página" + error)
     }
 })
 
@@ -32,8 +44,8 @@ router.get("/reset", async (req, res) => {
             style: "style.css"
         });
     } catch (error) {
-        logger.error("Error al obtener los carritos:", error);
-        res.status(500).send("Error al obtener los carritos" + error)
+        logger.error("Error al obtener la página:", error);
+        res.status(500).send("Error al obtener la página" + error)
     }
 })
 

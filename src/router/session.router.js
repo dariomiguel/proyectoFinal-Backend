@@ -22,13 +22,6 @@ router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), 
             return res.status(401).send({ status: "error", error: "Credenciales no validas!" })
         }
 
-        //!Para implementar JWT más adelante
-        // const token = generateToken(usuario)
-        // res.cookie("coderCookie", token, {
-        //     maxAge: 60 * 60 * 1000,
-        //     httpOnly: true
-        // })
-
         const result = await userService.get(usuario)
         req.session.user = result
 
