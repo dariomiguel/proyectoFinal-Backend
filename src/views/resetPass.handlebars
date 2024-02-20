@@ -1,4 +1,10 @@
 <h2>Introduzca su nueva contraseña</h2>
-<label for="">Contraseña</label>
-<p>Vuelva a ingresar la contraseña</p>
-<label for="">Contraseña</label>
+
+<form  id="newPassForm">
+        <input id="tokenNewPass" type="hidden" name="token" value="{{ token }}">
+    <input id="emailNewPass" type="hidden" name="decodedToken" value="{{ decodedTokenString }}">
+    Password: <input type="text" name="password" required id="newPass"></input><br>
+
+    <button type="submit">Change password</button>
+<br>
+</form>

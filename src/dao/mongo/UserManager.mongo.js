@@ -1,6 +1,7 @@
 import UserModel from "../models/user.model.js"
-import __dirname from "../../utils.js"
+import __dirname, { createHash, isValidPassword } from "../../utils.js"
 import { logger } from "../../utils/logger.js"
+
 
 class UserManagerMongo {
 
@@ -58,6 +59,36 @@ class UserManagerMongo {
             if (!user) return false;
 
             return true;
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    searchUserAndPass = async (emailUser, newPass) => {
+        try {
+
+            const passHashed = createHash(newPass);
+            const user = await UserModel.findOne({ email: emailUser.replace(/"/g, '') }).lean().exec()
+
+            if (!isValidPassword(user, newPass)) {
+                logger.info("la contraseña No es igual a la anterior")
+                await UserModel.updateOne({ _id: user._id }, { $set: { password: passHashed } })
+                return true
+            } else {
+                logger.info("la contraseña es igual a la anterior no se va a cambiar")
+                return false;
+            }
+
+
+            // if (passHashed == user.password) {
+            //     console.log("la contraseña es igual a la anterior no se va a cambiar")
+            //     return true;
+            // } else {
+            //     console.log("la contraseña No es igual a la anterior")
+            //     await UserModel.updateOne({ _id: user._id }, { $set: { password: passHashed } })
+            //     return false
+            // }
+
         } catch (error) {
             throw error;
         }

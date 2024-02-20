@@ -67,35 +67,6 @@ export const authorize = (requiredRole) => {
     };
 };
 
-
-
-//! PREGUNTAR PORQUE NO FUNCIONA CON JWT
-// export const authorize = requiredRole => {
-//     return async (req, res, next) => {
-//         try {
-//             // Verificar si hay un usuario autenticado en la sesión
-//             if (!req.user) {
-//                 return res.status(401).json({ error: "No hay usuario autenticado" });
-//             }
-
-//             const user = req.user
-//             // logger.info("El rol del user es: ", user.user.role)
-//             logger.info("El rol requerido requiredRole es ", requiredRole);
-//             logger.info("El req session user es :", req.user);
-//             logger.info("El user es: ", user)
-
-//             if (!user) return res.status(401).send({ error: "UNAUTHORIZED!" })
-//             if (user.user.role != requiredRole) return res.status(403).send({ error: "NO PERMISIONS!" })
-
-//             return next()
-//         } catch (error) {
-//             logger.error("Error en el middleware de autorización:", error);
-//             return res.status(500).json({ error: "Error en el servidor" });
-//         }
-//     };
-// };
-
-
 export const logUser = () => {
     return function logUser(req, res, next) {
 

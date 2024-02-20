@@ -26,4 +26,9 @@ export default class UserRepository {
         const result = await this.dao.searchUser(userEmail)
         return result
     }
+
+    getUserAndPass = async (userEmail, newPass) => {
+        const result = await this.dao.searchUserAndPass(userEmail, newPass)
+        return result
+    }
 }

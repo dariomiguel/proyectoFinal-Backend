@@ -30,7 +30,6 @@ if (buyBtn) {
             // Extraer el payload del response como JSON para poder utilizar los valores qe dio el post
             const responseData = await response.json();
             const ticket = responseData.payload;
-            console.log("El ticket creado es: ", ticket);
 
             Swal.fire({
                 title: "Compra exitosa",
@@ -51,9 +50,9 @@ if (buyBtn) {
                     'Content-Type': 'application/json',
                 },
             });
-            const responseGetData = await responseGet.json();
-            const ticketGet = responseGetData.payload;
-            console.log("El ticketGet creado es: ", ticketGet);
+            // const responseGetData = await responseGet.json();
+            // const ticketGet = responseGetData.payload;
+            // console.log("El ticketGet creado es: ", ticketGet);
 
 
         } catch (error) {
