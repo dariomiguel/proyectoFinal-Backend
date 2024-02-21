@@ -65,6 +65,11 @@ app.engine("handlebars", handlebars.engine({
     runtimeOptions: {
         allowProtoPropertiesByDefault: true,
     },
+    helpers: {
+        ifEquals: function (arg1, arg2, options) {
+            return (arg1 === arg2) ? options.fn(this) : options.inverse(this);
+        }
+    }
 }));
 app.set("views", __dirname + "/views");
 app.set("view engine", "handlebars");

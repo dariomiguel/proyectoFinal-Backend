@@ -17,7 +17,7 @@ router.get("/", logUser(), async (req, res) => {
     }
 })
 
-router.post("/", logUser(), authorize("user"), async (req, res) => {
+router.post("/", logUser(), authorize(["user", "premium"]), async (req, res) => {
     try {
         const cart = await cartService.create(req.user.role);
 
@@ -31,7 +31,7 @@ router.post("/", logUser(), authorize("user"), async (req, res) => {
     }
 })
 
-router.get("/:cid", logUser(), authorize("user"), async (req, res) => {
+router.get("/:cid", logUser(), authorize(["user", "premium"]), async (req, res) => {
 
     try {
         const cId = req.params.cid;

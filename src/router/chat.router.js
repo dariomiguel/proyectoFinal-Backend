@@ -20,7 +20,7 @@ function handleError(error, res) {
     }
 }
 
-router.get("/", logUser(), authorize("user"), async (req, res) => {
+router.get("/", logUser(), authorize(["user", "premium"]), async (req, res) => {
     try {
 
         const limit = req.query.limit;
@@ -37,7 +37,7 @@ router.get("/", logUser(), authorize("user"), async (req, res) => {
     }
 });
 
-router.post("/", authorize("user"), async (req, res) => {
+router.post("/", authorize(["user", "premium"]), async (req, res) => {
     try {
         const { user, message } = req.body;
         //Agregar Chat a la conversación

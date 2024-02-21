@@ -4,7 +4,13 @@
         <div class="userWelcome">
             <h1>Bienvenido a CapyArt {{user.first_name}} {{user.last_name}}!!</h1>
             <p>{{user.email}}</p>
-            <h4><b>{{user.role}}</b></h4>
+            {{#ifEquals user.role "admin"}}
+                <h4><b>Administrador</b></h4>
+            {{else ifEquals user.role "premium"}}
+                <h4><b>Usuario Premium</b></h4>
+            {{else}}
+                <h4><b>Usuario Estándar</b></h4>
+            {{/ifEquals}}
         </div>
         <div class="container__priceOrder">
             <label for="priceOrder">Ordenar por Precio:</label>

@@ -1,6 +1,7 @@
 import express from "express";
 import { productService } from "../repositories/index.js";
 import { logger } from "../utils/logger.js";
+import { authorize } from "../utils.js";
 
 const router = express.Router();
 
@@ -11,7 +12,7 @@ function auth(req, res, next) {
 }
 
 
-router.get("/", auth, async (req, res) => {
+router.get("/", auth, authorize(["admin", "premium"]), async (req, res) => {
     try {
         const limit = parseInt(req.query?.limit || 10);
         const page = parseInt(req.query?.page || 1);

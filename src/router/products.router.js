@@ -35,7 +35,7 @@ router.get("/", async (req, res) => {
     }
 });
 
-router.post("/", logUser(), authorize("admin"), async (req, res) => {
+router.post("/", logUser(), authorize(["admin", "premium"]), async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
 
@@ -117,7 +117,7 @@ router.get("/:pid", logUser(), async (req, res) => {
 
 });
 
-router.put("/:pid", logUser(), authorize("admin"), async (req, res) => {
+router.put("/:pid", logUser(), authorize(["admin", "premium"]), async (req, res) => {
     try {
         const productId = req.params.pid;
         const { key, value } = req.body;
@@ -142,7 +142,7 @@ router.put("/:pid", logUser(), authorize("admin"), async (req, res) => {
     }
 });
 
-router.delete("/:pid", logUser(), authorize("admin"), async (req, res) => {
+router.delete("/:pid", logUser(), authorize(["admin", "premium"]), async (req, res) => {
     try {
         const productId = req.params.pid;
 

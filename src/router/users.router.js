@@ -6,7 +6,7 @@ import { logger } from "../utils/logger.js";
 const router = Router();
 
 
-router.get("/", authorize("user"), async (req, res) => {
+router.get("/", authorize(["user", "premium"]), async (req, res) => {
     try {
         const user = req.session.user
         const uId = user._id;

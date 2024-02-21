@@ -59,7 +59,7 @@ router.get("/logout", (req, res) => {
     }
 });
 
-router.get("/current", authorize("user"), (req, res) => {
+router.get("/current", authorize(["user", "premium"]), (req, res) => {
     try {
         if (!req.session.user) return res.status(401).json({ error: "No hay usuario autenticado" });
         const userDTO = new userInsertDTO(req.session.user)
@@ -85,7 +85,7 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
 router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
 
 //! PREGUNTAR PORQUE NO FUNCIONA CON JWT
-// router.get("/current", passport.authenticate("jwt", { session: false }), authorize("user"), (req, res) => {
+// router.get("/current", passport.authenticate("jwt", { session: false }), authorize(["user", "premium"]), (req, res) => {
 //     try {
 //         if (!req.user) return res.status(401).json({ error: "No hay usuario autenticado" });
 //         (req, res) => {

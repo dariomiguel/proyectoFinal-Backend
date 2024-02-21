@@ -37,7 +37,8 @@
             <div class="container__location--card">
                 <img src="/img/icons/icons8-ubicación-ios-17-32.png" alt="" />
                 <div class="locationText">
-                    <p class="locationText__name">Enviar a "NOMBRE"</p>
+                    <p class="locationText__name">Enviar a
+                        {{user.first_name}}</p>
                     <p class="locationText__ubication">Ubicación</p>
                 </div>
             </div>
@@ -54,6 +55,13 @@
                 <option value="bordados">Bordados</option>
                 <option value="esculturas">Esculturas</option>
             </select>
+
+            {{#ifEquals user.role "admin"}}
+                <a href="http://localhost:8080/realtimeproducts">Crear Producto</a>
+            {{else ifEquals user.role "premium"}}
+                <a href="http://localhost:8080/realtimeproducts">Crear Producto</a>
+            {{/ifEquals}}
+
         </div>
     </div>
 </nav>

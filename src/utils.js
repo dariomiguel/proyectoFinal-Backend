@@ -38,7 +38,7 @@ export const authToken = (req, res, next) => {
     })
 }
 
-export const authorize = (requiredRole) => {
+export const authorize = (requiredRoles) => {
     return async (req, res, next) => {
         try {
             // Verificar si hay un usuario autenticado en la sesión
@@ -48,19 +48,20 @@ export const authorize = (requiredRole) => {
             }
 
             const user = req.session.user
-
             if (!user) return res.status(401).send({ error: "Sin autortizacion para acceder al contenido solicitado!" })
-            if (user.role != requiredRole) {
+
+            const hasRequiredRole = requiredRoles.some(role => user.role === role);
+            if (!hasRequiredRole) {
                 logger.error("NO PERMISIONS!")
                 return res.status(403).send({ error: "NO PERMISIONS!" })
             }
-
 
             logger.info("Acceso autorizado ")
             logger.http("Acceso autorizado ")
 
             return next()
         } catch (error) {
+
             logger.error("Error en el middleware de autorización:", error);
             return res.status(500).json({ error: "Error en el servidor" });
         }
