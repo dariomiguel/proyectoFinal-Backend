@@ -153,3 +153,23 @@
 {"level":"error","message":"No se encontró imagén : "}
 {"level":"error","message":"No se encontró imagén : "}
 {"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"Hubo un error general en la escritura de la base de datos: owner is not defined","stack":"ReferenceError: owner is not defined\n    at ProductRepository.create (file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/repositories/services/products.repository.js:41:125)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/router/products.router.js:51:34"}
+{"level":"error","message":"Hubo un error general en la escritura de la base de datos: owner is not defined","stack":"ReferenceError: owner is not defined\n    at ProductRepository.create (file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/repositories/services/products.repository.js:41:125)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/router/products.router.js:51:34"}
+{"level":"error","message":"Hubo un error general en la escritura de la base de datos: owner is not defined","stack":"ReferenceError: owner is not defined\n    at ProductRepository.create (file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/repositories/services/products.repository.js:41:125)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/router/products.router.js:51:34"}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"Hubo un error general en la escritura de la base de datos: owner is not defined","stack":"ReferenceError: owner is not defined\n    at ProductRepository.create (file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/repositories/services/products.repository.js:41:125)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/router/products.router.js:53:34"}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}
+{"level":"error","message":"No se encontró imagén : "}

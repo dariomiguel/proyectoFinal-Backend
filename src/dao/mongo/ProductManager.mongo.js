@@ -65,7 +65,7 @@ class ProductManagerMongo {
         }
     }
 
-    addProduct = async (title, description, code, price, stock, category, thumbnail) => {
+    addProduct = async (title, description, code, price, stock, category, thumbnail, owner) => {
         try {
             const newId = await this.createID()
             const productToAdd = {
@@ -78,6 +78,7 @@ class ProductManagerMongo {
                 stock: stock,
                 category: category,
                 thumbnail: thumbnail,
+                owner: owner
             }
 
             const result = await ProductModel.create(productToAdd);

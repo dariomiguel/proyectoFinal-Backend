@@ -106,7 +106,7 @@ productsAddForm.addEventListener("submit", async (event) => {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                title, price, description, code, stock, category, thumbnail,
+                title, price, description, code, stock, category, thumbnail
             }),
         });
 

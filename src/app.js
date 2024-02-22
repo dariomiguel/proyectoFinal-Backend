@@ -95,7 +95,7 @@ app.use("/recoverpass", restorePass);
 //PASSPORT
 initializePassport()
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
 
 //Creamos una variable para el servidor  
 const httpServer = app.listen(8080, () => logger.info("En linea..."));

@@ -38,6 +38,7 @@ router.get("/", async (req, res) => {
 router.post("/", logUser(), authorize(["admin", "premium"]), async (req, res) => {
     try {
         const { title, description, code, price, stock, category, thumbnail } = req.body;
+        const userSession = req.session.user
 
         const productoAInspeccionar = {
             title,
@@ -47,8 +48,14 @@ router.post("/", logUser(), authorize(["admin", "premium"]), async (req, res) =>
             CustomError.createProduct(productoAInspeccionar)
         }
 
-
-        const productoAgregado = await productService.create(title, description, code, price, stock, category, thumbnail)
+        const productoAgregado = await productService.create(title,
+            description,
+            code,
+            price,
+            stock,
+            category,
+            thumbnail,
+            userSession.email)
 
         res
             //*201 para creaciones exitosas

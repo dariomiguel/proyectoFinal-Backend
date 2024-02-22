@@ -11,8 +11,8 @@ export default class ProductRepository {
         return result
     }
 
-    create = async (title, description, code, price, stock, category, thumbnail) => {
-        const productToInsert = new productInsertDTO({ title, description, code, price, stock, category, thumbnail })
+    create = async (title, description, code, price, stock, category, thumbnail, owner) => {
+        const productToInsert = new productInsertDTO({ title, description, code, price, stock, category, thumbnail, owner })
 
         //Manejo de excepciones para no permitir valores incorrectos
         const algunaPropiedadVacia = await this.dao.isNotValidCode(productToInsert);
@@ -38,7 +38,7 @@ export default class ProductRepository {
             throw error;
 
         } else {
-            const productoAgregado = await this.dao.addProduct(title, description, code, price, stock, category, thumbnail);
+            const productoAgregado = await this.dao.addProduct(title, description, code, price, stock, category, thumbnail, owner);
             return productoAgregado
         }
     }
