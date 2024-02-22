@@ -52,16 +52,30 @@ const sendDelete = async (id) => {
         const response = await fetch(`/api/products/${id}`, {
             method: "DELETE",
         });
+        const responseData = await response.json();
+
         if (response.ok) {
-            console.log("Se eliminó corectamente el elemento con ID: ", id);
-            Swal.fire({
-                icon: "success",
-                title: "Producto Eliminado!",
-                text: "🗑️",
-                confirmButtonColor: "#3085d6",
-                confirmButtonText: "Aceptar"
-            });
-            document.getElementById(id).innerHTML = "";
+            if (responseData.payload) {
+                console.log("Se eliminó corectamente el elemento con ID: ", id);
+                Swal.fire({
+                    icon: "success",
+                    title: "Producto Eliminado!",
+                    text: "🗑️",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                });
+                document.getElementById(id).innerHTML = "";
+
+            } else {
+                console.error("Error elimando el producto, se necesitan permisos.");
+                Swal.fire({
+                    icon: "error",
+                    title: "Atención!!",
+                    text: "Usted no tiene el permiso para eliminar este producto!",
+                    confirmButtonColor: "#d33",
+                    confirmButtonText: "Cerrar"
+                });
+            }
 
         } else {
             console.error("Error elimando el producto desde formulario cliente:", response);

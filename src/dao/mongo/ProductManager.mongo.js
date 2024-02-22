@@ -177,10 +177,19 @@ class ProductManagerMongo {
         }
     }
 
-    deleteProduct = async (pid) => {
+    deleteProduct = async (pid, userSession) => {
         try {
-            await ProductModel.deleteOne({ id: pid })
-            logger.info(`Producto con id:${pid} se eliminó correctamente!`);
+            const productoBuscado = await this.getProductById(pid);
+
+            if (userSession.role === "admin" || productoBuscado.owner === userSession.email) {
+                await ProductModel.deleteOne({ _id: pid })
+                logger.info(`Producto con id:${pid} se eliminó correctamente!`);
+                return true
+            }
+
+            logger.error(`Usted no posee permisos para eliminar el producto con id:${pid}`);
+            return false
+
         } catch (error) {
             throw error;
         }

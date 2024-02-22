@@ -152,14 +152,15 @@ router.put("/:pid", logUser(), authorize(["admin", "premium"]), async (req, res)
 router.delete("/:pid", logUser(), authorize(["admin", "premium"]), async (req, res) => {
     try {
         const productId = req.params.pid;
+        const userSession = req.session.user;
+        const response = await productService.getProduct(productId);
 
-        if (productId === null) {
+        if (productId === null || !response) {
             logger.error(`No se encontró el producto con id:"${productId}"`);
             res.status(404).json({ Error: `No se encontró el producto con id:"${productId}"` });
         } else {
-            logger.info("El req session role es: ", req.session.user.role);
-            await productService.delete(productId)
-            res.status(201).json({ message: "Producto eliminado correctamente" });
+            const result = await productService.delete(productId, userSession);
+            res.status(201).json({ status: "success", payload: result });
         }
 
     } catch (error) {
