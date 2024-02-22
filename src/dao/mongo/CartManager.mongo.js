@@ -144,6 +144,7 @@ class CartManager {
         try {
             await CartModel.updateOne({ _id: cId }, updatedCart);
             logger.info(`Carrito con id:${cId} actualizado correctamente!`);
+            return true
         } catch (error) {
             logger.error(error)
             throw error;

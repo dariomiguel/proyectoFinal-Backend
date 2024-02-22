@@ -65,18 +65,25 @@ router.post("/:cid/product/:pid", logUser(), async (req, res) => {
         const cId = req.params.cid;
         const pId = req.params.pid;
         const quantity = req.body.quantity || 1;
-        await cartService.productToCart(cId, pId, quantity);
+        const user = req.session.user
+        const searchProduct = await productService.getProduct(pId)
 
-        res.status(200).json({ message: `Producto con id: ${pId} (cantidad: ${quantity}) agregado al carrito con id: ${cId} correctamente!` });
-
+        if (user.role === "premium" && searchProduct.owner === user.email) {
+            logger.error("Usted no puede agregar el producto al carro");
+            res.status(403).json({ status: "Forbidden", payload: false })
+            return false
+        }
+        const response = await cartService.productToCart(cId, pId, quantity);
+        logger.info(`Producto con id: ${pId} (cantidad: ${quantity}) agregado al carrito con id: ${cId} correctamente!`)
+        res.status(200).json({ status: "success", payload: response })
     } catch (error) {
         if (error.statusCode = 4001) {
-            logger.error(`No se encontró el carrito con id: ${cId}`);
+            logger.error(`No se encontró el carrito por Id`);
 
             return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
 
         } else if (error.statusCode = 4002) {
-            logger.error(`No se encontró el producto con id: ${pId}`);
+            logger.error(`No se encontró el producto por Id`);
             return res.status(404).json({ error: `No se encontró el carrito con id solicitado` });
 
         } else {

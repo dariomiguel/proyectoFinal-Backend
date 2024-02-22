@@ -57,6 +57,26 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                 });
 
+                const responsePost = await fetch(`/api/carts/${cartId}/product/${productId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                const responseDataPost = await responsePost.json();
+                const isOwnerOfProduct = responseDataPost.payload;
+
+                if (!isOwnerOfProduct) {
+                    Swal.fire({
+                        icon: "error",
+                        title: "Error agregando producto",
+                        text: "Usted es dueño del producto, no puede agregar al carrito.",
+                        confirmButtonColor: "#d33",
+                        confirmButtonText: "Cerrar"
+                    });
+                    return
+                }
+
                 Swal.fire({
                     icon: "success",
                     title: "Producto Agregado",
@@ -64,13 +84,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     confirmButtonColor: "#3085d6",
                     confirmButtonText: "Aceptar"
                 })
-
-                await fetch(`/api/carts/${cartId}/product/${productId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                });
 
             } catch (error) {
                 logger.error('Hubo un error al realizar la solicitud POST:', error);
