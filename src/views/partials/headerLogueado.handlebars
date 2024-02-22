@@ -61,6 +61,8 @@
             {{else ifEquals user.role "premium"}}
                 <a href="http://localhost:8080/realtimeproducts">Crear Producto</a>
             {{/ifEquals}}
+            <a href="http://localhost:8080/api/users/premium/{{user._id}}">|
+                Cambiar Rol</a>
 
         </div>
     </div>

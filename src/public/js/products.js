@@ -135,3 +135,47 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+    const btnChangeRole = document.getElementById("btnChangeRole");
+
+    btnChangeRole.addEventListener("click", async () => {
+        const url = window.location.href;
+        const segments = url.split("/");
+        const uid = segments[segments.length - 1];
+
+        try {
+            const response = await fetch(`/api/users/premium/${uid}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            });
+            const data = await response.json();
+
+            if (data) {
+                Swal.fire({
+                    icon: "success",
+                    title: "Cambio Completado!",
+                    text: "El cambio de rol se ha producido correctamente.",
+                    confirmButtonColor: "#3085d6",
+                    confirmButtonText: "Aceptar"
+                })
+                    .then(() => window.location.reload())
+                return
+            }
+
+            Swal.fire({
+                icon: "error",
+                title: "Hubo un error",
+                text: "El rol no se ha podido cambiar.",
+                confirmButtonColor: "#d33",
+                confirmButtonText: "Cerrar"
+            })
+                .then(() => window.location.reload())
+            return
+        } catch (error) {
+            console.error("Error al cambiar el rol de usuario:", error);
+        }
+    });
+});

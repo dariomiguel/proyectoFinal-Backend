@@ -79,16 +79,28 @@ class UserManagerMongo {
                 return false;
             }
 
+        } catch (error) {
+            throw error;
+        }
+    }
 
-            // if (passHashed == user.password) {
-            //     console.log("la contraseña es igual a la anterior no se va a cambiar")
-            //     return true;
-            // } else {
-            //     console.log("la contraseña No es igual a la anterior")
-            //     await UserModel.updateOne({ _id: user._id }, { $set: { password: passHashed } })
-            //     return false
-            // }
+    updateUser = async (userID) => {
+        try {
+            const user = await UserModel.findOne({ _id: userID });
 
+            if (!user) logger.info("No se encontro el usuario");
+
+            if (user.role === "user") {
+                logger.info("El usuario es user");
+                await UserModel.updateOne({ _id: userID }, { $set: { role: "premium" } })
+                return "premium"
+            } else if (user.role === "premium") {
+                logger.info("El usuario es premium");
+                await UserModel.updateOne({ _id: userID }, { $set: { role: "user" } })
+                return "user"
+            }
+
+            return false
         } catch (error) {
             throw error;
         }

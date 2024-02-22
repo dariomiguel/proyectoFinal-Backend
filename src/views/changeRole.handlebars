@@ -1,0 +1,7 @@
+{{#ifEquals user.role "user"}}
+    <p>Desea cambiar el rol de user a premium?</p>
+    <button id="btnChangeRole">Cambiar rol</button>
+{{else ifEquals user.role "premium"}}
+    <p>Desea cambiar el rol de premium a user?</p>
+    <button id="btnChangeRole">Cambiar rol</button>
+{{/ifEquals}}

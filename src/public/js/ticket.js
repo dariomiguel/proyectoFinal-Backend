@@ -50,10 +50,6 @@ if (buyBtn) {
                     'Content-Type': 'application/json',
                 },
             });
-            // const responseGetData = await responseGet.json();
-            // const ticketGet = responseGetData.payload;
-            // console.log("El ticketGet creado es: ", ticketGet);
-
 
         } catch (error) {
             console.error("Error en la compra:", error);
