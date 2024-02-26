@@ -29,6 +29,9 @@ import passport from "passport";
 import initializePassport from "./config/passport.config.js";
 import { addLogger, logger } from "./utils/logger.js";
 
+import swaggerJsdoc from "swagger-jsdoc";
+import SwaggerUiExpress from "swagger-ui-express";
+
 const app = express();
 app.use(compression())
 app.use(express.json());
@@ -90,6 +93,20 @@ app.use("/mail", mailRouter);
 app.use("/mockingproducts", MockingProductsRouter);
 app.use("/loggerTest", loggerTest);
 app.use("/recoverpass", restorePass);
+
+const swaggerOptions = {
+    definition: {
+        openapi: "3.0.1",
+        info: {
+            title: "Documentación de E-Comerce",
+            description: "Proyecto de e-commerce."
+        }
+    },
+    apis: [`${__dirname}/docs/**/*.yaml`]
+}
+
+const specs = swaggerJsdoc(swaggerOptions);
+app.use("/apidocs", SwaggerUiExpress.serve, SwaggerUiExpress.setup(specs))
 
 
 //PASSPORT

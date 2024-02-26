@@ -1,0 +1,75 @@
+paths:
+    /api/products:
+        get:
+            summary: Obtiene una lista de productos
+            tags:
+                - Products
+
+            parameters:
+                - in: query
+                  name: limit
+                  schema:
+                      type: integer
+                      minimum: 1
+                  description: "Número máximo de productos a devolver por página (por defecto: 10)"
+                - in: query
+                  name: page
+                  schema:
+                      type: integer
+                      minimum: 1
+                  description: "Número de página a devolver (por defecto: 1)"
+                - in: query
+                  name: query
+                  schema:
+                      type: string
+                  description: Búsqueda por palabra clave
+                - in: query
+                  name: category
+                  schema:
+                      type: string
+                      enum: [cuadros, artesanias, bordados, esculturas]
+                  description: Filtrar por categoría
+                - in: query
+                  name: stockAvailability
+                  schema:
+                      type: string
+                      enum: [all, inStock, outOfStock]
+                  description: Filtrar por disponibilidad de stock
+                - in: query
+                  name: priceOrder
+                  schema:
+                      type: string
+                      enum: [ascending, descending]
+                  description: Ordenar por precio (ascendente o descendente)
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    payload:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Product"
+                "404":
+                    description: No se encontraron productos
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+                "500":
+                    description: Hubo un error al obtener la lista de productos
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
