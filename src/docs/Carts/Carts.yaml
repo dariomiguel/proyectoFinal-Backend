@@ -455,18 +455,34 @@ components:
                                 description: Cantidad del producto en el carrito
                     default: []
 
-            example:
-                _id: ObjectId("65b6ddf9575c0d89c0725c80")
-                products:
-                    - product: "656515343c480d0e807b92b0"
-                      quantity: 1
-                      _id: "65d6a953ae62d102844f918a"
-                    - product: "656927d94eb25a3d70fdecc9"
-                      quantity: 6
-                      _id: "65d6a992c91507075999b60a"
-                    - product: "655b686c1c4d5ca3fdad9355"
-                      quantity: 1
-                      _id: "65d6aa412ecd46b7ac4198bb"
-                    - product: "65d6aad5965c130b98d2b684"
-                      quantity: 1
-                      _id: "65d6aae6965c130b98d2b697"
+        Ticket:
+            type: object
+            properties:
+                code:
+                    type: string
+                    default: "[generated]"
+                    uniqueItems: true
+                    minLength: 1
+                purchase_datetime:
+                    type: string
+                    format: date-time
+                amount:
+                    type: number
+                purchaser:
+                    type: string
+
+                example:
+                    _id: ObjectId("65b6ddf9575c0d89c0725c80")
+                    products:
+                        - product: "656515343c480d0e807b92b0"
+                          quantity: 1
+                          _id: "65d6a953ae62d102844f918a"
+                        - product: "656927d94eb25a3d70fdecc9"
+                          quantity: 6
+                          _id: "65d6a992c91507075999b60a"
+                        - product: "655b686c1c4d5ca3fdad9355"
+                          quantity: 1
+                          _id: "65d6aa412ecd46b7ac4198bb"
+                        - product: "65d6aad5965c130b98d2b684"
+                          quantity: 1
+                          _id: "65d6aae6965c130b98d2b697"
