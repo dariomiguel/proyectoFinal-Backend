@@ -195,6 +195,4 @@ router.get("/:cid/purchase", logUser(), async (req, res) => {
     }
 });
 
-
-
 export default router
