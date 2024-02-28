@@ -3,8 +3,7 @@ paths:
         get:
             summary: Obtiene una lista de productos
             tags:
-                - Products
-
+                - Product
             parameters:
                 - in: query
                   name: limit
@@ -41,9 +40,10 @@ paths:
                       type: string
                       enum: [ascending, descending]
                   description: Ordenar por precio (ascendente o descendente)
+
             responses:
                 "200":
-                    description: OK
+                    description: Lista de productos que se obtiene satisfactoriamente
                     content:
                         application/json:
                             schema:
@@ -56,7 +56,7 @@ paths:
                                         items:
                                             $ref: "#/components/schemas/Product"
                 "404":
-                    description: No se encontraron productos
+                    description: No se encontraron los productos solicitados
                     content:
                         application/json:
                             schema:
@@ -65,7 +65,7 @@ paths:
                                     Error:
                                         type: string
                 "500":
-                    description: Hubo un error al obtener la lista de productos
+                    description: Error al obtener la lista de productos, por fallos en queries, o por fallo en conexión a la base de datos
                     content:
                         application/json:
                             schema:
@@ -73,3 +73,252 @@ paths:
                                 properties:
                                     Error:
                                         type: string
+
+        post:
+            summary: Agrega un nuevo producto
+            tags:
+                - Product
+            security:
+                - session: []
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                title:
+                                    type: string
+                                description:
+                                    type: string
+                                code:
+                                    type: string
+                                price:
+                                    type: number
+                                stock:
+                                    type: integer
+                                category:
+                                    type: string
+                                thumbnail:
+                                    type: string
+                            required:
+                                - title
+                                - price
+            responses:
+                "201":
+                    description: Producto agregado correctamente
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    payload:
+                                        $ref: "#/components/schemas/Product"
+                "400":
+                    description: Error en la solicitud del cliente
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+                "500":
+                    description: Error interno del servidor
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+
+    /api/products/{pid}:
+        get:
+            summary: Obtiene un producto por su ID
+            tags:
+                - Product
+            parameters:
+                - in: path
+                  name: pid
+                  required: true
+                  schema:
+                      type: string
+                  description: ID del producto
+            responses:
+                "200":
+                    description: Producto encontrado satisfactoriamente
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    payload:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Product"
+                "404":
+                    description: Producto no encontrado
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+                "500":
+                    description: Error interno del servidor
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+
+        put:
+            summary: Actualiza un producto por su ID
+            tags:
+                - Product
+            parameters:
+                - in: path
+                  name: pid
+                  required: true
+                  schema:
+                      type: string
+                  description: ID del producto
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                key:
+                                    type: string
+                                value:
+                                    type: string
+                            required:
+                                - key
+                                - value
+            responses:
+                "400":
+                    description: No se encontró la propiedad solicitada
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+                "404":
+                    description: No se encontró el producto con el ID solicitado
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+                "500":
+                    description: Error interno del servidor al actualizar el producto
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+
+        delete:
+            summary: Elimina un producto por su ID
+            tags:
+                - Product
+            parameters:
+                - in: path
+                  name: pid
+                  required: true
+                  schema:
+                      type: string
+                  description: ID del producto
+            responses:
+                "404":
+                    description: No se encontró el producto con el ID solicitado
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    Error:
+                                        type: string
+                "201":
+                    description: Producto eliminado exitosamente
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    payload:
+                                        $ref: "#/components/schemas/Product"
+                "500":
+                    description: Error interno del servidor al eliminar el producto
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    error:
+                                        type: string
+
+components:
+    schemas:
+        Product:
+            type: object
+            properties:
+                _id:
+                    type: ObjectId
+                    description: ID autogenerado por Mongo.
+                title:
+                    type: String
+                    description: Nombre del producto.
+                description:
+                    type: String
+                    description: Descripción del producto.
+                code:
+                    type: String
+                    description: Código único generado por lógica del texto fuente, este código es único.
+                price:
+                    type: Number
+                    description: Precio del producto.
+                status:
+                    type: Boolean
+                    description: Booleano que marca si el producto esta disponible se marque como true, de lo contrario false.
+                stock:
+                    type: Number
+                    description: Cantidad de productos disponibles.
+                category:
+                    type: String
+                    description: Categorías de productos disponibles "cuadros", "artesanias", "bordados", "esculturas", por defecto se selecciona "cuadros".
+                thumbnail:
+                    type: String
+                    description: URL de la imagén del producto.
+                owner:
+                    type: String
+                    description: Propietario del producto, se utilizará el email para diferenciarlo. Por defecto el propietario es "admin".
+            example:
+                _id: ObjectId("656515343c480d0e807b92ac")
+                title: Fantastic Plastic Pants
+                description: Officia omnis vel est et mollitia
+                code: 6eeb1ff8-2762-42e4-886e-d5e4ac54d166
+                price: 435
+                status: true
+                stock: 70
+                category: bordados
+                thumbnail: https://imgur.com/6j4pRHT.png
+                owner: admin
