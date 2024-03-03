@@ -56,7 +56,6 @@ const sendDelete = async (id) => {
 
         if (response.ok) {
             if (responseData.payload) {
-                console.log("Se eliminó corectamente el elemento con ID: ", id);
                 Swal.fire({
                     icon: "success",
                     title: "Producto Eliminado!",
@@ -137,7 +136,6 @@ productsAddForm.addEventListener("submit", async (event) => {
             } else {
                 console.error("Error al obtener el último producto. Código de estado:", obtainID.status);
             }
-            console.log("Se agregó correctacemte un producto desde el formulario cliente!");
             sendProduct(lastAddedProduct)
             Swal.fire({
                 icon: "success",

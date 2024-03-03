@@ -28,7 +28,6 @@ loginForm.addEventListener("submit", async (event) => {
             headers: { "Content-Type": "application/json" }
         })
             .then(r => r.json())
-            .then(data => console.log(data))
 
         const response = await fetch("/api/session/login", {
             method: "POST",
