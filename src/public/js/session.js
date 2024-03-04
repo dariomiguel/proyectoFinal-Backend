@@ -7,6 +7,7 @@ loginForm.addEventListener("submit", async (event) => {
     const email = document.querySelector("#emailLogin").value;
     const password = document.querySelector("#passLogin").value;
 
+    const timerInterval = 8000
     Swal.fire({
         title: "Login",
         html: "Iniciando sesión",
@@ -22,45 +23,39 @@ loginForm.addEventListener("submit", async (event) => {
     })
 
     try {
-        fetch("/api/session/login", {
-            method: "POST",
-            body: JSON.stringify({ email, password }),
-            headers: { "Content-Type": "application/json" }
-        })
-            .then(r => r.json())
-
         const response = await fetch("/api/session/login", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
-                email, password
+                email,
+                password
             }),
         });
 
-        if (response.status === 200) {
+        if (response.ok) {
+            // Si la respuesta es exitosa (código de estado 200-299),
+            // redirige al usuario a la página de productos.
             window.location.href = "/products";
-        } else if (response.status === 400) {
+        } else {
+            // Manejo de errores según el código de estado de la respuesta.
+            let errorMessage = "Ocurrió un error en el inicio de sesión.";
+
+            if (response.status === 400) {
+                errorMessage = "Usuario o contraseña incorrectos.";
+            } else if (response.status === 403) {
+                errorMessage = "La contraseña es incorrecta.";
+            } else if (response.status === 500) {
+                errorMessage = "Ocurrió un error en el sistema.";
+            }
+
+            // Muestra un mensaje de error al usuario.
             Swal.fire({
                 icon: 'error',
                 title: 'Error de inicio de sesión',
-                text: 'Usuario incorrecto',
-            })
-        }
-        else if (response.status === 403) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Error de inicio de sesión',
-                text: 'La contraseña es incorrecta',
-            })
-        }
-        else if (response.status === 500) {
-            Swal.fire({
-                icon: 'error',
-                title: 'ERROR',
-                text: 'ha ocurrido un error en el sistema!!',
-            })
+                text: errorMessage,
+            });
         }
 
 

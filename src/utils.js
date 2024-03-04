@@ -70,7 +70,6 @@ export const authorize = (requiredRoles) => {
 
 export const logUser = () => {
     return function logUser(req, res, next) {
-
         if (req.session?.user) return next()
 
         logger.info("Redirección a login... ")

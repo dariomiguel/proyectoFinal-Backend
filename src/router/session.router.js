@@ -26,7 +26,7 @@ router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), 
         req.session.user = result
 
         logger.info("Iniciando sesión... ")
-        return res.status(200).redirect("/products")
+        return res.status(200).redirect("/")
     } catch (error) {
         logger.error("Error en el controlador /login:", error);
         return res.status(500).send("Error en el servidor")
@@ -35,7 +35,7 @@ router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), 
 
 router.post("/register", passport.authenticate("register", { failureRedirect: "/" }), async (req, res) => {
     try {
-        return res.status(200).redirect("/")
+        return res.status(200).redirect("/products")
     } catch (error) {
         logger.error("Error en el controlador /register:", error);
         return res.status(500).send("Error en el servidor");

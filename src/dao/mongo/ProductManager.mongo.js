@@ -4,6 +4,7 @@ import CustomError from "../../errors/customErrors.js";
 import { logger } from "../../utils/logger.js"
 //Import para validar imagenes
 import axios from "axios";
+import imageSize from "image-size"
 
 class ProductManagerMongo {
 
@@ -37,10 +38,29 @@ class ProductManagerMongo {
             if (page > result.totalPages || page < 1 || (isNaN(page)) || result.docs.length === 0) status = "404"
 
             //Iteramos en cada objeto y verificamos que la url es valida para usar
-            const resultWithImageResult = await Promise.all(result.docs.map(async (doc) => {
-                const validUrl = await this.validateImage(doc.thumbnail);
-                return { ...doc, imageValidationResult: validUrl };
-            }));
+            const iterationStartTime = new Date().getTime();
+
+            const resultWithImageResult = [];
+            const cache = {}; // Objeto para almacenar en caché las validaciones de imágenes
+
+            for (const doc of result.docs) {
+                let validUrl = cache[doc.thumbnail];
+                if (validUrl === undefined) {
+                    try {
+                        const dimensions = imageSize.imageSize(doc.thumbnail);
+                        if (dimensions.width > 0 && dimensions.height > 0) {
+                            validUrl = doc.thumbnail;
+                        } else {
+                            validUrl = false
+                        }
+                    } catch (error) {
+                        validUrl = false
+                    }
+                    cache[doc.thumbnail] = validUrl; // Almacena el resultado en caché
+                }
+                resultWithImageResult.push({ ...doc, imageValidationResult: validUrl });
+            }
+
 
             const response = {
                 status: status,
@@ -51,8 +71,8 @@ class ProductManagerMongo {
                 page: result.page,
                 hasPrevPage: result.hasPrevPage,
                 hasNextPage: result.hasNextPage,
-                prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
-                nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
+                //?Importante: Se quitó para optimización se deja prentivamente!! prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
+                //?Importante: Se quitó para optimización se deja prentivamente!! nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
                 totalDocs: result.totalDocs, //?Agregado para ver la cantidad de productos preguntar si eliminar o no
                 limit: result.limit //?Agregado para saber el límite actual
             };
@@ -223,7 +243,6 @@ class ProductManagerMongo {
 
             return url
         } catch (error) {
-            logger.error("No se encontró imagén : ", url, error.message);
             return false
         }
     }
