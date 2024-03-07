@@ -21,6 +21,11 @@ const assert = Assert.strict
 describe("Testing Cart DAO Mongo", function () {
     this.timeout(10000); // Aumenta el tiempo a 10 segundos.
 
+    afterEach(async () => {
+        // Limpiar la base de datos después de cada prueba
+        await CartModel.deleteMany({});
+    });
+
     it("Debe crear un nuevo carrito", async () => {
 
         const CartDao = new CartManagerMongo();

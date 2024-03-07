@@ -13,7 +13,6 @@ class UserManagerMongo {
                 error.statusCode = 404; // Asigna un código de estado 404 al error
                 throw error;
             }
-            logger.info("User es: ", user);
             return user
         } catch (error) {
             throw error;
@@ -71,11 +70,9 @@ class UserManagerMongo {
             const user = await UserModel.findOne({ email: emailUser.replace(/"/g, '') }).lean().exec()
 
             if (!isValidPassword(user, newPass)) {
-                logger.info("la contraseña No es igual a la anterior")
                 await UserModel.updateOne({ _id: user._id }, { $set: { password: passHashed } })
                 return true
             } else {
-                logger.info("la contraseña es igual a la anterior no se va a cambiar")
                 return false;
             }
 

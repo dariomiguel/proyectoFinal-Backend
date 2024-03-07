@@ -28,12 +28,17 @@ export default class UserRepository {
     }
 
     getUserAndPass = async (userEmail, newPass) => {
+        logger.info("User es: ", userEmail);
         const result = await this.dao.searchUserAndPass(userEmail, newPass)
+        if (result) logger.info("la contraseña No es igual a la anterior")
+        else logger.info("la contraseña es igual a la anterior no se va a cambiar")
+
         return result
     }
 
     put = async (uId) => {
         const result = await this.dao.updateUser(uId)
+
         return result
     }
 }
