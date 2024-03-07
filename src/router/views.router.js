@@ -74,7 +74,6 @@ router.get("/products", logUser(), async (req, res) => {
         const stockAvailability = req.query?.stockAvailability || "all";
         const priceOrder = req.query?.priceOrder || "ascending";
 
-        logger.info("Mostrando productos!!");
         const response = await productService.get(limit, page, query, category, stockAvailability, priceOrder);
         const user = req.session.user
 

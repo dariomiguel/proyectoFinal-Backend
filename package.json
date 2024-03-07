@@ -5,8 +5,8 @@
     "description": "",
     "main": "app.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
-        "start": "nodemon ./src/app.js -p MONGO --env production"
+        "start": "nodemon ./src/app.js -p MONGO --env production",
+        "test": "mocha src/test/*.test.js --env development"
     },
     "keywords": [],
     "author": "Dario Miguel",
@@ -41,6 +41,8 @@
         "winston": "^3.11.0"
     },
     "devDependencies": {
-        "mocha": "^10.3.0"
+        "chai": "^5.1.0",
+        "mocha": "^10.3.0",
+        "sinon": "^17.0.1"
     }
 }

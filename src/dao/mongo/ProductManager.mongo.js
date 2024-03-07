@@ -71,8 +71,6 @@ class ProductManagerMongo {
                 page: result.page,
                 hasPrevPage: result.hasPrevPage,
                 hasNextPage: result.hasNextPage,
-                //?Importante: Se quitó para optimización se deja prentivamente!! prevLink: result.hasPrevPage ? `/api/products?page=${result.prevPage}&limit=${limit}` : null,
-                //?Importante: Se quitó para optimización se deja prentivamente!! nextLink: result.hasNextPage ? `/api/products?page=${result.nextPage}&limit=${limit}` : null,
                 totalDocs: result.totalDocs, //?Agregado para ver la cantidad de productos preguntar si eliminar o no
                 limit: result.limit //?Agregado para saber el límite actual
             };
@@ -203,7 +201,7 @@ class ProductManagerMongo {
 
             if (userSession.role === "admin" || productoBuscado.owner === userSession.email) {
                 await ProductModel.deleteOne({ _id: pid })
-                logger.info(`Producto con id:${pid} se eliminó correctamente!`);
+
                 return true
             }
 

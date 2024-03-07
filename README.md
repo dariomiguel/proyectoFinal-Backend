@@ -21,3 +21,7 @@ npm start
 5. Después de ejecutar el comando anterior, el proyecto estará en funcionamiento. Puedes acceder a él a través del navegador web utilizando la siguiente URL:
 
 http://localhost:8080/
+
+\*. Para utilizar los test del proyecto utilice el siguiente comando:
+
+npm run test

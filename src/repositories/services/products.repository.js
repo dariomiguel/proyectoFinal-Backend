@@ -71,6 +71,8 @@ export default class ProductRepository {
 
     delete = async (productId, userSession) => {
         const result = await this.dao.deleteProduct(productId, userSession);
+        logger.info(`Producto con id:${productId} se eliminó correctamente!`);
+
         return result
 
     }
