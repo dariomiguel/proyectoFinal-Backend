@@ -1,7 +1,7 @@
 import { Router } from "express";
 import passport from "passport";
 import { userService } from "../repositories/index.js";
-import { authorize, generateToken } from "../utils.js";
+import { authorize, updateLoginDate, updateLogoutDate } from "../utils.js";
 import config from "../config/config.js"
 import userInsertDTO from "../DTO/user.dto.js";
 import { logger } from "../utils/logger.js";
@@ -12,8 +12,7 @@ const githubUrl = config.githubUrl;
 
 const router = Router();
 
-
-router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), async (req, res) => {
+router.post("/login", passport.authenticate("login", { failureRedirect: "/" }), updateLoginDate, async (req, res) => {
     try {
         const usuario = req.user;
 
@@ -42,7 +41,7 @@ router.post("/register", passport.authenticate("register", { failureRedirect: "/
     }
 })
 
-router.get("/logout", (req, res) => {
+router.get("/logout", updateLogoutDate, (req, res) => {
     try {
         req.session.destroy(err => {
             if (err) {
@@ -84,17 +83,4 @@ router.get("/githubcallback", passport.authenticate("github", { failureRedirect:
 
 router.get("/error", (req, res) => res.send("ERROR EN LA AUTENTIFICACIÓN!"))
 
-//! PREGUNTAR PORQUE NO FUNCIONA CON JWT
-// router.get("/current", passport.authenticate("jwt", { session: false }), authorize(["user", "premium"]), (req, res) => {
-//     try {
-//         if (!req.user) return res.status(401).json({ error: "No hay usuario autenticado" });
-//         (req, res) => {
-//             res.send({ status: "success", payload: req.user })
-//         }
-//         // return res.status(200).json(req.session.user);
-//     } catch (error) {
-//         logger.error("Error en la ruta /current:", error);
-//         return res.status(500).json({ error: "Error en el servidor" });
-//     }
-// });
 export default router

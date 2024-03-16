@@ -22,30 +22,12 @@ const transport = nodemailer.createTransport({
     }
 })
 
-router.get("/", async (req, res) => {
-    try {
-        const result = await transport.sendMail({
-            from: "dario.e.miguel@gmail.com",
-            to: "dario.e.miguel@gmail.com",
-            subject: "Email de prueba",
-            html: `
-        <h1>Email de prueba de link.</h1>
-        <p>http://localhost:8080/products</p>`
-        })
-        logger.info(result);
-        res.send("Email enviado con exito!")
-    }
-    catch (error) {
-        logger.error(error);
-    }
-})
-
 router.post("/reset-password/:emailUser", async (req, res) => {
     try {
         const email = req.params.emailUser;
 
         // Genera Token que dura 1h
-        const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "10m" });
+        const token = jwt.sign({ email }, JWT_SECRET, { expiresIn: "1h" });
 
         const resetLink = `http://localhost:8080/recoverpass/reset/${token}`;
 

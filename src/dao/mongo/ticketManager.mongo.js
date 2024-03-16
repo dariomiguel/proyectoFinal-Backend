@@ -1,7 +1,6 @@
 import TicketModel from "../models/ticket.model.js";
 import CartModel from "../models/carts.model.js";
 import ProductsModel from "../models/products.model.js";
-import UserModel from "../models/user.model.js";
 
 class TicketManager {
 

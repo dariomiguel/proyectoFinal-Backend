@@ -5,6 +5,7 @@ import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
 import { faker } from "@faker-js/faker"
 import { logger } from "./utils/logger.js"
+import UserModel from "./DAO/models/user.model.js";
 
 const PRIVATE_KEY = config.privateKey;
 
@@ -98,3 +99,29 @@ export const generateProduct = () => {
         thumbnail: faker.image.imageUrl()
     }
 }
+
+// Actualiza la fecha de inicio de sesión del usuario
+export const updateLoginDate = async (req, res, next) => {
+    try {
+        const userId = req.user._id;
+        await UserModel.findByIdAndUpdate(userId, { $push: { "last_connection": { login: new Date() } } });
+
+        next();
+    } catch (error) {
+        console.error("Error al actualizar la fecha de inicio de sesión:", error);
+        next(error);
+    }
+};
+
+// Actualiza la fecha de cierre de sesión del usuario
+export const updateLogoutDate = async (req, res, next) => {
+    try {
+        const userId = req.session.user._id;
+        await UserModel.findByIdAndUpdate(userId, { $push: { "last_connection": { logout: new Date() } } });
+
+        next();
+    } catch (error) {
+        console.error("Error al actualizar la fecha de cierre de sesión:", error);
+        next(error);
+    }
+};
