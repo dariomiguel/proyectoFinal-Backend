@@ -22,6 +22,11 @@ export default class UserRepository {
         return result
     }
 
+    getUserById = async (uId) => {
+        const result = await this.dao.getUser(uId)
+        return result
+    }
+
     getUser = async (userEmail) => {
         const result = await this.dao.searchUser(userEmail)
         return result
@@ -38,6 +43,12 @@ export default class UserRepository {
 
     put = async (uId) => {
         const result = await this.dao.updateUser(uId)
+
+        return result
+    }
+
+    putDocuments = async (uId, documentName, documentLink) => {
+        const result = await this.dao.updateUserDocuments(uId, documentName, documentLink)
 
         return result
     }

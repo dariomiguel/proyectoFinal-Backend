@@ -102,6 +102,25 @@ class UserManagerMongo {
             throw error;
         }
     }
+
+    updateUserDocuments = async (uId, documentName, documentLink) => {
+        try {
+            const user = await UserModel.findById(uId);
+            if (!user) {
+                logger.info("Usuario no encontrado");
+                return false;
+            }
+
+            // Actualizar la propiedad documents del usuario
+            user.documents.push({ name: documentName, link: documentLink });
+            await user.save();
+
+            logger.info("Documentos actualizados exitosamente");
+            return true;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserManagerMongo

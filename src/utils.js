@@ -1,11 +1,12 @@
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import config from "./config/config.js";
-import jwt from "jsonwebtoken"
-import bcrypt from "bcrypt"
-import { faker } from "@faker-js/faker"
-import { logger } from "./utils/logger.js"
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import { faker } from "@faker-js/faker";
+import { logger } from "./utils/logger.js";
 import UserModel from "./DAO/models/user.model.js";
+import multer from "multer";
 
 const PRIVATE_KEY = config.privateKey;
 
@@ -125,3 +126,28 @@ export const updateLogoutDate = async (req, res, next) => {
         next(error);
     }
 };
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        let destinationFolder = "";
+        if (file.fieldname === "profileImage") {
+            destinationFolder = "profiles";
+        } else if (file.fieldname === "productImage") {
+            destinationFolder = "products";
+        } else if (file.fieldname === "document") {
+            destinationFolder = "documents";
+        } else {
+            destinationFolder = "others";
+        }
+        cb(null, `src/public/img/uploads/${destinationFolder}`);
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.originalname);
+    },
+    limits: {
+        // Limitar el tamaño del archivo a 2 MB (en bytes)
+        fileSize: 2 * 1024 * 1024 // 2 MB
+    }
+});
+
+export const upload = multer({ storage });

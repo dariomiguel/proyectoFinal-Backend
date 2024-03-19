@@ -1,19 +1,19 @@
 let cartId
 
-document.addEventListener('DOMContentLoaded', () => {
-    // Selecciona todos los botones con la clase 'btnAddCart'
-    let btnsAddCart = document.querySelectorAll('.btnAddCart');
+document.addEventListener("DOMContentLoaded", () => {
+    // Selecciona todos los botones con la clase "btnAddCart"
+    let btnsAddCart = document.querySelectorAll(".btnAddCart");
 
     // Agrega un listener a cada botón
     btnsAddCart.forEach(btnAddCart => {
-        btnAddCart.addEventListener('click', async (event) => {
+        btnAddCart.addEventListener("click", async (event) => {
             event.preventDefault();
-            let productId = event.target.getAttribute('data-product-id');
+            let productId = event.target.getAttribute("data-product-id");
 
             const responseGet = await fetch(`/api/products/${productId}`, {
-                method: 'GET',
+                method: "GET",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
             });
             const responseGetData = await responseGet.json();
@@ -30,18 +30,18 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             try {
                 const existCartInUserResponse = await fetch(`/api/users/`, {
-                    method: 'GET',
+                    method: "GET",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
                 const existCartInUserData = await existCartInUserResponse.json();
 
                 if (!existCartInUserData.payload) {
                     let responseCreateCart = await fetch(`/api/carts/`, {
-                        method: 'POST',
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json',
+                            "Content-Type": "application/json",
                         },
                     });
 
@@ -51,16 +51,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else cartId = existCartInUserData.payload
 
                 await fetch(`/api/users/cart/${cartId}`, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
 
                 const responsePost = await fetch(`/api/carts/${cartId}/product/${productId}`, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
                 const responseDataPost = await responsePost.json();
@@ -86,34 +86,34 @@ document.addEventListener('DOMContentLoaded', () => {
                 })
 
             } catch (error) {
-                logger.error('Hubo un error al realizar la solicitud POST:', error);
+                logger.error("Hubo un error al realizar la solicitud POST:", error);
             }
         });
     });
 });
 
-document.addEventListener('DOMContentLoaded', () => {
-    const btnSeeCart = document.getElementById('btnSeeCart');
+document.addEventListener("DOMContentLoaded", () => {
+    const btnSeeCart = document.getElementById("btnSeeCart");
 
     if (btnSeeCart) {
-        btnSeeCart.addEventListener('click', async (event) => {
+        btnSeeCart.addEventListener("click", async (event) => {
             event.preventDefault();
 
             try {
                 const existCartInUserResponse = await fetch(`/api/users/`, {
-                    method: 'GET',
+                    method: "GET",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
                 const existCartInUserData = await existCartInUserResponse.json();
 
                 if (!existCartInUserData.payload) {
                     // Si no tiene un carrito existente, crea uno nuevo
-                    const responseCreateCart = await fetch('/api/carts/', {
-                        method: 'POST',
+                    const responseCreateCart = await fetch("/api/carts/", {
+                        method: "POST",
                         headers: {
-                            'Content-Type': 'application/json',
+                            "Content-Type": "application/json",
                         },
                     });
 
@@ -122,15 +122,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else cartId = existCartInUserData.payload;
 
                 await fetch(`/api/users/cart/${cartId}`, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
 
                 window.location.href = `/api/carts/${cartId}`;
             } catch (error) {
-                logger.error('Hubo un error al realizar la solicitud:', error);
+                logger.error("Hubo un error al realizar la solicitud:", error);
             }
         });
     }
@@ -146,9 +146,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
             try {
                 const response = await fetch(`/api/users/premium/${uid}`, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json"
                     }
                 });
                 const data = await response.json();
