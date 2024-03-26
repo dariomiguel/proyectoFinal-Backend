@@ -2,11 +2,9 @@ import { Router } from "express";
 import { userService, cartService } from "../repositories/index.js";
 import { authorize } from "../utils.js";
 import { logger } from "../utils/logger.js";
-// import { upload } from "../utils.js";
-import multer from "multer"
+import { upload } from "../utils.js";
 
 const router = Router();
-
 
 router.get("/", authorize(["user", "premium"]), async (req, res) => {
     try {
@@ -107,44 +105,14 @@ router.get("/uid", authorize(["user", "premium"]), async (req, res) => {
     }
 })
 
-
-
-
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        // let destinationFolder = "";
-        // if (file.fieldname === "profileImage") {
-        //     destinationFolder = "profiles";
-        // } else if (file.fieldname === "productImage") {
-        //     destinationFolder = "products";
-        // } else if (file.fieldname === "document") {
-        //     destinationFolder = "documents";
-        // } else {
-        //     destinationFolder = "others";
-        // }
-        // cb(null, `src/public/img/uploads/${destinationFolder}`);
-        cb(null, `src/public/img/uploads/documents`);
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.originalname);
-    },
-    limits: {
-        // Limitar el tamaño del archivo a 2 MB (en bytes)
-        fileSize: 2 * 1024 * 1024 // 2 MB
-    }
-});
-const upload = multer({ storage: storage });
-
-router.post('/:uid/documents/', upload.array("files"), async (req, res) => {
+router.post('/:uid/documents/', upload.array("documents"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
 
         // const upadate = await userService.putDocuments(userId,)
         console.log("El req.files es: ", req.files);
-        if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
-        }
+        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
 
         // Verificar si se cargaron documentos
         if (!req.files || req.files.length === 0) {
@@ -161,7 +129,8 @@ router.post('/:uid/documents/', upload.array("files"), async (req, res) => {
         return res.status(500).json({ error: 'Error en el servidor' });
     }
 });
-router.post('/:uid/documents/d', upload.array("profile"), async (req, res) => {
+
+router.post('/:uid/documents/profile', upload.array("profileImage"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
@@ -189,6 +158,52 @@ router.post('/:uid/documents/d', upload.array("profile"), async (req, res) => {
         return res.status(500).json({ error: 'Error en el servidor' });
     }
 });
+
+// // Función para manejar la carga de documentos
+// const handleDocumentUpload = async (req, res, middlewareName) => {
+//     try {
+//         const userId = req.params.uid;
+//         const user = await userService.getUserById(userId);
+
+//         if (!user) {
+//             return res.status(404).json({ error: 'Usuario no encontrado' });
+//         }
+
+//         // Verificar si se cargaron documentos
+//         if (!req.files || req.files.length === 0) {
+//             return res.status(400).json({ error: 'No se han proporcionado documentos' });
+//         }
+
+//         console.log(req.files);
+
+//         // Actualizar el estado del usuario para indicar que se han cargado documentos
+//         user.hasUploadedDocuments = true;
+//         await user.save();
+
+//         return res.status(200).json({ message: 'Documentos cargados exitosamente' });
+//     } catch (error) {
+//         console.error('Error al cargar documentos:', error);
+//         return res.status(500).json({ error: 'Error en el servidor' });
+//     }
+// };
+
+// // Router genérico para la carga de documentos
+// router.post('/:uid/documents/:type?', (req, res) => {
+//     const middlewareName = req.params.type || "documents";
+//     upload.array(middlewareName)(req, res, () => handleDocumentUpload(req, res, middlewareName));
+// });
+
+
+
+
+
+
+
+
+
+
+
+
 router.post('/:uid/documents/products', upload.array("document"), async (req, res) => {
     try {
         const userId = req.params.uid;

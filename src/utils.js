@@ -130,17 +130,17 @@ export const updateLogoutDate = async (req, res, next) => {
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         let destinationFolder = "";
-        if (file.fieldname === "profileImage") {
+
+        if (file.fieldname === "documents") {
+            destinationFolder = "documents";
+        } else if (file.fieldname === "profileImage") {
             destinationFolder = "profiles";
         } else if (file.fieldname === "productImage") {
             destinationFolder = "products";
-        } else if (file.fieldname === "document") {
-            destinationFolder = "documents";
-        } else {
-            destinationFolder = "others";
         }
         cb(null, `src/public/img/uploads/${destinationFolder}`);
     },
+
     filename: function (req, file, cb) {
         cb(null, file.originalname);
     },
@@ -149,5 +149,5 @@ const storage = multer.diskStorage({
         fileSize: 2 * 1024 * 1024 // 2 MB
     }
 });
+export const upload = multer({ storage: storage });
 
-export const upload = multer({ storage });

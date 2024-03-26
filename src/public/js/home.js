@@ -64,15 +64,18 @@ document.getElementById("uploadForm").addEventListener("submit", async (event) =
     event.preventDefault();
 
     const fileInput = document.getElementById("fileInput")
+    const selectFileType = document.getElementById("fileType");
 
     const formData = new FormData();
-    const files = document.querySelector('input[type="file"]').files;
+    const docs = document.querySelector('input[type="file"]').files;
 
-    for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
+    for (let i = 0; i < docs.length; i++) {
+        formData.append(selectFileType.value, docs[i]);
     }
 
     try {
+
+        console.log("Select file tipe es:", selectFileType.value);
 
         const responseGet = await fetch("/api/users/uid", {
             method: "GET",

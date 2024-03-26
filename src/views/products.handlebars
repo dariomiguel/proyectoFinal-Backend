@@ -1,5 +1,41 @@
 <div class="generalContainer__products">
     
+<div class="carusel_main_container">
+    <div class="center">
+        <div class="carusel_cont">
+            <button onclick="plusSlides(-1)" class="btnLeftCarusel"> ❮ </button>
+    
+            <div class="img_carusel_cont fade">
+                <img src="/img/banners/BANNER 1.png" alt="" width="100%">
+            </div>
+            <div class="img_carusel_cont fade">
+                <img src="/img/banners/BANNER 2.png" alt="" width="100%">
+            </div>
+            <div class="img_carusel_cont fade">
+                <img src="/img/banners/BANNER 3.png" alt="" width="100%">
+            </div>
+            <div class="img_carusel_cont fade">
+                <img src="/img/banners/BANNER 2.png" alt="" width="100%">
+            </div>
+            <div class="img_carusel_cont fade">
+                <img src="/img/banners/BANNER 1.png" alt="" width="100%">
+            </div>
+    
+            <button onclick="plusSlides(1)" class="btnRightCarusel"> ❯ </button>
+        </div>
+        <div class="dot_cont">
+        
+            <div onclick="currentSlide(1)" class="dot"></div>
+            <div onclick="currentSlide(2)" class="dot"></div>
+            <div onclick="currentSlide(3)" class="dot active"></div>
+            <div onclick="currentSlide(4)" class="dot"></div>
+            <div onclick="currentSlide(5)" class="dot"></div>
+        
+        </div>
+    </div>
+    
+    
+</div>
     <div class="container__topSection">
         <div class="userWelcome">
             <h1>Bienvenido a CapyArt {{user.first_name}} {{user.last_name}}!!</h1>
@@ -12,14 +48,22 @@
                 <h4><b>Usuario Estándar</b></h4>
             {{/ifEquals}}
         </div>
-<div>
+        
+{{! !Para prueba en subida de archivos}}
+
+{{!-- <div>
     <p>Subir Archivos</p>
-  <form id="uploadForm" enctype="multipart/form-data">
-    <input type="file" name="files" id="fileInput" multiple />
-    <button type="submit">Subir Archivo(s)</button>
-  </form>
-  <div id="message"></div>
-</div>
+    <form id="uploadForm" enctype="multipart/form-data">
+            <select id="fileType">
+                <option value="documents">Documentos</option>
+                <option value="profiles">Perfil</option>
+                <option value="products">Productos</option>
+            </select>
+        <input type="file" name="files" id="fileInput" multiple />
+        <button type="submit">Subir Archivo(s)</button>
+    </form>
+    <div id="message"></div>
+</div> --}}
 
         <div class="container__priceOrder">
             <label for="priceOrder">Ordenar por Precio:</label>

@@ -9,8 +9,8 @@ loginForm.addEventListener("submit", async (event) => {
 
     const timerInterval = 8000
     Swal.fire({
-        title: "Login",
-        html: "Iniciando sesión",
+        title: "Iniciando sesión",
+        html: "Espere por favor...",
         timer: 8000,
         timerProgressBar: true,
         didOpen: () => {
