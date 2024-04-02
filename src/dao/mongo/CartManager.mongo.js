@@ -163,7 +163,7 @@ class CartManager {
 
     deleteAllProductsFromCart = async (cId) => {
         try {
-            await CartModel.updateOne({ _id: cId }, { $set: { products: [] } });
+            await CartModel.updateOne({ _id: cId }, { $set: { products: [], total: 0 } });
             logger.info(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
         } catch (error) {
             logger.error(error)

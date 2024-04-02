@@ -60,8 +60,11 @@ class TicketManager {
         )
         await CartModel.updateOne(
             { _id: cartId },
-            { $pull: { products: { product: productId } } }
+            {
+                $pull: { products: { product: productId } }
+            }
         );
+        await CartModel.updateOne({ _id: cartId }, { $set: { total: 0 } });
     }
 
     lastTicket = async (email) => {

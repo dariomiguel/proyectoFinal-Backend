@@ -8,6 +8,21 @@ document.addEventListener("DOMContentLoaded", () => {
     btnsAddCart.forEach(btnAddCart => {
         btnAddCart.addEventListener("click", async (event) => {
             event.preventDefault();
+
+            const timerInterval = 8000
+            Swal.fire({
+                title: "Procesando...",
+                timer: timerInterval,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
+                },
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            })
+
             let productId = event.target.getAttribute("data-product-id");
 
             const responseGet = await fetch(`/api/products/${productId}`, {

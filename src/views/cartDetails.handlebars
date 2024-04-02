@@ -4,6 +4,13 @@
 <button type="button" id="comprarButton">Comprar</button>
 
 <h2>El Total del carrito ${{cartPorId.total}}</h2>
+
+{{#ifEquals cartPorId.total 0}}
+    <p>El carrito está vacío</p>
+{{else}}
+    <p>El carrito no está vacío</p>
+{{/ifEquals}}
+
 {{#if cartPorId}}
     {{#each cartPorId.products}}
         <div>
