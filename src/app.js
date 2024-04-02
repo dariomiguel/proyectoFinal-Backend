@@ -5,6 +5,7 @@ import __dirname from "./utils.js";
 import config from "./config/config.js";
 import cookieParser from "cookie-parser";
 import compression from "express-compression";
+import cors from "cors"
 
 //? Variables de entorno
 const urlMongo = config.urlMongo;
@@ -20,6 +21,7 @@ import mailRouter from "./router/mail.router.js"
 import MockingProductsRouter from "./router/mockingProducts.router.js";
 import loggerTest from "./router/loggerTest.router.js"
 import restorePass from "./router/restorePass.router.js"
+import paymentRouter from "./router/payment.router.js"
 
 import MongoStore from "connect-mongo";
 import session from "express-session";
@@ -38,6 +40,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(addLogger)
+app.use(cors())
 
 // Configuración de middleware para habilitar CORS
 app.use((req, res, next) => {
@@ -93,6 +96,7 @@ app.use("/mail", mailRouter);
 app.use("/mockingproducts", MockingProductsRouter);
 app.use("/loggerTest", loggerTest);
 app.use("/recoverpass", restorePass);
+app.use("/api/payments", paymentRouter)
 
 const swaggerOptions = {
     definition: {

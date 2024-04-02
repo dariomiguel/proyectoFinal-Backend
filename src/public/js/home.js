@@ -59,45 +59,47 @@ categoryElement.addEventListener("change", () => {
     redirectToPage(1, values)
 })
 
+const uploadForm = document.getElementById("uploadForm");
 
-document.getElementById("uploadForm").addEventListener("submit", async (event) => {
-    event.preventDefault();
+if (uploadForm) {
+    uploadForm.addEventListener("submit", async (event) => {
+        event.preventDefault();
 
-    const fileInput = document.getElementById("fileInput")
-    const selectFileType = document.getElementById("fileType");
+        const fileInput = document.getElementById("fileInput");
+        const selectFileType = document.getElementById("fileType");
 
-    const formData = new FormData();
-    const docs = document.querySelector('input[type="file"]').files;
+        const formData = new FormData();
+        const docs = document.querySelector('input[type="file"]').files;
 
-    for (let i = 0; i < docs.length; i++) {
-        formData.append(selectFileType.value, docs[i]);
-    }
+        for (let i = 0; i < docs.length; i++) {
+            formData.append(selectFileType.value, docs[i]);
+        }
 
-    try {
+        try {
+            console.log("Select file type is:", selectFileType.value);
 
-        console.log("Select file tipe es:", selectFileType.value);
+            const responseGet = await fetch("/api/users/uid", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                }
+            });
+            const { payload: userId } = await responseGet.json();
 
-        const responseGet = await fetch("/api/users/uid", {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            }
-        });
-        const { payload: userId } = await responseGet.json();
+            console.log("userId is:", userId);
 
-        console.log("userId es; ", userId)
+            const response = await fetch(`/api/users/${userId}/documents`, {
+                method: "POST",
+                body: formData
+            });
+            const data = await response.json();
 
-        const response = await fetch(`/api/users/${userId}/documents`, {
-            method: "POST",
-            body: formData
-        });
-        const data = await response.json();
+            document.getElementById("message").textContent = data.message;
+            fileInput.value = ""; // Limpiar el campo de entrada de archivos después de la carga
 
-        document.getElementById("message").textContent = data.message;
-        fileInput.value = ""; // Limpiar el campo de entrada de archivos después de la carga
-
-    } catch (error) {
-        console.error("Error:", error);
-        document.getElementById("message").textContent = "Error al subir archivo(s)";
-    }
-});
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById("message").textContent = "Error al subir archivo(s)";
+        }
+    });
+}

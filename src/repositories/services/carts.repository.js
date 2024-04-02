@@ -61,6 +61,12 @@ export default class CartRepository {
             existingCart.products.push({ product: pId, quantity });
         }
 
+        let totalFOR = 0;
+        for (let i = 0; i < existingCart.products.length; i++) {
+            totalFOR += existingCart.products[i].product.price * existingCart.products[i].quantity
+        }
+        existingCart.total = totalFOR;
+
         // Actualizar el carrito en la base de datos
         const result = await this.dao.updateCart(cId, existingCart);
         return result

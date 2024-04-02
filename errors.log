@@ -7,3 +7,20 @@
 {"level":"error","message":"No hay usuario autenticado"}
 {"level":"error","message":"No hay usuario autenticado"}
 {"level":"error"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id"}
+{"level":"error","message":"No se encontró el carrito por Id totalFOR is not defined","stack":"ReferenceError: totalFOR is not defined\n    at CartRepository.productToCart (file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/repositories/services/carts.repository.js:67:18)\n    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)\n    at async file:///C:/Users/dario/Desktop/Entrega%20del%20Proyecto%20Final%20-%20Backend/src/router/carts.router.js:76:26","statusCode":4001}
+{"level":"error"}
+{"level":"error","message":"No se encontró el carrito por Id"}
