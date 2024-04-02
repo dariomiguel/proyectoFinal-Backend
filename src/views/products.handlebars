@@ -15,7 +15,7 @@
                 <img src="/img/banners/BANNER 3.png" alt="" width="100%">
             </div>
             <div class="img_carusel_cont fade">
-                <img src="/img/banners/BANNER 2.png" alt="" width="100%">
+                <img src="/img/banners/BANNER 4.png" alt="" width="100%">
             </div>
             <div class="img_carusel_cont fade">
                 <img src="/img/banners/BANNER 1.png" alt="" width="100%">
@@ -93,23 +93,21 @@
                 <option value="inStock">En Stock</option>
                 <option value="outOfStock">Agotado</option>
             </select><br />
-        
 
             <br>
             <input id="prevPage" type="hidden" value="{{result.prevPage}}">
             <input id="nextPage" type="hidden" value="{{result.nextPage}}">
-        
         
         </div>
         <div class="container__card">
             {{#each result.payload}}
                 <div class="cardProduct">
                     <div class="container__card--image">
-                        {{#if this.imageValidationResult}}
-                            <img src={{this.thumbnail}} alt="{{this.description}}">
-                        {{else}}
+                        {{#unless this.imageValidationResult}}
                             <img src="https://cdn.pixabay.com/photo/2017/01/25/17/35/picture-2008484_1280.png" alt="{{this.description}}">
-                        {{/if}}
+                        {{else}}
+                            <img src={{this.thumbnail}} alt="{{this.description}}">
+                        {{/unless}}
                     </div>
                     <div class="container__card--body">
                         <p class="container__card--title">{{this.title}}</p>

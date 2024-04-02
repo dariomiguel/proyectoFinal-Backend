@@ -37,29 +37,18 @@ class ProductManagerMongo {
 
             if (page > result.totalPages || page < 1 || (isNaN(page)) || result.docs.length === 0) status = "404"
 
-            //Iteramos en cada objeto y verificamos que la url es valida para usar
-            const iterationStartTime = new Date().getTime();
-
             const resultWithImageResult = [];
             const cache = {}; // Objeto para almacenar en caché las validaciones de imágenes
 
-            for (const doc of result.docs) {
-                let validUrl = cache[doc.thumbnail];
-                if (validUrl === undefined) {
-                    try {
-                        const dimensions = imageSize.imageSize(doc.thumbnail);
-                        if (dimensions.width > 0 && dimensions.height > 0) {
-                            validUrl = doc.thumbnail;
-                        } else {
-                            validUrl = false
-                        }
-                    } catch (error) {
-                        validUrl = false
-                    }
-                    cache[doc.thumbnail] = validUrl; // Almacena el resultado en caché
-                }
-                resultWithImageResult.push({ ...doc, imageValidationResult: validUrl });
-            }
+            result.docs.forEach(doc => {
+                const validUrl = doc.thumbnail;
+                const regex = /\.(jpg|jpeg|png|gif)$/i;
+                const isValid = regex.test(validUrl);
+
+                cache[validUrl] = isValid; // Almacena el resultado en caché
+                resultWithImageResult.push({ ...doc, imageValidationResult: isValid });
+            });
+
 
 
             const response = {
