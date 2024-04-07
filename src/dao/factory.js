@@ -11,6 +11,7 @@ export let ChatManager
 export let UserManager
 export let TicketManager
 export let MockingProducts
+export let PaymentManager
 
 logger.info(`Persistence with ${options.p}`)
 
@@ -52,6 +53,7 @@ switch (options.p) {
         const { default: UserManagerMongo } = await import("./mongo/UserManager.mongo.js")
         const { default: TicketManagerMongo } = await import("./mongo/TicketManager.mongo.js")
         const { default: MockingProductsMongo } = await import("./mongo/MockingProducts.mongo.js")
+        const { default: PaymentManagerMongo } = await import("./mongo/payment.mongo.js")
 
         ProductManager = ProductManagerMongo;
         CartManager = CartManagerMongo;
@@ -59,6 +61,7 @@ switch (options.p) {
         UserManager = UserManagerMongo;
         TicketManager = TicketManagerMongo;
         MockingProducts = MockingProductsMongo;
+        PaymentManager = PaymentManagerMongo;
 
         break;
 

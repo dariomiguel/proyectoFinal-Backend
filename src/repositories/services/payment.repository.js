@@ -1,16 +1,11 @@
-import Stripe from "stripe"
-
-//PRIVATE KEY
-const key = "sk_test_51P094KEPX0bJa8Kh4SLPibF9A0yz0eH0ITwZMpfz0SZplLUCEceDRAWIIlUHHYtOwOIqabYSVghLyBwEmJqw474900ohtmhYOc"
-
-export default class PaymentService {
-    constructor() {
-        this.stripe = new Stripe(key)
+export default class PaymentRepository {
+    constructor(dao) {
+        this.dao = dao
     }
 
-    createPaymentIntent = async (data) => {
-        const paymentIntent = this.stripe.paymentIntents.create(data);
+    get = async (cart) => {
+        const result = await this.dao.get(cart)
 
-        return paymentIntent
+        return result
     }
 }

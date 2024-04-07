@@ -1,14 +1,11 @@
 <h1>Mi carrito!</h1>
-<p><i>Estamos en el carrito {{cartPorId.id}}</i></p>
-
-<button type="button" id="comprarButton">Comprar</button>
-
-<h2>El Total del carrito ${{cartPorId.total}}</h2>
 
 {{#ifEquals cartPorId.total 0}}
-    <p>El carrito está vacío</p>
+    <h3>El carrito está vacío.</h3>
+
 {{else}}
-    <p>El carrito no está vacío</p>
+    <h2>El Total del carrito ${{cartPorId.total}}</h2>
+    <button type="button" id="comprarButton">Comprar</button>
 {{/ifEquals}}
 
 {{#if cartPorId}}

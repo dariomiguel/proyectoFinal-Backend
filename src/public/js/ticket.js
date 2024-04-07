@@ -20,41 +20,39 @@ if (buyBtn) {
         try {
             const cidValue = getCIDFromURL();
 
-            const response = await fetch(`/api/carts/${cidValue}/purchase`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            });
+            const response = await fetch(`/api/carts/${cidValue}`, {
+                method: "POST",
+            })
+            let data = await response.json()
 
-            // Extraer el payload del response como JSON para poder utilizar los valores qe dio el post
-            const responseData = await response.json();
-            const ticket = responseData.payload;
 
+            const responsePaymentIntent = await fetch(`/api/payments/payment-intents/${cidValue}`, {
+                method: "POST",
+            })
+            data = await responsePaymentIntent.json()
+
+            const timerInterval = 8000
             Swal.fire({
-                title: "Compra exitosa",
-                html: `
-                <p>Fecha: ${ticket.purchase_datetime}</p>
-                <p>Comprador: ${ticket.purchaser}</p>
-                <p>Código: ${ticket.code}</p>
-                <p>Total: $${ticket.amount}</p>
-            `,
-                icon: "success"
-            }).then(() => {
-                window.location.href = `/api/carts/${cidValue}/purchase`;
-            });
-
-            const responseGet = await fetch(`/api/carts/${cidValue}/purchase`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
+                title: "Redireccionando...",
+                html: "Espere por favor!",
+                timer: timerInterval,
+                timerProgressBar: true,
+                didOpen: () => {
+                    Swal.showLoading();
+                    const timer = Swal.getPopup().querySelector("b");
                 },
-            });
+                willClose: () => {
+                    clearInterval(timerInterval);
+                }
+            })
+            window.location.href = data.url
+
 
         } catch (error) {
             console.error("Error en la compra:", error);
         }
     });
+
 }
 function getCIDFromURL() {
     const url = window.location.href;

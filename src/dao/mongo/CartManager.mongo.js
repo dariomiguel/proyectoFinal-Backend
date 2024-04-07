@@ -56,6 +56,7 @@ class CartManager {
         try {
             //* Buscamos elementos por Id en base de datos
             const carritoBuscado = await CartModel.findOne({ _id: cId }).populate("products.product")
+
             return carritoBuscado;
         } catch (error) {
             logger.error("No se encontró el carrito solicitado\n", error);
@@ -165,6 +166,41 @@ class CartManager {
         try {
             await CartModel.updateOne({ _id: cId }, { $set: { products: [], total: 0 } });
             logger.info(`Todos los productos del carrito con id:${cId} se eliminaron correctamente!`);
+        } catch (error) {
+            logger.error(error)
+            throw error;
+        }
+    }
+
+    totalCart = async (cId) => {
+        try {
+
+            const carrito = await CartModel.findOne({ "_id": cId }).lean();
+            let total = 0;
+            let buyCart = []
+            let amountBuyCart = []
+            let rejectedCart = []
+
+            for (let i = 0; i < carrito.products.length; i++) {
+                const producto = await ProductsModel.findOne({ "_id": carrito.products[i].product.toString() }).lean();
+
+                if (carrito.products[i].quantity <= producto.stock) {
+
+                    buyCart.push(producto._id);
+
+                    const subTotal = carrito.products[i].quantity * producto.price
+                    amountBuyCart.push(subTotal)
+
+                    await this.updateStock(cId, producto._id.toString(), carrito.products[i].quantity)
+                } else {
+                    rejectedCart.push(producto._id);
+                }
+            }
+
+            total = amountBuyCart.reduce((act, curr) => act + curr, 0)
+            console.log("El total en carrito");
+
+            return total
         } catch (error) {
             logger.error(error)
             throw error;

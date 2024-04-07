@@ -47,10 +47,37 @@ router.get("/:cid", logUser(), authorize(["user", "premium"]), async (req, res) 
                 return res.status(200).json({ status: "success", payload: cartPorId });
             }
             logger.info("Redireccionando a carrito... ")
+
             res.render("cartDetails", {
                 style: "cartDetails.css",
                 cartPorId
             })
+        }
+
+    } catch (error) {
+        logger.error("Hubo un error al buscar el carrito por ID")
+        res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
+    }
+});
+
+
+router.post("/:cid", logUser(), authorize(["user", "premium"]), async (req, res) => {
+
+    try {
+        const cId = req.params.cid;
+        const cartPorId = await cartService.get(cId);
+        if (cartPorId === null) {
+            logger.error("Error ")
+            res
+                .status(404)
+                .json({ Error: "No se encontró el carrito solicitado" });
+        } else {
+            //Si estoy usando un postman uso res.status
+            if (req.headers['user-agent'].includes('Postman')) {
+                return res.status(200).json({ status: "success", payload: cartPorId });
+            }
+            logger.info("Redireccionando a carrito... ")
+            res.json({ payload: cartPorId })
         }
 
     } catch (error) {
@@ -165,26 +192,18 @@ router.put("/:cid/products/:pid", logUser(), async (req, res) => {
     }
 });
 
-router.post("/:cid/purchase", logUser(), async (req, res) => {
-    try {
-        const cId = req.params.cid;
-        const user = req.session.user
-
-        const ticket = await ticketService.post(cId, user);
-
-        res.status(201).json({ status: "success", payload: ticket });
-
-    } catch (error) {
-        res.status(500).json({ Error: "Hubo un error al buscar el carrito por ID" });
-    }
-});
-
 router.get("/:cid/purchase", logUser(), async (req, res) => {
     try {
+        const cId = req.params.cid;
+        const userT = req.session.user
         const userName = req.session.user.first_name
+        await ticketService.post(cId, userT);
+
         const ticket = await ticketService.get(userName);
 
         logger.info("Redireccionando a ticket... ")
+        logger.info(`El ticket del cliente es: ${ticket}`)
+
         res.render("ticket", {
             style: "ticket.css",
             ticket

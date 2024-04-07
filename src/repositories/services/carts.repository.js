@@ -61,16 +61,11 @@ export default class CartRepository {
             existingCart.products.push({ product: pId, quantity });
         }
 
-        let totalFOR = 0;
-        for (let i = 0; i < existingCart.products.length; i++) {
-            if (i < existingCart.products.length - 1) {
-                totalFOR += existingCart.products[i].product.price * existingCart.products[i].quantity
-            } else {
-                totalFOR += existingProduct.price * existingCart.products[i].quantity
-            }
-        }
+        let totalFOR = await this.dao.totalCart(cId);
+
         //Pasamos el valor del total con solo 2 decimales.
         existingCart.total = parseFloat(totalFOR.toFixed(2));
+
 
         // Actualizar el carrito en la base de datos
         const result = await this.dao.updateCart(cId, existingCart);

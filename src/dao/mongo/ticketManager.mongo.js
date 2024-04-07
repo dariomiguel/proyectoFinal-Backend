@@ -69,7 +69,6 @@ class TicketManager {
 
     lastTicket = async (email) => {
 
-        const cantDocument = await TicketModel.countDocuments();
         const ultimoTicket = await TicketModel.findOne().sort({ $natural: -1 });
 
         return ultimoTicket

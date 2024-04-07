@@ -18,6 +18,8 @@ const config = {
 
     emailUser: process.env.EMAIL_USER,
     emailPass: process.env.EMAIL_PASS,
+
+    stripeKey: process.env.STRIPE_KEY
 };
 
 export default config;

@@ -12,6 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const timerInterval = 8000
             Swal.fire({
                 title: "Procesando...",
+                html: "Espere por favor!",
                 timer: timerInterval,
                 timerProgressBar: true,
                 didOpen: () => {
