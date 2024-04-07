@@ -18,19 +18,6 @@ if (buyBtn) {
     buyBtn.addEventListener("click", async (event) => {
         event.preventDefault();
         try {
-            const cidValue = getCIDFromURL();
-
-            const response = await fetch(`/api/carts/${cidValue}`, {
-                method: "POST",
-            })
-            let data = await response.json()
-
-
-            const responsePaymentIntent = await fetch(`/api/payments/payment-intents/${cidValue}`, {
-                method: "POST",
-            })
-            data = await responsePaymentIntent.json()
-
             const timerInterval = 8000
             Swal.fire({
                 title: "Redireccionando...",
@@ -45,6 +32,20 @@ if (buyBtn) {
                     clearInterval(timerInterval);
                 }
             })
+            const cidValue = getCIDFromURL();
+
+            const response = await fetch(`/api/carts/${cidValue}`, {
+                method: "POST",
+            })
+            let data = await response.json()
+
+
+            const responsePaymentIntent = await fetch(`/api/payments/payment-intents/${cidValue}`, {
+                method: "POST",
+            })
+            data = await responsePaymentIntent.json()
+
+
             window.location.href = data.url
 
 
