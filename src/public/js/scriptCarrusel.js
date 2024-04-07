@@ -4,12 +4,12 @@ showSlides(slideIndex);
 let slideInterval = setInterval(autoShowSlides, 5000);
 
 function plusSlides(n) {
-    clearInterval(slideInterval); // Limpiar intervalo antes de cambiar de diapositiva
+    clearInterval(slideInterval);
     showSlides(slideIndex += n);
 }
 
 function currentSlide(n) {
-    clearInterval(slideInterval); // Limpiar intervalo antes de cambiar de diapositiva
+    clearInterval(slideInterval);
     showSlides(slideIndex = n);
 }
 
@@ -37,13 +37,13 @@ function showSlides(n) {
 
 function autoShowSlides() {
     plusSlides(1);
+    slideInterval = setInterval(autoShowSlides, 5000); // Reiniciar el intervalo después de avanzar a la siguiente diapositiva
+
 }
 
-// Añadir event listener para reiniciar el intervalo cuando se hace clic en el carrusel
-const carrusel = document.querySelector('.tu-clase-de-carrusel'); // Reemplaza 'tu-clase-de-carrusel' con la clase de tu carrusel
+const carrusel = document.querySelector(".btnRightCarusel");
 if (carrusel) {
     carrusel.addEventListener('click', function () {
-        clearInterval(slideInterval);
-        slideInterval = setInterval(autoShowSlides, 5000);
+        autoShowSlides();
     });
 }
