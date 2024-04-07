@@ -60,6 +60,7 @@ export default class CartRepository {
             // Si el producto no existe, agregarlo al carrito con la cantidad especificada
             existingCart.products.push({ product: pId, quantity });
         }
+        await this.dao.updateCart(cId, existingCart);
 
         let totalFOR = await this.dao.totalCart(cId);
 

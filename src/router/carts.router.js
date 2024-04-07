@@ -103,6 +103,7 @@ router.post("/:cid/product/:pid", logUser(), async (req, res) => {
         const response = await cartService.productToCart(cId, pId, quantity);
         logger.info(`Producto con id: ${pId} (cantidad: ${quantity}) agregado al carrito con id: ${cId} correctamente!`)
         res.status(200).json({ status: "success", payload: response })
+
     } catch (error) {
         if (error.statusCode = 4001) {
             logger.error(`No se encontró el carrito por Id`);

@@ -1,4 +1,5 @@
 import CartModel from "../models/carts.model.js";
+import ProductsModel from "../models/products.model.js";
 import __dirname from "../../utils.js"
 import { logger } from "../../utils/logger.js"
 
@@ -182,7 +183,7 @@ class CartManager {
             let rejectedCart = []
 
             for (let i = 0; i < carrito.products.length; i++) {
-                const producto = await ProductsModel.findOne({ "_id": carrito.products[i].product.toString() }).lean();
+                const producto = await ProductsModel.findOne({ "_id": carrito.products[i].product }).lean();
 
                 if (carrito.products[i].quantity <= producto.stock) {
 
@@ -191,14 +192,12 @@ class CartManager {
                     const subTotal = carrito.products[i].quantity * producto.price
                     amountBuyCart.push(subTotal)
 
-                    await this.updateStock(cId, producto._id.toString(), carrito.products[i].quantity)
                 } else {
                     rejectedCart.push(producto._id);
                 }
             }
 
             total = amountBuyCart.reduce((act, curr) => act + curr, 0)
-            console.log("El total en carrito");
 
             return total
         } catch (error) {
