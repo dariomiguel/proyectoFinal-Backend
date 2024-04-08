@@ -4,7 +4,6 @@ import CustomError from "../../errors/customErrors.js";
 import { logger } from "../../utils/logger.js"
 //Import para validar imagenes
 import axios from "axios";
-import imageSize from "image-size"
 
 class ProductManagerMongo {
 
