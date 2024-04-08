@@ -47,12 +47,12 @@ switch (options.p) {
                 logger.error("Error conecting to DB", error);
             })
 
-        const { default: CartManagerMongo } = await import("./mongo/CartManager.mongo.js")
-        const { default: ProductManagerMongo } = await import("./mongo/ProductManager.mongo.js")
-        const { default: ChatManagerMongo } = await import("./mongo/ChatManager.mongo.js")
-        const { default: UserManagerMongo } = await import("./mongo/UserManager.mongo.js")
-        const { default: TicketManagerMongo } = await import("./mongo/TicketManager.mongo.js")
-        const { default: MockingProductsMongo } = await import("./mongo/MockingProducts.mongo.js")
+        const { default: CartManagerMongo } = await import("./mongo/cartmanager.mongo.js")
+        const { default: ProductManagerMongo } = await import("./mongo/productmanager.mongo.js")
+        const { default: ChatManagerMongo } = await import("./mongo/chatmanager.mongo.js")
+        const { default: UserManagerMongo } = await import("./mongo/usermanager.mongo.js")
+        const { default: TicketManagerMongo } = await import("./mongo/ticketmanager.mongo.js")
+        const { default: MockingProductsMongo } = await import("./mongo/mockingproducts.mongo.js")
         const { default: PaymentManagerMongo } = await import("./mongo/payment.mongo.js")
 
         ProductManager = ProductManagerMongo;
