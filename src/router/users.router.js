@@ -1,8 +1,7 @@
 import { Router } from "express";
 import { userService, cartService } from "../repositories/index.js";
-import { authorize } from "../utils.js";
+import { authorize, upload } from "../utils.js";
 import { logger } from "../utils/logger.js";
-import { upload } from "../utils.js";
 
 const router = Router();
 
@@ -53,7 +52,6 @@ router.get("/premium/:uid", async (req, res) => {
 
     try {
         if (uId === user._id) {
-            logger.info("Son iguales")
             res.render("changeRole", {
                 style: "style.css",
                 user
@@ -70,26 +68,26 @@ router.get("/premium/:uid", async (req, res) => {
     }
 })
 
-// router.post("/premium/:uid", async (req, res) => {
-//     const uId = req.params.uid;
+router.post("/premium/:uid", async (req, res) => {
+    const uId = req.params.uid;
 
-//     try {
-//         const response = await userService.put(uId)
-//         if (!response) {
-//             logger.error(`No se encontró el usuario con id:"${uId}"`);
-//             return res.status(404).json({ Error: `No se encontró el usuario con id:"${uId}"` });
-//         }
-//         logger.info("El rol del usuario ha sido cambiado satisfactoriamente")
+    try {
+        const response = await userService.put(uId)
+        if (!response) {
+            logger.error(`No se encontró el usuario con id:"${uId}"`);
+            return res.status(404).json({ Error: `No se encontró el usuario con id:"${uId}"` });
+        }
+        logger.info("El rol del usuario ha sido cambiado satisfactoriamente")
 
-//         req.session.user.role = response
-//         res.status(200).json({ payload: true });
+        req.session.user.role = response
+        res.status(200).json({ payload: true });
 
-//     } catch (error) {
-//         logger.error("Error al cambiar el rol de usuario :", error);
-//         res.status(500).json({ error: "Hubo un error al cambiar el rol de usuario " });
-//     }
+    } catch (error) {
+        logger.error("Error al cambiar el rol de usuario :", error);
+        res.status(500).json({ error: "Hubo un error al cambiar el rol de usuario " });
+    }
 
-// })
+})
 
 
 router.get("/uid", authorize(["user", "premium"]), async (req, res) => {
@@ -105,7 +103,7 @@ router.get("/uid", authorize(["user", "premium"]), async (req, res) => {
     }
 })
 
-router.post('/:uid/documents/', upload.array("documents"), async (req, res) => {
+router.post('/:uid/documents/', authorize(["user", "premium"]), upload.array("documents"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
@@ -130,7 +128,7 @@ router.post('/:uid/documents/', upload.array("documents"), async (req, res) => {
     }
 });
 
-router.post('/:uid/documents/profile', upload.array("profileImage"), async (req, res) => {
+router.post('/:uid/documents/profile', authorize(["user", "premium"]), upload.array("profileImage"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
@@ -159,57 +157,10 @@ router.post('/:uid/documents/profile', upload.array("profileImage"), async (req,
     }
 });
 
-// // Función para manejar la carga de documentos
-// const handleDocumentUpload = async (req, res, middlewareName) => {
-//     try {
-//         const userId = req.params.uid;
-//         const user = await userService.getUserById(userId);
-
-//         if (!user) {
-//             return res.status(404).json({ error: 'Usuario no encontrado' });
-//         }
-
-//         // Verificar si se cargaron documentos
-//         if (!req.files || req.files.length === 0) {
-//             return res.status(400).json({ error: 'No se han proporcionado documentos' });
-//         }
-
-//         console.log(req.files);
-
-//         // Actualizar el estado del usuario para indicar que se han cargado documentos
-//         user.hasUploadedDocuments = true;
-//         await user.save();
-
-//         return res.status(200).json({ message: 'Documentos cargados exitosamente' });
-//     } catch (error) {
-//         console.error('Error al cargar documentos:', error);
-//         return res.status(500).json({ error: 'Error en el servidor' });
-//     }
-// };
-
-// // Router genérico para la carga de documentos
-// router.post('/:uid/documents/:type?', (req, res) => {
-//     const middlewareName = req.params.type || "documents";
-//     upload.array(middlewareName)(req, res, () => handleDocumentUpload(req, res, middlewareName));
-// });
-
-
-
-
-
-
-
-
-
-
-
-
-router.post('/:uid/documents/products', upload.array("document"), async (req, res) => {
+router.post('/:uid/documents/products', authorize(["user", "premium"]), upload.array("document"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
-
-        // const upadate = await userService.putDocuments(userId,)
 
         if (!user) {
             return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -233,14 +184,7 @@ router.post('/:uid/documents/products', upload.array("document"), async (req, re
     }
 });
 
-
-
-
-
-
-
-
-router.put('/premium/:uid', async (req, res) => {
+router.put('/premium/:uid', authorize(["user", "premium"]), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
@@ -264,6 +208,28 @@ router.put('/premium/:uid', async (req, res) => {
         return res.status(500).json({ error: 'Error en el servidor' });
     }
 });
+
+router.get("/allusers", authorize(["user", "premium"]), async (req, res) => {
+    try {
+        const user = req.session.user
+        const uId = user._id;
+
+        let response = await userService.getCart(uId);
+
+        if (!response) {
+            const responseCreate = await cartService.create(user.role)
+            response = responseCreate._id
+        }
+        logger.http("Success")
+        res.status(200).json({ payload: response });
+
+    } catch (error) {
+        logger.error("Error al buscar usuario: ", error);
+        res.status(500).json({ error: "Hubo un error al buscar usuario" });
+    }
+})
+
+
 
 
 export default router

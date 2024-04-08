@@ -54,8 +54,9 @@ export const authorize = (requiredRoles) => {
 
             const hasRequiredRole = requiredRoles.some(role => user.role === role);
             if (!hasRequiredRole) {
-                logger.error("NO PERMISIONS!")
-                return res.status(403).send({ error: "NO PERMISIONS!" })
+                logger.error("Un usuario a intentado acceder a una página sin poseer permisos")
+                res.render("errorPage", { error: "Usted no posee permisos para usar esta página!" });
+                return next()
             }
 
             logger.info("Acceso autorizado ")
@@ -98,6 +99,19 @@ export const generateProduct = () => {
         stock: faker.number.int(),
         category: faker.helpers.arrayElement(["cuadros", "artesanias", "bordados", "esculturas"]),
         thumbnail: faker.image.imageUrl()
+    }
+}
+
+export const handleError = async (error, res) => {
+    if (error.statusCode === 404) {
+        logger.error("Error ")
+        res.status(404).json({ Error: "No se encontraron chats" });
+    } else if (error.statusCode === 400) {
+        logger.error("Error ")
+        res.status(400).json({ Error: "Hubo un error al obtener los valores, asegúrese de haber completado todos los campos.😶" });
+    } else {
+        logger.error(`Error al obtener el historial del chat:\n${error.message}`);
+        res.status(500).json({ Error: "Hubo un error al obtener el chat" });
     }
 }
 

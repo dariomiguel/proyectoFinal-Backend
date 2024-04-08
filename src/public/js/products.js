@@ -177,7 +177,7 @@ document.addEventListener("DOMContentLoaded", () => {
                         confirmButtonColor: "#3085d6",
                         confirmButtonText: "Aceptar"
                     })
-                        .then(() => window.location.reload())
+                        .then(() => window.location.href = "/products")
                     return
                 }
 
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     confirmButtonColor: "#d33",
                     confirmButtonText: "Cerrar"
                 })
-                    .then(() => window.location.reload())
+                    .then(() => window.location.href = "/products")
                 return
             } catch (error) {
                 console.error("Error al cambiar el rol de usuario:", error);
