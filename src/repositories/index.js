@@ -1,4 +1,4 @@
-import { CartManager, ProductManager, ChatManager, UserManager, TicketManager, MockingProducts, PaymentManager } from "../DAO/factory.js";
+import { CartManager, ProductManager, ChatManager, UserManager, TicketManager, MockingProducts, PaymentManager } from "../dao/factory.js";
 import CartRepository from "./services/carts.repository.js";
 import ProductRepository from "./services/products.repository.js";
 import ChatRepository from "./services/chat.repository.js";

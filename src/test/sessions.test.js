@@ -1,5 +1,5 @@
-import CartManagerMongo from "../DAO/mongo/CartManager.mongo.js";
-import UserManagerMongo from "../DAO/mongo/UserManager.mongo.js";
+import CartManagerMongo from "../dao/mongo/CartManager.mongo.js";
+import UserManagerMongo from "../dao/mongo/UserManager.mongo.js";
 import mongoose from "mongoose";
 import { expect } from "chai";
 import UserModel from "../dao/models/user.model.js";

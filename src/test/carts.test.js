@@ -1,10 +1,10 @@
-import CartManagerMongo from "../DAO/mongo/CartManager.mongo.js"
+import CartManagerMongo from "../dao/mongo/CartManager.mongo.js"
 import mongoose from "mongoose"
 import Assert from "assert"
 import config from "../config/config.js";
 import { expect } from "chai";
 
-import CartModel from "../DAO/models/carts.model.js";
+import CartModel from "../dao/models/carts.model.js";
 
 
 

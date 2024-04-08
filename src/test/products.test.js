@@ -1,4 +1,4 @@
-import ProductManagerMongo from "../DAO/mongo/ProductManager.mongo.js"
+import ProductManagerMongo from "../dao/mongo/ProductManager.mongo.js"
 import mongoose from "mongoose"
 import Assert from "assert"
 import config from "../config/config.js";
