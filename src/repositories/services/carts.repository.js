@@ -1,4 +1,4 @@
-import ProductManager from "../../dao/mongo/.js"
+import ProductManager from "../../dao/mongo/productmanager.mongo.js"
 import { logger } from "../../utils/logger.js"
 const productManager = new ProductManager();
 
