@@ -1,6 +1,7 @@
-import ProductManager from "../../dao/mongo/productmanager.mongo.js"
+// import ProductManager from "../../dao/mongo/productmanager.mongo.js"
+import ProductManagerMongo from "../../dao/mongo/productmanager.mongo.js";
 import { logger } from "../../utils/logger.js"
-const productManager = new ProductManager();
+const productManager = new ProductManagerMongo();
 
 export default class CartRepository {
     constructor(dao) {
