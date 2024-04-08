@@ -76,8 +76,6 @@ if (uploadForm) {
         }
 
         try {
-            console.log("Select file type is:", selectFileType.value);
-
             const responseGet = await fetch("/api/users/uid", {
                 method: "GET",
                 headers: {
@@ -85,8 +83,6 @@ if (uploadForm) {
                 }
             });
             const { payload: userId } = await responseGet.json();
-
-            console.log("userId is:", userId);
 
             const response = await fetch(`/api/users/${userId}/documents`, {
                 method: "POST",

@@ -76,7 +76,7 @@ router.get("/reset/:token", async (req, res) => {
             });
         } catch (error) {
             // Manejar el error, por ejemplo:
-            logger.error('Error al decodificar el token:', error);
+            logger.error("Error al decodificar el token:", error);
 
             res.redirect("/recoverpass");
         }

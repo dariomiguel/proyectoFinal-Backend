@@ -121,6 +121,78 @@ class UserManagerMongo {
             throw error;
         }
     }
+
+    getAll = async () => {
+        try {
+            const users = await UserModel.find();
+
+            const usersMainData = []
+
+            for (let i = 0; i < users.length; i++) {
+
+                const resultado = await UserModel.aggregate
+                    // ([
+                    //     { $match: { _id: users[i]._id } }, // Filtrar por el ID del usuario
+                    //     { $project: { last_connection: { $arrayElemAt: ["$last_connection", -1] } } } // Obtener el último elemento del array last_connection
+                    // ]);
+                    ([
+                        {
+                            $match: {
+                                _id: users[i]._id // Filtrar por el ID del usuario
+                            }
+                        },
+                        {
+                            $project: {
+                                last_connection: {
+                                    $filter: { // Filtrar el array last_connection
+                                        input: "$last_connection", // Array de entrada
+                                        as: "connection", // Alias para cada elemento del array
+                                        cond: { $ifNull: ["$$connection.login", false] } // Condición: solo mantener elementos con la propiedad "login" definida
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $project: {
+                                last_connection: {
+                                    $arrayElemAt: ["$last_connection", -1] // Obtener el último elemento del array last_connection filtrado
+                                }
+                            }
+                        }
+                    ]);
+
+                let ultimoLastConnection = resultado[0].last_connection === null ? new Date() : resultado[0].last_connection.login;
+                const fechaActual = new Date();
+                const limiteInferior = new Date();
+                limiteInferior.setDate(fechaActual.getDate() - 2);
+
+                let deleteUser = false
+
+                if (ultimoLastConnection < limiteInferior) deleteUser = true
+
+                console.log("La ultima conexion", ultimoLastConnection)
+
+                const mainData = {
+                    nombre: users[i].first_name,
+                    correo: users[i].email,
+                    rol: users[i].role,
+                    borrar: deleteUser
+                }
+                usersMainData.push(mainData)
+            }
+
+            console.log(usersMainData);
+
+            if (!users) {
+                logger.info("Sin usuarios en la base de datos");
+                return false;
+            }
+
+            return usersMainData;
+        } catch (error) {
+            throw error;
+        }
+    }
 }
 
 export default UserManagerMongo

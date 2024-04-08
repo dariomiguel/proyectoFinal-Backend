@@ -52,4 +52,10 @@ export default class UserRepository {
 
         return result
     }
+
+    getAllUsers = async () => {
+        const result = await this.dao.getAll()
+
+        return result
+    }
 }

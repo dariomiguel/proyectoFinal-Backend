@@ -2,7 +2,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box; 
-    font-family: 'Montserrat', sans-serif;
+    font-family: "Montserrat", sans-serif;
 }
 
 a{
@@ -173,7 +173,7 @@ main{
 }
 /* linea que divide el input del boton */
 .container__buscador button::before {
-    content: '';
+    content: "";
     position: absolute;
     top: 50%;
     left: 0;
@@ -434,3 +434,25 @@ button:hover { background-color: #fbe6ff; }
 .contenedor__pasarPaginas *{
     padding: 0 2rem;
 }
+
+        /* Estilos CSS para la lista */
+        .user-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .user-item {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+        }
+        .user-item .name {
+            font-weight: bold;
+        }
+        .user-item .email {
+            color: #666;
+        }
+        .user-item .role {
+            color: #333;
+        }

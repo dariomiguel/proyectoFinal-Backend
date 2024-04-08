@@ -103,32 +103,31 @@ router.get("/uid", authorize(["user", "premium"]), async (req, res) => {
     }
 })
 
-router.post('/:uid/documents/', authorize(["user", "premium"]), upload.array("documents"), async (req, res) => {
+router.post("/:uid/documents/", authorize(["user", "premium"]), upload.array("documents"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
 
         // const upadate = await userService.putDocuments(userId,)
-        console.log("El req.files es: ", req.files);
-        if (!user) return res.status(404).json({ error: 'Usuario no encontrado' });
+        if (!user) return res.status(404).json({ error: "Usuario no encontrado" });
 
         // Verificar si se cargaron documentos
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ error: 'No se han proporcionado documentos' });
+            return res.status(400).json({ error: "No se han proporcionado documentos" });
         }
 
         // Actualizar el estado del usuario para indicar que se han cargado documentos
         user.hasUploadedDocuments = true;
         await user.save();
 
-        return res.status(200).json({ message: 'Documentos cargados exitosamente' });
+        return res.status(200).json({ message: "Documentos cargados exitosamente" });
     } catch (error) {
-        console.error('Error al cargar documentos:', error);
-        return res.status(500).json({ error: 'Error en el servidor' });
+        console.error("Error al cargar documentos:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
     }
 });
 
-router.post('/:uid/documents/profile', authorize(["user", "premium"]), upload.array("profileImage"), async (req, res) => {
+router.post("/:uid/documents/profile", authorize(["user", "premium"]), upload.array("profileImage"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
@@ -136,92 +135,83 @@ router.post('/:uid/documents/profile', authorize(["user", "premium"]), upload.ar
         // const upadate = await userService.putDocuments(userId,)
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+            return res.status(404).json({ error: "Usuario no encontrado" });
         }
 
         // Verificar si se cargaron documentos
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ error: 'No se han proporcionado documentos' });
+            return res.status(400).json({ error: "No se han proporcionado documentos" });
         }
-
-        console.log(req.files);
 
         // Actualizar el estado del usuario para indicar que se han cargado documentos
         user.hasUploadedDocuments = true;
         await user.save();
 
-        return res.status(200).json({ message: 'Documentos cargados exitosamente' });
+        return res.status(200).json({ message: "Documentos cargados exitosamente" });
     } catch (error) {
-        console.error('Error al cargar documentos:', error);
-        return res.status(500).json({ error: 'Error en el servidor' });
+        console.error("Error al cargar documentos:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
     }
 });
 
-router.post('/:uid/documents/products', authorize(["user", "premium"]), upload.array("document"), async (req, res) => {
+router.post("/:uid/documents/products", authorize(["user", "premium"]), upload.array("document"), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+            return res.status(404).json({ error: "Usuario no encontrado" });
         }
 
         // Verificar si se cargaron documentos
         if (!req.files || req.files.length === 0) {
-            return res.status(400).json({ error: 'No se han proporcionado documentos' });
+            return res.status(400).json({ error: "No se han proporcionado documentos" });
         }
-
-        console.log(req.files);
 
         // Actualizar el estado del usuario para indicar que se han cargado documentos
         user.hasUploadedDocuments = true;
         await user.save();
 
-        return res.status(200).json({ message: 'Documentos cargados exitosamente' });
+        return res.status(200).json({ message: "Documentos cargados exitosamente" });
     } catch (error) {
-        console.error('Error al cargar documentos:', error);
-        return res.status(500).json({ error: 'Error en el servidor' });
+        console.error("Error al cargar documentos:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
     }
 });
 
-router.put('/premium/:uid', authorize(["user", "premium"]), async (req, res) => {
+router.put("/premium/:uid", authorize(["user", "premium"]), async (req, res) => {
     try {
         const userId = req.params.uid;
         const user = await userService.getUserById(userId);
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuario no encontrado' });
+            return res.status(404).json({ error: "Usuario no encontrado" });
         }
 
         // Verificar si el usuario ha cargado todos los documentos necesarios
         if (!user.hasUploadedDocuments) {
-            return res.status(400).json({ error: 'El usuario no ha cargado todos los documentos necesarios' });
+            return res.status(400).json({ error: "El usuario no ha cargado todos los documentos necesarios" });
         }
 
         // Actualizar el usuario a premium
-        user.role = 'premium';
+        user.role = "premium";
         await user.save();
 
-        return res.status(200).json({ message: 'Usuario actualizado a premium correctamente' });
+        return res.status(200).json({ message: "Usuario actualizado a premium correctamente" });
     } catch (error) {
-        console.error('Error al actualizar usuario a premium:', error);
-        return res.status(500).json({ error: 'Error en el servidor' });
+        console.error("Error al actualizar usuario a premium:", error);
+        return res.status(500).json({ error: "Error en el servidor" });
     }
 });
 
-router.get("/allusers", authorize(["user", "premium"]), async (req, res) => {
+router.get("/allusers", authorize(["admin"]), async (req, res) => {
     try {
-        const user = req.session.user
-        const uId = user._id;
+        let users = await userService.getAllUsers();
 
-        let response = await userService.getCart(uId);
-
-        if (!response) {
-            const responseCreate = await cartService.create(user.role)
-            response = responseCreate._id
-        }
-        logger.http("Success")
-        res.status(200).json({ payload: response });
+        res.render("adminPage", {
+            style: "style.css",
+            users
+        });
 
     } catch (error) {
         logger.error("Error al buscar usuario: ", error);

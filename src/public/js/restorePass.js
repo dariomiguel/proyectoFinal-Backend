@@ -20,18 +20,18 @@ if (resetPassForm) {
             const email = document.querySelector("#recoverEmail").value;
 
             const response = await fetch(`/recoverpass/${email}`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
             });
             const data = await response.json();
 
             if (data.payload) {
                 await fetch(`/mail/reset-password/${email}`, {
-                    method: 'POST',
+                    method: "POST",
                     headers: {
-                        'Content-Type': 'application/json',
+                        "Content-Type": "application/json",
                     },
                 });
 
@@ -46,9 +46,9 @@ if (resetPassForm) {
                 })
             } else {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Email no encontrado!',
-                    text: 'El email no aparece en la base de datos, asegúrese de haber escrito bien el email e intente otra vez.',
+                    icon: "error",
+                    title: "Email no encontrado!",
+                    text: "El email no aparece en la base de datos, asegúrese de haber escrito bien el email e intente otra vez.",
                 })
             }
         })
@@ -70,9 +70,9 @@ if (newPassForm) {
 
             const dataToSend = { email: email, pass: pass }
             const response = await fetch(`/recoverpass/reset/${tokenPass}`, {
-                method: 'POST',
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json',
+                    "Content-Type": "application/json",
                 },
                 body: JSON.stringify(dataToSend)
             });
@@ -90,9 +90,9 @@ if (newPassForm) {
                 })
             } else {
                 Swal.fire({
-                    icon: 'error',
-                    title: 'Contraseña incorrecta!',
-                    text: 'La contraseña no puede ser igual a la anterior',
+                    icon: "error",
+                    title: "Contraseña incorrecta!",
+                    text: "La contraseña no puede ser igual a la anterior",
                 })
             }
         })

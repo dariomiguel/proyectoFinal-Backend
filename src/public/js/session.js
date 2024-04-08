@@ -52,8 +52,8 @@ loginForm.addEventListener("submit", async (event) => {
 
             // Muestra un mensaje de error al usuario.
             Swal.fire({
-                icon: 'error',
-                title: 'Error de inicio de sesión',
+                icon: "error",
+                title: "Error de inicio de sesión",
                 text: errorMessage,
             });
         }

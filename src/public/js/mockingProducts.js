@@ -2,9 +2,9 @@ document.getElementById("generarProductos").addEventListener("click", async (eve
     event.preventDefault();
 
     const responseDataCreator = await fetch(`/mockingproducts`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
         },
     });
 

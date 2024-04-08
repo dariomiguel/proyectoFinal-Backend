@@ -223,9 +223,9 @@ class ProductManagerMongo {
     validateImage = async (url) => {
         try {
             await axios({
-                method: 'get',
+                method: "get",
                 url: url,
-                responseType: 'arraybuffer',
+                responseType: "arraybuffer",
             });
 
             return url

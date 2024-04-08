@@ -1,0 +1,22 @@
+<h1>Lista de Usuarios</h1>
+<ul class="user-list">
+    {{#each users}}
+        <li class="user-item">
+            <p class="name">Nombre: {{nombre}}</p>
+            <p class="email">Correo: {{correo}}</p>
+            <p class="role">Rol: {{rol}}</p>
+        </li>
+    {{/each}}
+</ul>
+<h1>Lista de Usuarios a borrar</h1>
+<ul class="user-list">
+    {{#each users}}
+        {{#if borrar}}
+            <li class="user-item">
+                <p class="name">Nombre: {{nombre}}</p>
+                <p class="email">Correo: {{correo}}</p>
+                <p class="role">Rol: {{rol}}</p>
+            </li>
+        {{/if}}
+    {{/each}}
+</ul>

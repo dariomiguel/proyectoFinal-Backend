@@ -25,7 +25,7 @@ describe("Testing Product DAO mongo", function () {
         const productDao = new ProductManagerMongo();
         const result = await productDao.addProduct("title test", "description test", "code0test", 1, 1, "cuadros", "thumbnail.test", "admin");
 
-        assert.strictEqual((typeof result === 'object' && result !== null), true)
+        assert.strictEqual((typeof result === "object" && result !== null), true)
     })
 
     it("El Dao debe poder obtener el último producto agregado por ID", async () => {

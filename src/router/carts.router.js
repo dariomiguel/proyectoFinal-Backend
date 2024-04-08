@@ -43,7 +43,7 @@ router.get("/:cid", logUser(), authorize(["user", "premium"]), async (req, res) 
                 .json({ Error: "No se encontró el carrito solicitado" });
         } else {
             //Si estoy usando un postman uso res.status
-            if (req.headers['user-agent'].includes('Postman')) {
+            if (req.headers["user-agent"].includes("Postman")) {
                 return res.status(200).json({ status: "success", payload: cartPorId });
             }
             logger.info("Redireccionando a carrito... ")
@@ -73,7 +73,7 @@ router.post("/:cid", logUser(), authorize(["user", "premium"]), async (req, res)
                 .json({ Error: "No se encontró el carrito solicitado" });
         } else {
             //Si estoy usando un postman uso res.status
-            if (req.headers['user-agent'].includes('Postman')) {
+            if (req.headers["user-agent"].includes("Postman")) {
                 return res.status(200).json({ status: "success", payload: cartPorId });
             }
             logger.info("Redireccionando a carrito... ")

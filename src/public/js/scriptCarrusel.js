@@ -43,7 +43,7 @@ function autoShowSlides() {
 
 const carrusel = document.querySelector(".btnRightCarusel");
 if (carrusel) {
-    carrusel.addEventListener('click', function () {
+    carrusel.addEventListener("click", function () {
         autoShowSlides();
     });
 }
