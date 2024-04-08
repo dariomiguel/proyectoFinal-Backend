@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import { faker } from "@faker-js/faker";
 import { logger } from "./utils/logger.js";
-import UserModel from "./DAO/models/user.model.js";
+import UserModel from "./dao/models/user.model.js";
 import multer from "multer";
 
 const PRIVATE_KEY = config.privateKey;

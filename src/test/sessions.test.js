@@ -2,7 +2,7 @@ import CartManagerMongo from "../DAO/mongo/CartManager.mongo.js";
 import UserManagerMongo from "../DAO/mongo/UserManager.mongo.js";
 import mongoose from "mongoose";
 import { expect } from "chai";
-import UserModel from "../DAO/models/user.model.js";
+import UserModel from "../dao/models/user.model.js";
 import Assert from "assert"
 import config from "../config/config.js";
 
